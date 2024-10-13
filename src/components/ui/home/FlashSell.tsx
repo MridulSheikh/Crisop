@@ -14,7 +14,7 @@ const FlashSell: FC = () => {
           View All <IoIosArrowForward className="ml-3 h-4 w-4" />
         </Button>
       </div>
-      <div className=" grid lg:grid-cols-4 gap-y-3 lg:gap-y-0 gap-x-3 mt-[34px]">
+      <div className=" grid lg:grid-cols-4 gap-y-3 lg:gap-y-0 gap-x-[29px] mt-[34px]">
         <ProductCard />
         <ProductCard />
         <ProductCard />
