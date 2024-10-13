@@ -1,3 +1,4 @@
+import Footer from "@/components/ui/layout/Navbar/Footer";
 import NavBar from "@/components/ui/layout/Navbar/NavBar";
 import React from "react";
 
@@ -10,6 +11,7 @@ const NormalLayout = ({
     <div>
       <NavBar />
       <main>{children}</main>
+      <Footer />
     </div>
   );
 };
