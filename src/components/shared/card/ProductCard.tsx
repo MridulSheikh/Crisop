@@ -27,7 +27,9 @@ const ProductCard = () => {
       <div className=" mt-[12px]">
         <h1 className=" text-[22px] font-normal">Double Bed & Side Tables</h1>
         <div className=" mt-5 flex justify-between items-center">
-          <h2 className=" text-sm">$150.00</h2>
+          <h2 className=" text-sm">
+            <span className="font-bold">$150.00</span> (1.25kg)
+          </h2>
           <Button variant={"ghost"}>
             <FiPlusCircle className=" text-xl" />
           </Button>

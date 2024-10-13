@@ -10,6 +10,7 @@ import { MdClose } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const navigationData = [
   {
@@ -41,10 +42,12 @@ const navigationData = [
 const NavBar: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [user, setUser] = useState<boolean>(true);
+  const pathname = usePathname();
   return (
     <div
-      className={cn("py-5 absolute z-50 w-full top-0 ", {
-        "bg-[#EFEEEE]": isOpen,
+      className={cn("py-5 z-50 w-full top-0 ", {
+        "bg-[#EFEEEE] ": isOpen || pathname != "/",
+        "absolute ": pathname === "/",
       })}
     >
       <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
@@ -61,7 +64,13 @@ const NavBar: FC = () => {
             <li key={i} className=" relative">
               <Link
                 href={dt.link}
-                className=" ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300 hover:after:w-[100%]"
+                className={cn(
+                  " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
+                  {
+                    "after:w-[100%] text-[#F76364] duration-300":
+                      pathname === dt.link,
+                  }
+                )}
               >
                 {dt.name}
               </Link>

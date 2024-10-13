@@ -8,9 +8,9 @@ const Banner: FC = () => {
       <div className="absolute size-80 rounded-full bg-gradient-to-r from-[#FF5F2C] to-[#FF5F2C]/10  top-[35%] left-[40%] opacity-40 blur-3xl filter block" />
       <div className="absolute size-80 rounded-full bg-gradient-to-r from-[#FF5F2C] to-[#FF5F2C]/10  -top-64 -right-36 opacity-40 blur-3xl filter block" />
 
-      <div className=" max-w-screen-xl mx-auto h-full px-5 pt-10 lg:py-0 flex flex-col lg:flex-row  relative z-10">
-        <div className="flex items-center lg:w-[50%]">
-          <div className=" mt-20">
+      <div className=" max-w-screen-xl mx-auto h-full px-5 pt-10 lg:py-0 grid lg:grid-cols-12  relative z-10">
+        <div className="flex col-span-5 items-center">
+          <div className="mt-20">
             <div className=" flex gap-x-3 p-3 rounded-full bg-[#FEF2F2] w-[250px]">
               <div className=" size-5 relative">
                 <Image alt="vagitable img" src="/img/vegetables 1.png" fill />
@@ -20,7 +20,7 @@ const Banner: FC = () => {
               </p>
             </div>
             <div className="relative mt-5">
-              <h1 className=" text-4xl lg:text-6xl font-bold lg:font-semibold leading-normal text-[#2F2F2E]">
+              <h1 className="text-4xl lg:text-6xl lg:leading-[4.75rem] font-bold lg:font-semibold text-[#2F2F2E]">
                 Make healthy <br /> life with{" "}
                 <span className=" text-[#106D42]">fresh</span> grocery
               </h1>
@@ -30,10 +30,12 @@ const Banner: FC = () => {
               <br className="hidden lg:inline-block" /> world, you can get them
               all use our website
             </p>
-            <Button className="bg-[#FF5F2C] mt-7 text-lg">Shop Now</Button>
+            <Button className="bg-[#FF5F2C] hover:bg-[#FF5F2C]/90 mt-7 text-lg">
+              Shop Now
+            </Button>
           </div>
         </div>
-        <div className="relative h-full lg:w-[50%]">
+        <div className="relative h-full col-span-7">
           <div className=" hidden lg:flex absolute p-2 lg:bottom-[50%] left-0 lg:left-16 z-10 items-center  gap-x-3 rounded-md border shadow-xl bg-white">
             <div className=" relative size-8">
               <Image alt={"location icon"} fill src={"/img/destination.png"} />
