@@ -1,9 +1,7 @@
 import React from "react";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -81,22 +79,25 @@ const ProductFillter = () => {
                   <RadioGroupItem value="300" id="maxPrice_300" />
                   <Label htmlFor="maxPrice_300">Under $300</Label>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="400" id="maxPrice_400" />
+                  <Label htmlFor="maxPrice_300">Under $300</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="custom" id="custom" />
+                  <Label htmlFor="custom">Custom ($0 to $0)</Label>
+                </div>
               </RadioGroup>
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="item-3">
+          {/* <AccordionItem value="item-3">
             <AccordionTrigger>Spacial Offers</AccordionTrigger>
             <AccordionContent>
               Yes. It&apos;s animated by default, but you can disable it if you
               prefer.
             </AccordionContent>
-          </AccordionItem>
+          </AccordionItem> */}
         </Accordion>
-        {/* <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter> */}
       </SheetContent>
     </Sheet>
   );

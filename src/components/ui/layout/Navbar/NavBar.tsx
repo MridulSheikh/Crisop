@@ -48,8 +48,7 @@ const NavBar: FC = () => {
       className={cn("py-5 z-50 w-full top-0 ", {
         "bg-[#EFEEEE] ": isOpen || pathname != "/",
         "absolute ": pathname === "/",
-      })}
-    >
+      })}>
       <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
         <div className=" w-[150px] h-[50px] relative">
           <Image
@@ -70,8 +69,7 @@ const NavBar: FC = () => {
                     "after:w-[100%] text-[#F76364] duration-300":
                       pathname === dt.link,
                   }
-                )}
-              >
+                )}>
                 {dt.name}
               </Link>
             </li>
@@ -98,8 +96,7 @@ const NavBar: FC = () => {
           <Button
             onClick={() => setIsOpen((prev) => !prev)}
             variant={"ghost"}
-            className=" lg:hidden"
-          >
+            className=" lg:hidden">
             {isOpen ? (
               <MdClose className=" text-3xl" />
             ) : (
@@ -122,14 +119,12 @@ const NavBar: FC = () => {
             duration: 0.8,
           },
         }}
-        className="mt-5 lg:hidden overflow-hidden"
-      >
+        className="mt-5 lg:hidden overflow-hidden">
         <ul className="text-lg pb-5 text-center">
           {navigationData.map((dt, i) => (
             <li
               key={i}
-              className=" hover:text-[#F76364] ease-in-out duration-300 hover:font-bold font-semibold px-5 py-4 bg-[#EFEEEE]"
-            >
+              className=" hover:text-[#F76364] ease-in-out duration-300 hover:font-bold font-semibold px-5 py-4 bg-[#EFEEEE]">
               <Link href={dt.link}>{dt.name}</Link>
             </li>
           ))}
