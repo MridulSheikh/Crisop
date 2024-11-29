@@ -34,8 +34,8 @@ const navigationData = [
     link: "/about-us",
   },
   {
-    name: "Contuct us",
-    link: "/contuct-us",
+    name: "Contact us",
+    link: "/contact-us",
   },
 ];
 
@@ -46,7 +46,7 @@ const NavBar: FC = () => {
   return (
     <div
       className={cn("py-5 z-50 w-full top-0 ", {
-        "bg-[#EFEEEE] ": isOpen || pathname != "/",
+        "bg-[#f4f5f6] ": isOpen || pathname != "/",
         "absolute ": pathname === "/",
       })}>
       <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
