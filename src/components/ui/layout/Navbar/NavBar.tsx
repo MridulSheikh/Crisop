@@ -18,26 +18,25 @@ const navigationData = [
     link: "/",
   },
   {
+    name: "Shop",
+    link: "/shop",
+  }
+];
+
+const hashLink = [
+ {
     name: "Categories",
-    link: "/categories",
-  },
-  {
-    name: "Products",
-    link: "/products",
-  },
-  {
-    name: "Flash Sale",
-    link: "/flash-sale",
+    link: "/#categories",
   },
   {
     name: "About us",
-    link: "/about-us",
+    link: "/#about-us",
   },
   {
     name: "Contact us",
-    link: "/contact-us",
+    link: "/#contact-us",
   },
-];
+]
 
 const NavBar: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -72,6 +71,21 @@ const NavBar: FC = () => {
                 )}>
                 {dt.name}
               </Link>
+            </li>
+          ))}
+         {hashLink.map((dt, i) => (
+            <li key={i} className=" relative">
+              <a
+                href={dt.link}
+                className={cn(
+                  " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
+                  {
+                    "after:w-[100%] text-[#F76364] duration-300":
+                      pathname === dt.link,
+                  }
+                )}>
+                {dt.name}
+              </a>
             </li>
           ))}
         </ul>

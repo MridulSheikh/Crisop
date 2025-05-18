@@ -66,7 +66,7 @@ const navigationData = [
 
 const Footer = () => {
   return (
-    <div className=" mt-[170px]">
+    <div className=" mt-20">
       <div className=" bg-[#f0eded] py-5">
         <div className=" max-w-screen-xl px-5 mx-auto flex flex-wrap gap-5 justify-center md:justify-between items-center">
           {footerImage.map((img: string, index: number) => (

@@ -33,9 +33,9 @@ const AboutUs = () => {
     once: true,
   });
   return (
-    <div
-      className="max-w-screen-xl px-5 mx-auto mt-20 overflow-hidden"
-      id="upcoming-event">
+    <section
+      className="max-w-screen-xl px-5 mx-auto mt-[117px] overflow-hidden"
+      id="about-us">
       <div className="grid lg:grid-cols-2 gap-[92px]">
         <motion.div
           ref={ref}
@@ -161,7 +161,7 @@ const AboutUs = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

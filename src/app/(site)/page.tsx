@@ -1,15 +1,17 @@
+import AboutUs from "@/components/ui/home/AboutUs";
 import Banner from "@/components/ui/home/Banner";
-import FlashSell from "@/components/ui/home/FlashSell";
+import Contact from "@/components/ui/home/ContactUs";
 import MostPopularProduct from "@/components/ui/home/MostPopularProduct";
-import TopCategories from "@/components/ui/home/TopCategories";
+import OurCategories from "@/components/ui/home/OurCategories";
 
 export default function Home() {
   return (
     <>
       <Banner />
-      <FlashSell />
-      <TopCategories />
       <MostPopularProduct />
+      <OurCategories />
+      <AboutUs />
+      <Contact />
     </>
   );
 }

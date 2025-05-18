@@ -1,12 +1,12 @@
 import Image from "next/image";
 import React, { FC } from "react";
 
-const TopCategories: FC = () => {
+const OurCategories: FC = () => {
   return (
-    <div className=" max-w-screen-xl mx-auto px-5">
+    <section id="categories" className=" max-w-screen-xl mx-auto px-5">
       <div className=" text-center mt-[117px]">
         <h1 className=" text-[36px] font-bold text-[#2F2F2E]">
-          Top Categories
+          Our Categories
         </h1>
         <p className=" mt-[12px] md:w-3/6 mx-auto text-[#666666]">
           Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
@@ -66,8 +66,8 @@ const TopCategories: FC = () => {
           </h1>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default TopCategories;
+export default OurCategories;

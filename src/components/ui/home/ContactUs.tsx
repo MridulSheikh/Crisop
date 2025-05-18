@@ -87,19 +87,8 @@ const Contact = () => {
       .finally(() => setLoading(false));
   };
   return (
-    <div className="overflow-hidden">
-      <div className=" h-48 relative overflow-hidden">
-        <Image
-          src={"/img/contact-us/fresh-food-banner.jpg"}
-          fill
-          alt="banner_image"
-          className=" object-cover object-center"
-        />
-        <div className=" w-full h-full bg-black/70 absolute top-0 right-0 flex justify-center items-center">
-          <h2 className=" text-2xl text-white">Home / Contact us</h2>
-        </div>
-      </div>
-      <div className=" mt-10 max-w-screen-xl px-5 mx-auto">
+    <section id="contact-us" className="overflow-hidden">
+      <div className=" mt-[117px] max-w-screen-xl px-5 mx-auto">
         <div className=" grid lg:grid-cols-2 gap-x-7">
           <motion.div
             ref={ref}
@@ -280,7 +269,7 @@ const Contact = () => {
           </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

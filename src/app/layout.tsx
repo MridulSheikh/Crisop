@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bdoGrotesk.variable} font-bdoGrotesk antialiased`}>
+      <body className={`${bdoGrotesk.variable} font-bdoGrotesk antialiased scroll-smooth`}>
         {children}
       </body>
     </html>
