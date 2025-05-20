@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { Pencil, Trash2 } from "lucide-react";
 import AddProduct from "@/components/ui/admin/products/AddProduct";
+import EditProduct from "@/components/ui/admin/products/EditeProductModal";
+import DeleteProductAlert from "@/components/ui/admin/products/DeleteProductAlert";
 
 type Product = {
   id: string;
@@ -93,18 +93,19 @@ export default function ProductPage() {
                   </span>
                 </td>
                 <td className="p-3 text-right space-x-2">
-                  <Link href={`/admin/product/edit/${product.id}`}>
-                    <Pencil
-                      size={16}
-                      className="text-gray-600 hover:text-black"
-                    />
-                  </Link>
-                  <button onClick={() => alert("Delete not implemented")}>
-                    <Trash2
-                      size={16}
-                      className="text-red-500 hover:text-red-700"
-                    />
-                  </button>
+                  <EditProduct
+                    product={{
+                      name: product.name,
+                      description: "",
+                      category: "",
+                      stockLocation: "",
+                      status: "draft",
+                      regularPrice: product.price.toString(),
+                      discountPrice: undefined,
+                      images: product.image,
+                    }}
+                  />
+                  <DeleteProductAlert />
                 </td>
               </tr>
             ))}

@@ -39,28 +39,28 @@ export function UserAvatar({ className }: { className: string }) {
         <Button
           className=" mx-auto mt-2 rounded-full mb-2"
           size={"sm"}
-          onClick={() => router.push("/dashboard/profile")}
+          onClick={() => router.push("/profile")}
         >
           View Profile
         </Button>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => router.push("/dashboard/cart")}
+            onClick={() => router.push("/cart")}
             className=" cursor-pointer"
           >
             <ShoppingCart className="mr-2 h-4 w-4" />
             <span>Cart</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push("/dashboard/my-order")}
+            onClick={() => router.push("/my-order")}
             className=" cursor-pointer"
           >
             <Logs className="mr-2 h-4 w-4" />
             <span>My order</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push("/dashboard/profile")}
+            onClick={() => router.push("/profile")}
             className=" cursor-pointer"
           >
             <LayoutDashboard className="mr-2 h-4 w-4" />

@@ -1,6 +1,8 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import AddWarehouse from "@/components/ui/admin/warehouse/AddWarehouse";
+import DeleteWarehouseModal from "@/components/ui/admin/warehouse/DeleteWarehouseModal";
+import EditWarehouse from "@/components/ui/admin/warehouse/EditWarehouseModal";
 import { useState, useEffect } from "react";
 
 type Warehouse = {
@@ -37,31 +39,21 @@ export default function WarehousePage() {
     ]);
   }, []);
 
-  // Dummy handlers
-  const handleAdd = () => {
-    alert("Add Warehouse form goes here");
-  };
-
-  const handleEdit = (id: string) => {
-    alert(`Edit Warehouse ${id} form goes here`);
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this warehouse?")) {
-      setWarehouses((prev) => prev.filter((wh) => wh.id !== id));
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = (index: number, updatedWarehouse: any) => {
+    console.log("Updated warehouse at index", index, ":", updatedWarehouse);
   };
 
   return (
     <div className="p-6 bg-white min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Warehouses</h1>
-        <button
-          onClick={handleAdd}
-          className="inline-flex items-center gap-2 bg-black text-white text-sm px-4 py-2 rounded-md hover:opacity-90"
-        >
-          <Plus size={16} /> Add Warehouse
-        </button>
+        <AddWarehouse
+          onAdd={(newWarehouse) => {
+            const id = `wh-${Math.random().toString(36).substr(2, 5)}`;
+            setWarehouses((prev) => [...prev, { id, ...newWarehouse }]);
+          }}
+        />
       </div>
 
       <div className="overflow-x-auto">
@@ -75,7 +67,7 @@ export default function WarehousePage() {
             </tr>
           </thead>
           <tbody>
-            {warehouses.map((wh) => (
+            {warehouses.map((wh, index) => (
               <tr
                 key={wh.id}
                 className="hover:bg-gray-50 transition duration-150"
@@ -84,18 +76,8 @@ export default function WarehousePage() {
                 <td className="p-3 text-gray-600">{wh.location}</td>
                 <td className="p-3 text-gray-600">{wh.capacity}</td>
                 <td className="p-3 text-right space-x-3">
-                  <button
-                    onClick={() => handleEdit(wh.id)}
-                    className="text-green-600 hover:underline"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(wh.id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Delete
-                  </button>
+                  <EditWarehouse initialData={wh}  onUpdate={(updated) => handleUpdate(index, updated)} />
+                  <DeleteWarehouseModal />
                 </td>
               </tr>
             ))}

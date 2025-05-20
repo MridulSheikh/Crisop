@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Eye } from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
+import AddCategory from "@/components/ui/admin/category/AddCategory";
+import EditCategoryModal from "@/components/ui/admin/category/EditeCategoryModal";
+import DeleteCategoryAlert from "@/components/ui/admin/category/DeleteCategoryConfirmModal";
 
 type Category = {
   id: string;
@@ -42,12 +45,7 @@ const CategoryPage = () => {
     <div className="p-6 bg-white min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Categories</h1>
-        <Link
-          href="/admin/category/add"
-           className="inline-flex items-center gap-2 bg-black text-white text-sm px-4 py-2 rounded-md hover:opacity-90"
-        >
-          + Add Category
-        </Link>
+        <AddCategory onAdd={(data) => {console.log(data)}} />
       </div>
 
       <div className="overflow-x-auto">
@@ -71,7 +69,7 @@ const CategoryPage = () => {
                 </td>
                 <td className="p-3 text-gray-600">{category.description}</td>
                 <td className="p-3 text-gray-600">{category.productCount}</td>
-                <td className="p-3 text-right space-x-3">
+                <td className="p-3 text-right flex justify-end space-x-3">
                   <Link
                     href={`/admin/category/${category.id}`}
                     className="inline-flex items-center gap-1 text-blue-600 hover:underline"
@@ -79,13 +77,8 @@ const CategoryPage = () => {
                     <Eye size={16} />
                     View
                   </Link>
-                  <Link
-                    href={`/admin/category/edit/${category.id}`}
-                    className="inline-flex items-center gap-1 text-green-600 hover:underline"
-                  >
-                    <Edit size={16} />
-                    Edit
-                  </Link>
+                  <EditCategoryModal />
+                  <DeleteCategoryAlert />
                 </td>
               </tr>
             ))}

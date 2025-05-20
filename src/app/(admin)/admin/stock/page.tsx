@@ -1,7 +1,8 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import AddStock from "@/components/ui/admin/stock/AddStock";
+import DeleteStockModal from "@/components/ui/admin/stock/DeleteStockModal";
+import UpdateStock from "@/components/ui/admin/stock/UpdateStockModal";
 import { useEffect, useState } from "react";
 
 type StockItem = {
@@ -11,6 +12,27 @@ type StockItem = {
   quantity: number;
   warehouse: string;
 };
+
+const warehouses = [
+  {
+    id: "wh-001",
+    name: "Warehouse A",
+    location: "New York",
+    capacity: 5000,
+  },
+  {
+    id: "wh-002",
+    name: "Warehouse B",
+    location: "Los Angeles",
+    capacity: 3000,
+  },
+  {
+    id: "wh-003",
+    name: "Warehouse C",
+    location: "Chicago",
+    capacity: 4000,
+  },
+];
 
 const StockPage = () => {
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
@@ -57,12 +79,13 @@ const StockPage = () => {
         <h1 className="text-2xl font-semibold text-gray-800">
           Stock Management
         </h1>
-        <Link
-          href="/admin/product/new"
-          className="inline-flex items-center gap-2 bg-black text-white text-sm px-4 py-2 rounded-md hover:opacity-90"
-        >
-          <Plus size={16} /> Add Stock
-        </Link>
+        <AddStock
+          warehouses={warehouses.map((wh) => ({ id: wh.id, name: wh.name }))}
+          onAdd={(stockData) => {
+            console.log("Stock added:", stockData);
+            // Add stock logic here (e.g., API call or local update)
+          }}
+        />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 text-sm">
@@ -72,6 +95,7 @@ const StockPage = () => {
               <th className="p-3 border-b">SKU</th>
               <th className="p-3 border-b">Quantity</th>
               <th className="p-3 border-b">Warehouse</th>
+              <th className="p-3 border-b flex justify-end">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -96,6 +120,23 @@ const StockPage = () => {
                   />
                 </td>
                 <td className="p-3 text-gray-600">{item.warehouse}</td>
+                <td className=" flex justify-end">
+                  <UpdateStock
+                    stock={{
+                      product: "Sugar 25kg",
+                      quantity: 50,
+                      warehouseId: "wh-1",
+                    }}
+                    warehouses={[
+                      { id: "wh-1", name: "Dhaka Warehouse" },
+                      { id: "wh-2", name: "Chittagong Warehouse" },
+                    ]}
+                    onUpdate={(updatedStock) => {
+                      console.log("Updated stock:", updatedStock);
+                    }}
+                  />
+                  <DeleteStockModal />
+                </td>
               </tr>
             ))}
 
