@@ -1,5 +1,6 @@
 import { Eye, Heart, ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const ProductCard = () => {
@@ -9,14 +10,16 @@ const ProductCard = () => {
         <div className=" bg-red-600 inline p-0.5 absolute top-0 left-0 text-white text-sm">
           -10%
         </div>
-        <div className=" h-60 relative ">
-          <Image
-            src={"/img/product.png"}
-            alt="product_image"
-            fill
-            className=" object-contain object-center"
-          />
-        </div>
+        <Link href={`/shop/${1}`}>
+          <div className=" h-60 relative ">
+            <Image
+              src={"/img/product.png"}
+              alt="product_image"
+              fill
+              className=" object-contain object-center"
+            />
+          </div>
+        </Link>
       </div>
 
       <div className=" mt-10 text-center">
@@ -35,9 +38,11 @@ const ProductCard = () => {
         <button className=" size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-[#86a628] hover:text-white ease-in-out duration-300">
           <ShoppingCart className=" size-5" />
         </button>
-        <button className=" size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-[#86a628] hover:text-white ease-in-out duration-300">
-          <Eye className=" size-5" />
-        </button>
+        <Link href={`/shop/${1}`}>
+          <button className=" size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-[#86a628] hover:text-white ease-in-out duration-300">
+            <Eye className=" size-5" />
+          </button>
+        </Link>
       </div>
     </div>
   );

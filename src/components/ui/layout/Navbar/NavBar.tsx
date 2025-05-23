@@ -92,9 +92,6 @@ const NavBar: FC = () => {
         <div className=" flex gap-x-4 items-center">
           <Link href={"/cart"} className="hidden lg:inline-block">
             <Button variant={"ghost"} className="relative">
-              <div className=" absolute size-4 text-xs rounded-full top-0 right-0 bg-[#F76364] text-white">
-                12
-              </div>
               <TiShoppingCart className=" text-2xl" />
             </Button>
           </Link>
