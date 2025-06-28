@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 const navigationData = [
   {
@@ -20,11 +22,11 @@ const navigationData = [
   {
     name: "Shop",
     link: "/shop",
-  }
+  },
 ];
 
 const hashLink = [
- {
+  {
     name: "Categories",
     link: "/#categories",
   },
@@ -36,18 +38,19 @@ const hashLink = [
     name: "Contact us",
     link: "/#contact-us",
   },
-]
+];
 
 const NavBar: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<boolean>(true);
+  const user = useAppSelector(useCurrentUser);
   const pathname = usePathname();
   return (
     <div
       className={cn("py-5 z-50 w-full top-0 ", {
         "bg-[#f4f5f6] ": isOpen || pathname != "/",
         "absolute ": pathname === "/",
-      })}>
+      })}
+    >
       <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
         <div className=" w-[150px] h-[50px] relative">
           <Image
@@ -68,12 +71,13 @@ const NavBar: FC = () => {
                     "after:w-[100%] text-[#F76364] duration-300":
                       pathname === dt.link,
                   }
-                )}>
+                )}
+              >
                 {dt.name}
               </Link>
             </li>
           ))}
-         {hashLink.map((dt, i) => (
+          {hashLink.map((dt, i) => (
             <li key={i} className=" relative">
               <a
                 href={dt.link}
@@ -83,7 +87,8 @@ const NavBar: FC = () => {
                     "after:w-[100%] text-[#F76364] duration-300":
                       pathname === dt.link,
                   }
-                )}>
+                )}
+              >
                 {dt.name}
               </a>
             </li>
@@ -96,18 +101,21 @@ const NavBar: FC = () => {
             </Button>
           </Link>
           {user ? (
-            <UserAvatar className="hidden lg:inline-block mx-auto size-10 " />
+            <UserAvatar className="hidden lg:inline-block mx-auto size-10 " userName={user.name} />
           ) : (
-            <Button className=" hidden lg:inline-block rounded-full">
-              {" "}
-              Login{" "}
-            </Button>
+            <Link href={"/login"}>
+              <Button className=" hidden lg:inline-block rounded-full">
+                {" "}
+                Login{" "}
+              </Button>
+            </Link>
           )}
 
           <Button
             onClick={() => setIsOpen((prev) => !prev)}
             variant={"ghost"}
-            className=" lg:hidden">
+            className=" lg:hidden"
+          >
             {isOpen ? (
               <MdClose className=" text-3xl" />
             ) : (
@@ -130,12 +138,14 @@ const NavBar: FC = () => {
             duration: 0.8,
           },
         }}
-        className="mt-5 lg:hidden overflow-hidden">
+        className="mt-5 lg:hidden overflow-hidden"
+      >
         <ul className="text-lg pb-5 text-center">
           {navigationData.map((dt, i) => (
             <li
               key={i}
-              className=" hover:text-[#F76364] ease-in-out duration-300 hover:font-bold font-semibold px-5 py-4 bg-[#EFEEEE]">
+              className=" hover:text-[#F76364] ease-in-out duration-300 hover:font-bold font-semibold px-5 py-4 bg-[#EFEEEE]"
+            >
               <Link href={dt.link}>{dt.name}</Link>
             </li>
           ))}
@@ -143,7 +153,7 @@ const NavBar: FC = () => {
         <div className=" px-5 text-center">
           {user ? (
             <div className="">
-              <UserAvatar className="mx-auto size-14 mb-5" />
+              <UserAvatar className="mx-auto size-14 mb-5" userName={user.name} />
               <Link href={"/cart"} className="mx-auto">
                 <Button variant={"ghost"} className="relative">
                   <div className=" absolute size-4 text-xs rounded-full top-0 right-0 bg-[#F76364] text-white">

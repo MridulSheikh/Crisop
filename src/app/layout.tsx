@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@/style/css/globals.css";
+import { Providers } from "@/components/provider/Provider";
+import { ToastContainer } from "react-toastify";
 
 const bdoGrotesk = localFont({
   src: "../fonts/BDOGroteskVF.woff2",
@@ -31,8 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bdoGrotesk.variable} font-bdoGrotesk antialiased scroll-smooth`}>
-        {children}
+      <body
+        className={`${bdoGrotesk.variable} font-bdoGrotesk antialiased scroll-smooth`}
+      >
+         <ToastContainer position="top-center" />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

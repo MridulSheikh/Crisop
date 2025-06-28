@@ -14,15 +14,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/features/auth/authSlice";
 
-export function UserAvatar({ className }: { className: string }) {
+export function UserAvatar({ className, userName }: { className: string, userName: string }) {
   const router = useRouter();
+   const dispatch = useAppDispatch();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className={cn("cursor-pointer ", className)}>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback>mridul sheikh</AvatarFallback>
+          <AvatarFallback>{userName}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -32,10 +35,10 @@ export function UserAvatar({ className }: { className: string }) {
         <div className=" pt-5 flex justify-center">
           <Avatar className={cn("cursor-pointer size-14 ")}>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>mridul sheikh</AvatarFallback>
+            <AvatarFallback>{userName}</AvatarFallback>
           </Avatar>
         </div>
-        <h2 className=" mt-2 text-center">Mridul Sehikh</h2>
+        <h2 className=" mt-2 text-center">{userName}</h2>
         <Button
           className=" mx-auto mt-2 rounded-full mb-2"
           size={"sm"}
@@ -60,7 +63,7 @@ export function UserAvatar({ className }: { className: string }) {
             <span>My order</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className=" cursor-pointer">
+          <DropdownMenuItem onClick={() => dispatch(logout())} className=" cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
