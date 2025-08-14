@@ -13,7 +13,7 @@ const DeleteTeamMember = () => {
     >
       <Button variant="outline" className="text-red-500 hover:text-red-700">
         {" "}
-        <Trash2 size={16}  /> Delete
+        <Trash2 size={16}  /> Remove
       </Button>
     </ConfirmDialog>
   );

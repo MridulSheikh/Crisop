@@ -27,7 +27,7 @@ type MemberFormValues = z.infer<typeof memberSchema>;
 
 type AddTeamMemberModalProps = {
   onAdd: (member: MemberFormValues) => void;
-  roles: { id: string; name: string }[];
+  roles: string[];
 };
 
 export default function AddTeamMemberModal({ onAdd, roles }: AddTeamMemberModalProps) {
@@ -87,9 +87,9 @@ export default function AddTeamMemberModal({ onAdd, roles }: AddTeamMemberModalP
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
               <SelectContent>
-                {roles.map((role) => (
-                  <SelectItem key={role.id} value={role.id}>
-                    {role.name}
+                {roles.map((role, index) => (
+                  <SelectItem key={index} value={role}>
+                    {role}
                   </SelectItem>
                 ))}
               </SelectContent>

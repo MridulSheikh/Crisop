@@ -1,3 +1,4 @@
+import { TUserBuilderQueries } from "@/types/user";
 import { baseApi } from "../../api/baseApi";
 
 type TResponseUser = {
@@ -16,9 +17,17 @@ type ToAuthLoginPayload = {
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    userRegistration: builder.mutation({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getTeamMember: builder.query<TUserBuilderQueries, { [key: string]: string | any }>({
+      query: () =>({
+        url: `/user?role=admin,manager`,
+        method: "GET",
+      }),
+      providesTags: ['user']
+    }),
+    signupUser: builder.mutation({
       query: (data) => ({
-        url: "/user/register",
+        url: "/user/create",
         method: "POST",
         body: data,
       }),
@@ -51,13 +60,30 @@ const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    verfiyEmail: builder.mutation({
+      query: (data) => ({
+        url: `/user/verify`,
+        method: "POST",
+        body: data
+      })
+    }),
+    changeUserRole: builder.mutation({
+      query: (data) => ({
+        url: "/user/change-role",
+        method: "POST",
+        body: data
+      })
+    })
   }),
 });
 
 export const {
-  useUserRegistrationMutation,
+  useSignupUserMutation,
   useLoginUserMutation,
   useOauthLoginMutation,
   useForgotPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation, 
+  useVerfiyEmailMutation,
+  useChangeUserRoleMutation,
+  useGetTeamMemberQuery
 } = authApi;

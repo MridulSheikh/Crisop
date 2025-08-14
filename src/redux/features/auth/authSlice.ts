@@ -11,6 +11,7 @@ type TUser = {
   exp: number | null;
   name: string;
   img: string;
+  role: string;
 };
 
 const initialState: TAuthState = {

@@ -100,7 +100,7 @@ export default function ForgotPasswordPage() {
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full bg-green-600 hover:bg-green-700"
+                className="w-full"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Sending..." : "Send Reset Link"}
@@ -112,7 +112,7 @@ export default function ForgotPasswordPage() {
               Remember your password?{" "}
               <a
                 href="/login"
-                className="text-green-700 hover:underline font-medium"
+                className="text-black hover:underline font-medium"
               >
                 Back to Login
               </a>

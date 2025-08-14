@@ -10,10 +10,11 @@ import { catchAsync } from "@/utils/catchAsync";
 import { useResetPasswordMutation } from "@/redux/features/auth/authApi";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z
   .object({
-    newPassword: z.string().min(8, "Password must be at least 6 characters"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -69,7 +70,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-green-50 to-white flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white shadow-2xl rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-center text-green-700">
+        <h2 className="text-2xl font-bold text-center">
           Reset Your Password
         </h2>
         <p className="text-sm text-center text-gray-500 mt-1 mb-6">
@@ -90,7 +91,7 @@ const ResetPassword = () => {
               type={showPassword ? "text" : "password"}
               id="newPassword"
               {...register("newPassword")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 "
               placeholder="••••••••"
             />
             <button
@@ -120,7 +121,7 @@ const ResetPassword = () => {
               type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
               {...register("confirmPassword")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2"
               placeholder="••••••••"
             />
             <button
@@ -137,13 +138,13 @@ const ResetPassword = () => {
             )}
           </div>
 
-          <button
+          <Button
             disabled={isLoading}
             type="submit"
-            className="w-full py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition"
+            className="w-full"
           >
             Reset Password
-          </button>
+          </Button>
         </form>
       </div>
     </div>
