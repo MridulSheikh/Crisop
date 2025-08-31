@@ -27,7 +27,7 @@ export type TUser = {
     name: string,
     email: string,
     image: string,
-    role: 'admin' | 'manager' | 'user'
+    role: 'admin' | 'manager' | 'user' | 'super'
 }
 export type TUserBuilderQueries = {
     data: TUser[];

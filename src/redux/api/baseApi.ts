@@ -53,12 +53,17 @@ const baseQueryWithRefreshToken = async (
       api.dispatch(logout());
     }
   }
+
+  // this error for when user role changed by admin, user can't make any request untile user login again
+  if(error?.status === 401 && error.data?.errorMessage === "User login needed!"){
+    api.dispatch(logout());
+  }
   return result;
 };
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user"],
+  tagTypes: ["users"],
   endpoints: () => ({}),
 });

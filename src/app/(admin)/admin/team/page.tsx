@@ -1,10 +1,56 @@
 "use client";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
-
-import DeleteTeamMember from "@/components/ui/admin/team/DeleteTeamMember";
-import { useGetTeamMemberQuery } from "@/redux/features/auth/authApi";
+import TeamCard from "@/components/ui/admin/team/TeamCard";
+import {
+  useChangeUserRoleMutation,
+  useGetTeamMemberQuery,
+} from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
 import { ThreeDots } from "react-loader-spinner";
+import { toast } from "react-toastify";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ErrorUi = ({ error }: { error:any }) => {
+  return (
+    <tr>
+      <td></td>
+      <td className="flex justify-center py-10">
+        {"status" in error &&
+        error?.data &&
+        typeof error.data === "object" &&
+        "errorMessage" in error.data ? (
+          <p>{(error.data as { errorMessage: string }).errorMessage}</p>
+        ) : (
+          <p>Something went wrong.</p>
+        )}
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  );
+};
+
+const LoadingUi = () => {
+  return (
+    <tr>
+      <td></td>
+      <td className=" flex justify-center">
+        <ThreeDots
+          visible={true}
+          height="80"
+          width="60"
+          color="#4b5563"
+          radius="9"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  );
+};
 
 const TeamPage = () => {
   // Roles state
@@ -13,11 +59,37 @@ const TeamPage = () => {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
+  const [changeRole, { isLoading: isChangeRoleLoading }] =
+    useChangeUserRoleMutation();
 
   const teamMember = data?.data;
 
   // Team handlers
-  const handleAddMember = () => alert("Add Team Member form here");
+  const handleAddMember = async (data: { email: string; roleId: string }) => {
+    const toastId = toast.loading("Updating...");
+    try {
+      await changeRole({
+        email: data.email,
+        role: data.roleId,
+      }).unwrap();
+      toast.update(toastId, {
+        render: "Successfully add team member",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        position: "top-center",
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.update(toastId, {
+        render: err?.data?.errorMessage ?? "something went wrong",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+        position: "top-center",
+      });
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -27,6 +99,7 @@ const TeamPage = () => {
           <AddTeamMemberModal
             roles={["admin", "manager"]}
             onAdd={handleAddMember}
+            isLoading={isChangeRoleLoading}
           />
         </div>
       </div>
@@ -44,61 +117,10 @@ const TeamPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {isError && (
-                  <tr>
-                    <td></td>
-                    <td className="flex justify-center py-10">
-                      {"status" in error &&
-                      error?.data &&
-                      typeof error.data === "object" &&
-                      "errorMessage" in error.data ? (
-                        <p>
-                          {
-                            (error.data as { errorMessage: string })
-                              .errorMessage
-                          }
-                        </p>
-                      ) : (
-                        <p>Something went wrong.</p>
-                      )}
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                )}
-                {isLoading && (
-                  <tr>
-                    <td></td>
-                    <td className=" flex justify-center">
-                      <ThreeDots
-                        visible={true}
-                        height="80"
-                        width="60"
-                        color="#4b5563"
-                        radius="9"
-                        ariaLabel="three-dots-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                      />
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                )}
+                {isError && <ErrorUi error={error} />}
+                {isLoading && <LoadingUi />}
                 {teamMember?.map((member: TUser) => (
-                  <tr
-                    key={member._id}
-                    className="hover:bg-gray-50 transition duration-150"
-                  >
-                    <td className="p-3 font-medium text-gray-800">
-                      {member.name}
-                    </td>
-                    <td className="p-3 text-gray-600">{member.email}</td>
-                    <td className="p-3 text-gray-600">{member.role}</td>
-                    <td className="p-3 text-right space-x-3">
-                      <DeleteTeamMember />
-                    </td>
-                  </tr>
+                  <TeamCard member={member} key={member._id} />
                 ))}
                 {teamMember?.length === 0 && (
                   <tr>

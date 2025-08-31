@@ -1,6 +1,6 @@
 "use client";
 
-import { LegacyRef, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,13 +16,13 @@ import {
   useLoginUserMutation,
   useVerfiyEmailMutation,
 } from "@/redux/features/auth/authApi";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "@/redux/features/auth/authSlice";
+import { setUser, useCurrentUser } from "@/redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useGoogleLogin } from "@react-oauth/google";
 import FacebookLoginButton from "@/components/auth/FacebookLoginButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -40,6 +40,10 @@ export default function LoginPage() {
   const dispatch = useAppDispatch();
   const [verifyEmail] = useVerfiyEmailMutation();
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
+  const user = useAppSelector(useCurrentUser);
   const [codeDigits, setCodeDigits] = useState<string[]>([
     "",
     "",
@@ -48,7 +52,6 @@ export default function LoginPage() {
     "",
     "",
   ]);
-  const router = useRouter();
 
   const {
     register,
@@ -120,6 +123,7 @@ export default function LoginPage() {
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
+        console.log(error)
         toast.update(toastId, {
           render:
             error?.data?.errorMessage ??
@@ -181,6 +185,13 @@ export default function LoginPage() {
     }
   };
 
+  // rederect user
+  useEffect(() => {
+    if (user?.email) {
+      router.replace(redirectTo);
+    }
+  }, [user]);
+
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-green-50">
       {/* Left Image */}
@@ -197,7 +208,9 @@ export default function LoginPage() {
       <div className="flex items-center justify-center p-6">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">
+              Welcome back
+            </CardTitle>
           </CardHeader>
           {step === "login" ? (
             <CardContent>
@@ -246,11 +259,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Submit */}
-                <Button
-                  disabled={isLoading}
-                  type="submit"
-                  className="w-full"
-                >
+                <Button disabled={isLoading} type="submit" className="w-full">
                   {isLoading ? "Logging in…" : "Login"}
                 </Button>
               </form>
