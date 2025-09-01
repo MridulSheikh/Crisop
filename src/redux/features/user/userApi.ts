@@ -11,6 +11,14 @@ const userApi = baseApi.injectEndpoints({
             }),
             providesTags: ["users"],
         }),
+        addTeamMemeber: builder.mutation({
+            query: (data) => ({
+                url: "/user/add-member",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["users"]
+        }),
         changeUserRole: builder.mutation({
             query: (data) => ({
                 url: "/user/change-role",
@@ -23,4 +31,4 @@ const userApi = baseApi.injectEndpoints({
 })
 
 
-export const { useGetTeamMemberQuery, useChangeUserRoleMutation } = userApi
+export const { useGetTeamMemberQuery, useAddTeamMemeberMutation, useChangeUserRoleMutation} = userApi

@@ -22,6 +22,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { UserPlus } from "lucide-react";
 
 // Schema with role added
 const memberSchema = z.object({
@@ -72,7 +73,7 @@ export default function AddTeamMemberModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-black text-white px-4 py-2 rounded-md hover:opacity-90">
-          + Add Member
+        <UserPlus /> Add team member
         </Button>
       </DialogTrigger>
       <DialogContent>

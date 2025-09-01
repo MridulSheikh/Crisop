@@ -2,7 +2,7 @@
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
 import {
-  useChangeUserRoleMutation,
+  useAddTeamMemeberMutation,
   useGetTeamMemberQuery,
 } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
@@ -59,8 +59,10 @@ const TeamPage = () => {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
-  const [changeRole, { isLoading: isChangeRoleLoading }] =
-    useChangeUserRoleMutation();
+  const [AddTeamMember, { isLoading: isChangeRoleLoading, error: addTeamError}] =
+    useAddTeamMemeberMutation();
+
+   console.log(addTeamError)
 
   const teamMember = data?.data;
 
@@ -68,7 +70,7 @@ const TeamPage = () => {
   const handleAddMember = async (data: { email: string; roleId: string }) => {
     const toastId = toast.loading("Updating...");
     try {
-      await changeRole({
+      await AddTeamMember({
         email: data.email,
         role: data.roleId,
       }).unwrap();
