@@ -62,8 +62,6 @@ const TeamPage = () => {
   const [AddTeamMember, { isLoading: isChangeRoleLoading, error: addTeamError}] =
     useAddTeamMemeberMutation();
 
-   console.log(addTeamError)
-
   const teamMember = data?.data;
 
   // Team handlers
