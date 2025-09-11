@@ -26,7 +26,7 @@ const userApi = baseApi.injectEndpoints({
                 body: data,
             }),
             invalidatesTags: ["users"]
-        })
+        }),   
     })
 })
 

@@ -17,38 +17,7 @@ interface IProps {
 const TeamCard = (props: IProps) => {
   const { member } = props;
   const user = useAppSelector(useCurrentUser);
-  const [changeRole, { isLoading }] =
-    useChangeUserRoleMutation()
-  //   e: React.ChangeEvent<HTMLSelectElement>
-  // ) => {
-  //   const newRole = e.target.value;
-  //   const toastId = toast.loading("Updating...");
-  //   try {
-  //     await changeRole({
-  //       email: member.email,
-  //       role: newRole,
-  //     }).unwrap();
-  //     toast.update(toastId, {
-  //       render: "Successfully role changed",
-  //       type: "success",
-  //       isLoading: false,
-  //       autoClose: 3000,
-  //       position: "top-center",
-  //     });
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   } catch (err: any) {
-  //     toast.update(toastId, {
-  //       render:
-  //         err?.data?.errorMessage ??
-  //         "something went wrong",
-  //       type: "error",
-  //       isLoading: false,
-  //       autoClose: 4000,
-  //       position: "top-center",
-  //     });
-  //   }
-  // };
-
+  const [changeRole] = useChangeUserRoleMutation()
   const isSameAdmin = user?.role === "admin" && member.role === "admin";
   const isSuper = member?.role === "super";
   return (

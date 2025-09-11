@@ -15,6 +15,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useState } from 'react';
+import { useAddWareHouseMutation } from '@/redux/features/warehouse/warehouseApi';
+import { toast } from 'react-toastify';
 
 // Schema validation
 const formSchema = z.object({
@@ -25,13 +27,9 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-type AddWarehouseProps = {
-  onAdd: (warehouse: { name: string; location: string; capacity: number }) => void;
-};
-
-export default function AddWarehouse({ onAdd }: AddWarehouseProps) {
+export default function AddWarehouse() {
   const [open, setOpen] = useState(false);
-
+  const [addWarehouse] = useAddWareHouseMutation()
   const {
     register,
     handleSubmit,
@@ -46,8 +44,30 @@ export default function AddWarehouse({ onAdd }: AddWarehouseProps) {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    onAdd(data);
+  const onSubmit = async (data: FormValues) => {
+    const toastId = toast.loading("Adding warehouse...");
+    try {
+      const response = await addWarehouse(data).unwrap();
+      // update the existing loading toast into success
+      toast.update(toastId, {
+        render: response.data.message,
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        position: "top-center",
+      });
+      // eslint-disable-next-line @typescript-eslint/no-exp
+    } catch (error: any) {
+      toast.update(toastId, {
+        render:
+          error?.data?.errorMessage ??
+          "Something went wrong!",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+        position: "top-center",
+      });
+    }
     reset();
     setOpen(false);
   };

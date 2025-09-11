@@ -10,7 +10,7 @@ import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ErrorUi = ({ error }: { error:any }) => {
+export const ErrorUi = ({ error }: { error:any }) => {
   return (
     <tr>
       <td></td>
@@ -30,7 +30,7 @@ const ErrorUi = ({ error }: { error:any }) => {
   );
 };
 
-const LoadingUi = () => {
+export const LoadingUi = () => {
   return (
     <tr>
       <td></td>

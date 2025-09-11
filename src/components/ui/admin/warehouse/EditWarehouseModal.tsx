@@ -15,9 +15,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useState } from "react";
+import { useUpdateWareHouseMutation } from "@/redux/features/warehouse/warehouseApi";
+import { toast } from "react-toastify";
 
 // Schema
 const warehouseSchema = z.object({
+  _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   location: z.string().min(1, "Location is required"),
   capacity: z.coerce.number().min(1, "Capacity must be at least 1 unit"),
@@ -27,11 +30,11 @@ type WarehouseFormValues = z.infer<typeof warehouseSchema>;
 
 type EditWarehouseProps = {
   initialData: WarehouseFormValues;
-  onUpdate: (data: WarehouseFormValues) => void;
 };
 
-export default function EditWarehouse({ initialData, onUpdate }: EditWarehouseProps) {
+export default function EditWarehouse({ initialData }: EditWarehouseProps) {
   const [open, setOpen] = useState(false);
+  const [updateWarehouse] = useUpdateWareHouseMutation()
 
   const {
     register,
@@ -42,9 +45,31 @@ export default function EditWarehouse({ initialData, onUpdate }: EditWarehousePr
     defaultValues: initialData,
   });
 
-  const onSubmit = (data: WarehouseFormValues) => {
-    onUpdate(data);
-    setOpen(false);
+  const onSubmit = async (data: WarehouseFormValues) => {
+     const toastId = toast.loading("updating warehouse...");
+        try {
+          const response = await updateWarehouse({id: initialData._id as string, data}).unwrap();
+          // update the existing loading toast into success
+          toast.update(toastId, {
+            render: response.data.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 3000,
+            position: "top-center",
+          });
+          // eslint-disable-next-line @typescript-eslint/no-exp
+        } catch (error: any) {
+          toast.update(toastId, {
+            render:
+              error?.data?.errorMessage ??
+              "Something went wrong!",
+            type: "error",
+            isLoading: false,
+            autoClose: 4000,
+            position: "top-center",
+          });
+        }
+        setOpen(false);
   };
 
   return (
