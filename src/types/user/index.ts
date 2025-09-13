@@ -24,7 +24,7 @@ export type TStock = {
     _id: string;
     productName: string;
     sku: string;
-    quntity: number;
+    quantity: number;
     warehouse: string;
     isDeleted?:boolean;
 }

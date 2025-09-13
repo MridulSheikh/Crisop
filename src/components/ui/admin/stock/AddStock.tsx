@@ -12,45 +12,66 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState } from "react";
+import { use, useState } from "react";
+import { useAddStocksMutation } from "@/redux/features/warehouse/stockApi";
+import { toast } from "react-toastify";
+import { SelectWarehouse } from "./SelectWarehouse";
 
 // Schema
 const stockSchema = z.object({
-  product: z.string().min(1, "Product name is required"),
+  productName: z.string().min(1, "Product name is required"),
   quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
-  warehouseId: z.string().min(1, "Select a warehouse"),
+  warehouse: z.string().min(1, "Select a warehouse"),
 });
 
 type StockFormValues = z.infer<typeof stockSchema>;
 
-type AddStockProps = {
-  onAdd: (stock: StockFormValues) => void;
-  warehouses: { id: string; name: string }[];
-};
-
-export default function AddStock({ onAdd, warehouses }: AddStockProps) {
+export default function AddStock() {
   const [open, setOpen] = useState(false);
+  const [addStock] = useAddStocksMutation();
 
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
+    control,
     formState: { errors },
   } = useForm<StockFormValues>({
     resolver: zodResolver(stockSchema),
     defaultValues: {
-      product: "",
+      productName: "",
       quantity: 1,
-      warehouseId: "",
+      warehouse: "",
     },
   });
 
-  const onSubmit = (data: StockFormValues) => {
-    onAdd(data);
+  const onSubmit = async (data: StockFormValues) => {
+    const toastId = toast.loading("Adding Stock...");
+    try {
+      const response = await addStock(data).unwrap();
+      // update the existing loading toast into success
+      toast.update(toastId, {
+        render: response.data.message,
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        position: "top-center",
+      });
+      // eslint-disable-next-line @typescript-eslint/no-exp
+    } catch (error: any) {
+      toast.update(toastId, {
+        render:
+          error?.data?.errorMessage ??
+          "Something went wrong!",
+        type: "error",
+        isLoading: false,
+        autoClose: 4000,
+        position: "top-center",
+      });
+    }
     reset();
     setOpen(false);
   };
@@ -59,7 +80,7 @@ export default function AddStock({ onAdd, warehouses }: AddStockProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="inline-flex items-center gap-2 bg-black text-white text-sm px-4 py-2 rounded-md hover:opacity-90">
-         + Add Stock
+          + Add Stock
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -69,9 +90,9 @@ export default function AddStock({ onAdd, warehouses }: AddStockProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2">
           <div>
             <Label htmlFor="product">Product Name</Label>
-            <Input id="product" {...register("product")} placeholder="e.g., Rice 50kg" />
-            {errors.product && (
-              <p className="text-sm text-red-500 mt-1">{errors.product.message}</p>
+            <Input id="product" {...register("productName")} placeholder="e.g., Rice 50kg" />
+            {errors.productName && (
+              <p className="text-sm text-red-500 mt-1">{errors.productName.message}</p>
             )}
           </div>
 
@@ -84,21 +105,15 @@ export default function AddStock({ onAdd, warehouses }: AddStockProps) {
           </div>
 
           <div>
-            <Label>Warehouse</Label>
-            <Select onValueChange={(val) => setValue("warehouseId", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select warehouse" />
-              </SelectTrigger>
-              <SelectContent>
-                {warehouses.map((wh) => (
-                  <SelectItem key={wh.id} value={wh.id}>
-                    {wh.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.warehouseId && (
-              <p className="text-sm text-red-500 mt-1">{errors.warehouseId.message}</p>
+            <Controller
+              name="warehouse"
+              control={control}
+              render={({ field }) => (
+                <SelectWarehouse value={field.value} onChange={field.onChange} />
+              )}
+            />
+            {errors.warehouse && (
+              <p className="text-sm text-red-500 mt-1">{errors.warehouse.message}</p>
             )}
           </div>
 

@@ -13,27 +13,6 @@ type StockItem = {
   warehouse: string;
 };
 
-const warehouses = [
-  {
-    id: "wh-001",
-    name: "Warehouse A",
-    location: "New York",
-    capacity: 5000,
-  },
-  {
-    id: "wh-002",
-    name: "Warehouse B",
-    location: "Los Angeles",
-    capacity: 3000,
-  },
-  {
-    id: "wh-003",
-    name: "Warehouse C",
-    location: "Chicago",
-    capacity: 4000,
-  },
-];
-
 const StockPage = () => {
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
 
@@ -79,13 +58,7 @@ const StockPage = () => {
         <h1 className="text-2xl font-semibold text-gray-800">
           Stock Management
         </h1>
-        <AddStock
-          warehouses={warehouses.map((wh) => ({ id: wh.id, name: wh.name }))}
-          onAdd={(stockData) => {
-            console.log("Stock added:", stockData);
-            // Add stock logic here (e.g., API call or local update)
-          }}
-        />
+        <AddStock />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 text-sm">

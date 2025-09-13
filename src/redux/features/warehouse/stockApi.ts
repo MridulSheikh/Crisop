@@ -11,7 +11,7 @@ const stockApi = baseApi.injectEndpoints({
             providesTags: ["stocks"]
         }),
         addStocks: builder.mutation({
-            query: (body: TStock) =>({
+            query: (body: Omit<TStock, "_id" | "sku" | "isDeleted">) =>({
                 url: '/stock',
                 method: 'POST',
                 body: body
