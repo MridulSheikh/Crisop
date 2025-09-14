@@ -1,24 +1,26 @@
 "use client";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import {
   useAddTeamMemeberMutation,
   useGetTeamMemberQuery,
 } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
+import { useSearchParams } from "next/navigation";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const ErrorUi = ({ error }: { error:any }) => {
+export const ErrorUi = ({ error }: { error: any }) => {
   return (
     <tr>
       <td></td>
       <td className="flex justify-center py-10">
         {"status" in error &&
-        error?.data &&
-        typeof error.data === "object" &&
-        "errorMessage" in error.data ? (
+          error?.data &&
+          typeof error.data === "object" &&
+          "errorMessage" in error.data ? (
           <p>{(error.data as { errorMessage: string }).errorMessage}</p>
         ) : (
           <p>Something went wrong.</p>
@@ -54,15 +56,18 @@ export const LoadingUi = () => {
 
 const TeamPage = () => {
   // Roles state
-
-  const { data, isLoading, error, isError } = useGetTeamMemberQuery({
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page')
+  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page }, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
-  const [AddTeamMember, { isLoading: isChangeRoleLoading, error: addTeamError}] =
+
+  const [AddTeamMember, { isLoading: isChangeRoleLoading }] =
     useAddTeamMemeberMutation();
 
-  const teamMember = data?.data;
+  const teamMember = data?.data?.data;
+  const meta = data?.data?.meta;
 
   // Team handlers
   const handleAddMember = async (data: { email: string; roleId: string }) => {
@@ -93,7 +98,7 @@ const TeamPage = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      <div className="px-6 sticky top-0 py-3 bg-white flex justify-between items-center">
+      <div className="px-6 sticky z-50 top-0 py-3 bg-white flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
         <div className=" flex gap-x-3">
           <AddTeamMemberModal
@@ -132,6 +137,10 @@ const TeamPage = () => {
               </tbody>
             </table>
           </div>
+          <div className="mt-5">
+            <PaginationWithLinks page={meta?.page as number} pageSize={meta?.limit as number} totalCount={meta?.total as number} />
+          </div>
+
         </section>
       </div>
     </div>

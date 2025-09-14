@@ -5,8 +5,8 @@ const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getTeamMember: builder.query<TUserBuilderQueries, { [key: string]: string | any }>({
-            query: () => ({
-                url: `/user?role=admin,manager,super`,
+            query: ({ role = "admin,manager,super", page = 1 }: {page: number}) => ({
+                url: `/user?page=${page}`,
                 method: "GET",
             }),
             providesTags: ["users"],
