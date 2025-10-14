@@ -58,7 +58,8 @@ const TeamPage = () => {
   // Roles state
   const searchParams = useSearchParams();
   const page = searchParams.get('page')
-  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page }, {
+  const pageNumber = Number(page)
+  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page: pageNumber  }, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
@@ -68,6 +69,8 @@ const TeamPage = () => {
 
   const teamMember = data?.data?.data;
   const meta = data?.data?.meta;
+
+  console.log(data)
 
   // Team handlers
   const handleAddMember = async (data: { email: string; roleId: string }) => {

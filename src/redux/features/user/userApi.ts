@@ -1,12 +1,17 @@
 import { baseApi } from "@/redux/api/baseApi";
 import { TUserBuilderQueries } from "@/types/user";
 
+interface GetTeamMemberParams {
+    page?: number;
+    role?: string;
+}
+
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        getTeamMember: builder.query<TUserBuilderQueries, { [key: string]: string | any }>({
-            query: ({ role = "admin,manager,super", page = 1 }: {page: number}) => ({
-                url: `/user?page=${page}`,
+        getTeamMember: builder.query<TUserBuilderQueries, GetTeamMemberParams>({
+            query: ({ role = "admin,manager,super", page = 1 }) => ({
+                url: `/user?page=${page}&role=${encodeURIComponent(role)}`,
                 method: "GET",
             }),
             providesTags: ["users"],
@@ -26,9 +31,9 @@ const userApi = baseApi.injectEndpoints({
                 body: data,
             }),
             invalidatesTags: ["users"]
-        }),   
+        }),
     })
 })
 
 
-export const { useGetTeamMemberQuery, useAddTeamMemeberMutation, useChangeUserRoleMutation} = userApi
+export const { useGetTeamMemberQuery, useAddTeamMemeberMutation, useChangeUserRoleMutation } = userApi
