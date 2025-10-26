@@ -1,6 +1,7 @@
 "use client";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
+import { Input } from "@/components/ui/input";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import {
   useAddTeamMemeberMutation,
@@ -8,6 +9,7 @@ import {
 } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
+import { ChangeEvent, EventHandler, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
@@ -55,22 +57,22 @@ export const LoadingUi = () => {
 };
 
 const TeamPage = () => {
+   const [searchQuery, setSearchQuery] = useState("");
   // Roles state
   const searchParams = useSearchParams();
   const page = searchParams.get('page')
   const pageNumber = Number(page)
-  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page: pageNumber  }, {
+  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page: pageNumber, search: searchQuery  }, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
+
 
   const [AddTeamMember, { isLoading: isChangeRoleLoading }] =
     useAddTeamMemeberMutation();
 
   const teamMember = data?.data?.data;
   const meta = data?.data?.meta;
-
-  console.log(data)
 
   // Team handlers
   const handleAddMember = async (data: { email: string; roleId: string }) => {
@@ -99,16 +101,30 @@ const TeamPage = () => {
     }
   };
 
+  console.log(searchQuery)
+
+  // Handle Search User
+  const handleSearchUser = (e: ChangeEvent<HTMLInputElement>)=>{
+         const value = e.target.value;
+         setSearchQuery(value);
+  }
+
   return (
     <div className="bg-white min-h-screen">
       <div className="px-6 sticky z-50 top-0 py-3 bg-white flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
         <div className=" flex gap-x-3">
+          
+          <div className="flex">
+              <Input type="search" placeholder="Search users" value={searchQuery} onChange={handleSearchUser}  />
+          </div>
+          
           <AddTeamMemberModal
             roles={["admin", "manager"]}
             onAdd={handleAddMember}
             isLoading={isChangeRoleLoading}
           />
+
         </div>
       </div>
       <div className="flex p-6 flex-col  gap-8">

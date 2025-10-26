@@ -4,14 +4,15 @@ import { TUserBuilderQueries } from "@/types/user";
 interface GetTeamMemberParams {
     page?: number;
     role?: string;
+    search?: String;
 }
 
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getTeamMember: builder.query<TUserBuilderQueries, GetTeamMemberParams>({
-            query: ({ role = "admin,manager,super", page = 1 }) => ({
-                url: `/user?page=${page}&role=${encodeURIComponent(role)}`,
+            query: ({ role = "admin,manager,super", page = 1, search }) => ({
+                url: `/user?page=${page}&role=${encodeURIComponent(role)}&search=${search}`,
                 method: "GET",
             }),
             providesTags: ["users"],
