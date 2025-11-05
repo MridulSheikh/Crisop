@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
 import { useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 
@@ -38,14 +37,7 @@ export function UserAvatar({ className, userName }: { className: string, userNam
             <AvatarFallback>{userName}</AvatarFallback>
           </Avatar>
         </div>
-        <h2 className=" mt-2 text-center">{userName}</h2>
-        <Button
-          className=" mx-auto mt-2 rounded-full mb-2"
-          size={"sm"}
-          onClick={() => router.push("/profile")}
-        >
-          View Profile
-        </Button>
+        <h2 className=" mt-2 text-center text-sm" >{userName}</h2>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem

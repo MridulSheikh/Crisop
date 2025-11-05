@@ -60,7 +60,8 @@ const NavBar: FC = () => {
             className=" object-contain object-center"
           />
         </div>
-        <ul className="  hidden lg:flex justify-center  items-center gap-x-7 h-full list-none">
+        <div className=" flex gap-x-7 items-center">
+           <ul className="  hidden lg:flex justify-center  items-center gap-x-7 h-full list-none">
           {navigationData.map((dt, i) => (
             <li key={i} className=" relative">
               <Link
@@ -95,11 +96,6 @@ const NavBar: FC = () => {
           ))}
         </ul>
         <div className=" flex gap-x-4 items-center">
-          <Link href={"/cart"} className="hidden lg:inline-block">
-            <Button variant={"ghost"} className="relative">
-              <TiShoppingCart className=" text-2xl" />
-            </Button>
-          </Link>
           {user ? (
             <UserAvatar className="hidden lg:inline-block mx-auto size-10 " userName={user.name} />
           ) : (
@@ -123,6 +119,8 @@ const NavBar: FC = () => {
             )}
           </Button>
         </div>
+        </div>
+       
       </div>
       <motion.div
         variants={{
@@ -154,14 +152,6 @@ const NavBar: FC = () => {
           {user ? (
             <div className="">
               <UserAvatar className="mx-auto size-14 mb-5" userName={user.name} />
-              <Link href={"/cart"} className="mx-auto">
-                <Button variant={"ghost"} className="relative">
-                  <div className=" absolute size-4 text-xs rounded-full top-0 right-0 bg-[#F76364] text-white">
-                    12
-                  </div>
-                  <TiShoppingCart className=" text-4xl" />
-                </Button>
-              </Link>
             </div>
           ) : (
             <Button className="w-full"> Login </Button>

@@ -7,6 +7,8 @@ import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "../../select";
 import { SelectValue } from "@radix-ui/react-select";
+import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
+import { cn } from "@/lib/utils";
 
 interface IProps {
   member: TUser;
@@ -22,7 +24,11 @@ const TeamCard = (props: IProps) => {
   const isSuper = member?.role === "super";
   return (
     <tr className="hover:bg-gray-50 transition duration-150">
-      <td className="p-3 font-medium text-gray-800">{member.name}</td>
+      <td className="p-3 font-medium text-gray-800 flex gap-x-3 items-center">
+          <Avatar className={cn("cursor-pointer size-7 ")}>
+            <AvatarImage src="https://i.pravatar.cc/300" alt="@shadcn" />
+          </Avatar>
+        {member.name}</td>
       <td className="p-3 text-gray-600">{member.email}</td>
 
       {/* Role column with dropdown */}
