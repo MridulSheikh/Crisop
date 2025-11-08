@@ -87,7 +87,7 @@ const Signup = () => {
       });
 
       // rederect route
-      router.push('/')
+      router.push('/dashboard/profile')
     } catch {
       toast.update(toastId, {
         render: "❌ Invalid or expired code",
@@ -265,7 +265,7 @@ const Signup = () => {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleCodeChange(e.target.value, idx)}
-                    ref={(el) => (inputsRef.current[idx] = el)}
+                    ref={(el) => {inputsRef.current[idx] = el}}
                     className="w-10 h-12 text-center border rounded text-lg"
                   />
                 ))}

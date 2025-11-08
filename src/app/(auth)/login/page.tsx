@@ -42,7 +42,7 @@ export default function LoginPage() {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = searchParams.get("redirect") || "/dashboard/profile";
   const user = useAppSelector(useCurrentUser);
   const [codeDigits, setCodeDigits] = useState<string[]>([
     "",
@@ -174,7 +174,7 @@ export default function LoginPage() {
       });
 
       // rederect route
-      router.push("/");
+      router.push("/profile");
     } catch {
       toast.update(toastId, {
         render: "❌ Invalid or expired code",
@@ -326,7 +326,7 @@ export default function LoginPage() {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleCodeChange(e.target.value, idx)}
-                    ref={(el) => (inputsRef.current[idx] = el)}
+                    ref={(el) => {inputsRef.current[idx] = el}}
                     className="w-10 h-12 text-center border rounded text-lg focus:ring-2 focus:ring-black"
                   />
                 ))}
