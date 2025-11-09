@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Logs, ShoppingCart } from "lucide-react";
+import { LogOut, Logs, ShoppingCart, User } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -40,6 +40,13 @@ export function UserAvatar({ className, userName }: { className: string, userNam
         <h2 className=" mt-2 text-center text-sm" >{userName}</h2>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+           <DropdownMenuItem
+            onClick={() => router.push("/profile")}
+            className=" cursor-pointer"
+          >
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push("/cart")}
             className=" cursor-pointer"
@@ -48,7 +55,7 @@ export function UserAvatar({ className, userName }: { className: string, userNam
             <span>Cart</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push("/my-order")}
+            onClick={() => router.push("/order")}
             className=" cursor-pointer"
           >
             <Logs className="mr-2 h-4 w-4" />
