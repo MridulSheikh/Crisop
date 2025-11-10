@@ -43,7 +43,7 @@ const Dashboard = ({
         </aside>
 
         {/* Main Content Area */}
-        <section className="flex-1 bg-white dark:bg-gray-900 rounded-2xl shadow p-6">
+        <section className="p-6 w-full">
           {children}
         </section>
       </main>
