@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,9 +12,12 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useCurrentUser } from "@/redux/features/auth/authSlice"
+import { useAppSelector } from "@/redux/hooks"
 import { Pencil } from "lucide-react"
 
 export function UpdateProfile() {
+    const user = useAppSelector(useCurrentUser);
   return (
     <Dialog>
       <form>
@@ -31,11 +35,7 @@ export function UpdateProfile() {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
+              <Input id="name-1" name="name" defaultValue={user?.name} />
             </div>
           </div>
           <DialogFooter>
