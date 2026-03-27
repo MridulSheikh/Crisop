@@ -11,11 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { use, useState } from "react";
+import {  useState } from "react";
 import { useAddStocksMutation } from "@/redux/features/warehouse/stockApi";
 import { toast } from "react-toastify";
 import { SelectWarehouse } from "./SelectWarehouse";
@@ -60,7 +59,8 @@ export default function AddStock() {
         autoClose: 3000,
         position: "top-center",
       });
-      // eslint-disable-next-line @typescript-eslint/no-exp
+      
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.update(toastId, {
         render:

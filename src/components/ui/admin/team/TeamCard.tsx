@@ -7,7 +7,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "../../select";
 import { SelectValue } from "@radix-ui/react-select";
-import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
+import { Avatar, AvatarImage } from "../../avatar";
 import { cn } from "@/lib/utils";
 
 interface IProps {
@@ -50,6 +50,7 @@ const TeamCard = (props: IProps) => {
                 autoClose: 3000,
                 position: "top-center",
               });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (err: any) {
               toast.update(toastId, {
                 render: err?.data?.errorMessage ?? "Something went wrong",

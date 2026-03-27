@@ -3,6 +3,7 @@ import { TStock, TStockBuilderQueries } from "@/types/user";
 
 const stockApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getStock: builder.query<TStockBuilderQueries, {[key: string]: string | any}>({
             query: ()=> ({
                 url: `/stock`,
@@ -19,6 +20,7 @@ const stockApi = baseApi.injectEndpoints({
             invalidatesTags: ['stocks']
         }),
         updateStocks: builder.mutation({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             query: ({id, data} : {id: string, data: any}) => ({
                 url: `/stock/${id}`,
                 method: "PATCH",

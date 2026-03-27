@@ -6,13 +6,6 @@ import EditWarehouse from "@/components/ui/admin/warehouse/EditWarehouseModal";
 import { useGetWarehouseQuery } from "@/redux/features/warehouse/warehouseApi";
 import { ErrorUi, LoadingUi } from "../team/page";
 
-type Warehouse = {
-  id: string;
-  name: string;
-  location: string;
-  capacity: number; // e.g., max units it can store
-};
-
 export default function WarehousePage() {
    const { data, isLoading, error, isError } = useGetWarehouseQuery({
       refetchOnMountOrArgChange: true,
@@ -43,7 +36,7 @@ export default function WarehousePage() {
                 {isLoading && <LoadingUi />}
             {warehouses?.map((wh, index) => (
               <tr
-                key={wh._id}
+                key={index}
                 className="hover:bg-gray-50 transition duration-150"
               >
                 <td className="p-3 font-medium text-gray-800">{wh.name}</td>

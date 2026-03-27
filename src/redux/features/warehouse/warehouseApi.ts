@@ -3,6 +3,7 @@ import { TWareHouseBuilderQueries } from "@/types/user";
 
 const wareHouseApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getWarehouse: builder.query<TWareHouseBuilderQueries, { [key: string]: string | any }>({
             query: () => ({
                 url: `/warehouse`,
@@ -11,6 +12,7 @@ const wareHouseApi = baseApi.injectEndpoints({
             providesTags: ["warehouse"],
         }),
         addWareHouse: builder.mutation({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             query: (body: any) => ({
                 url: `/warehouse`,
                 method: 'POST',
@@ -19,6 +21,7 @@ const wareHouseApi = baseApi.injectEndpoints({
             invalidatesTags: ["warehouse"]
         }),
         updateWareHouse: builder.mutation({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             query: ({ id, data }: { id: string, data: any }) =>({
                 url: `/warehouse/${id}`,
                 method: 'PATCH',

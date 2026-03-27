@@ -9,7 +9,7 @@ import {
 } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
-import { ChangeEvent, EventHandler, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
@@ -61,7 +61,7 @@ const TeamPage = () => {
   // Roles state
   const searchParams = useSearchParams();
   const page = searchParams.get('page')
-  const pageNumber = Number(page)
+  const pageNumber = Number(page) 
   const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page: pageNumber, search: searchQuery  }, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
