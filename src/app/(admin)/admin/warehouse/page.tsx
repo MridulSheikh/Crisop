@@ -5,23 +5,53 @@ import DeleteWarehouseModal from "@/components/ui/admin/warehouse/DeleteWarehous
 import EditWarehouse from "@/components/ui/admin/warehouse/EditWarehouseModal";
 import { useGetWarehouseQuery } from "@/redux/features/warehouse/warehouseApi";
 import { ErrorUi, LoadingUi } from "../team/page";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import { ChangeEvent, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 export default function WarehousePage() {
-   const { data, isLoading, error, isError } = useGetWarehouseQuery({
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const pageNumber = Number(page);
+  const { data, isLoading, error, isError } = useGetWarehouseQuery(
+    { page: pageNumber, search: searchQuery },
+    {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    });
+    },
+  );
 
-    const warehouses = data?.data
+  const warehouses = data?.data?.data;
+  const meta = data?.data?.meta;
+
+  console.log(meta);
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  };
 
   return (
     <div className="p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Warehouses</h1>
-        <AddWarehouse />
+        <div className=" flex gap-x-4 items-center">
+          <div className="flex">
+            <Input
+              type="search"
+              className=" min-w-60"
+              placeholder="🔍 Search Warehouse by name, location"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
+          <AddWarehouse />
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-hidden">
         <table className="min-w-full border border-gray-200 text-left text-sm rounded-md">
           <thead className="bg-black text-white sticky top-0">
             <tr>
@@ -33,7 +63,6 @@ export default function WarehousePage() {
           </thead>
           <tbody className=" bg-white">
             {isError && <ErrorUi error={error} />}
-                {isLoading && <LoadingUi />}
             {warehouses?.map((wh, index) => (
               <tr
                 key={index}
@@ -58,7 +87,17 @@ export default function WarehousePage() {
             )}
           </tbody>
         </table>
+        {isLoading && <LoadingUi />}
       </div>
+      {!isLoading && (
+        <div className="mt-5">
+          <PaginationWithLinks
+            page={meta?.page as number}
+            pageSize={meta?.limit as number}
+            totalCount={meta?.total as number}
+          />
+        </div>
+      )}
     </div>
   );
 }

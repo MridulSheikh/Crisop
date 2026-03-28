@@ -26,7 +26,15 @@ export type TWareHouse = {
 };
 
 export type TWareHouseBuilderQueries = {
-    data: TWareHouse[];
+    data:{
+         meta: {
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+        };
+        data: TWareHouse[];
+    } 
 };
 
 export type TStock = {

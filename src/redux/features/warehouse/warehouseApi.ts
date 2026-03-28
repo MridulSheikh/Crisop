@@ -5,8 +5,8 @@ const wareHouseApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getWarehouse: builder.query<TWareHouseBuilderQueries, { [key: string]: string | any }>({
-            query: () => ({
-                url: `/warehouse`,
+            query: ({page = 1, search}) => ({
+                url: `/warehouse?page=${page}${search ? `&searchTerm=${search}`: ""}`,
                 method: "GET",
             }),
             providesTags: ["warehouse"],
