@@ -3,58 +3,21 @@
 import AddStock from "@/components/ui/admin/stock/AddStock";
 import DeleteStockModal from "@/components/ui/admin/stock/DeleteStockModal";
 import UpdateStock from "@/components/ui/admin/stock/UpdateStockModal";
-import { useEffect, useState } from "react";
-
-type StockItem = {
-  id: string;
-  productName: string;
-  sku: string;
-  quantity: number;
-  warehouse: string;
-};
+import { useGetStockQuery } from "@/redux/features/warehouse/stockApi";
 
 const StockPage = () => {
-  const [stockItems, setStockItems] = useState<StockItem[]>([]);
+   const { data, isLoading, error, isError } = useGetStockQuery({
+        refetchOnMountOrArgChange: true,
+        refetchOnReconnect: true,
+      });
 
-  useEffect(() => {
-    // Replace with your API call
-    setStockItems([
-      {
-        id: "prod-001",
-        productName: "Apple",
-        sku: "APL-001",
-        quantity: 120,
-        warehouse: "Warehouse A",
-      },
-      {
-        id: "prod-002",
-        productName: "Banana",
-        sku: "BAN-002",
-        quantity: 80,
-        warehouse: "Warehouse B",
-      },
-      {
-        id: "prod-003",
-        productName: "Cheese",
-        sku: "CHS-003",
-        quantity: 50,
-        warehouse: "Warehouse A",
-      },
-    ]);
-  }, []);
+       const stock = data?.data;
 
   // Handler to update stock quantity locally (replace with API update)
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    setStockItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
 
   return (
     <div className="p-6 bg-white min-h-screen">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 bg-white sticky py-4 top-0">
         <h1 className="text-2xl font-semibold text-gray-800">
           Stock Management
         </h1>
@@ -72,9 +35,9 @@ const StockPage = () => {
             </tr>
           </thead>
           <tbody>
-            {stockItems.map((item) => (
+            {stock?.map((item) => (
               <tr
-                key={item.id}
+                key={item._id}
                 className="hover:bg-gray-50 transition duration-150"
               >
                 <td className="p-3 font-medium text-gray-800">
@@ -82,17 +45,9 @@ const StockPage = () => {
                 </td>
                 <td className="p-3 text-gray-600">{item.sku}</td>
                 <td className="p-3 text-gray-600">
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    min={0}
-                    onChange={(e) =>
-                      handleQuantityChange(item.id, Number(e.target.value))
-                    }
-                    className="w-20 border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-black"
-                  />
+                  {item.quantity}
                 </td>
-                <td className="p-3 text-gray-600">{item.warehouse}</td>
+                <td className="p-3 text-gray-600">{item.warehouse.name}</td>
                 <td className=" flex justify-end">
                   <UpdateStock
                     stock={{
@@ -113,7 +68,7 @@ const StockPage = () => {
               </tr>
             ))}
 
-            {stockItems.length === 0 && (
+            {stock?.length === 0 && (
               <tr>
                 <td colSpan={4} className="p-4 text-center text-gray-500">
                   No stock data available.

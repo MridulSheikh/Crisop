@@ -48,7 +48,7 @@ const DeleteTeamMember = (props : propsTypes) => {
       description="This will permanently deleted the member."
       actionText="Delete"
     >
-      <Button disabled={isLoading} variant="outline" className="">
+      <Button disabled={isLoading} variant="outline" className=" outline-red-500 text-red-500">
         {" "}
         <Trash2 size={16}  /> Delete
       </Button>

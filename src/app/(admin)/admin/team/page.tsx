@@ -10,7 +10,7 @@ import {
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-import { ThreeDots } from "react-loader-spinner";
+import { TailSpin } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,9 +20,9 @@ export const ErrorUi = ({ error }: { error: any }) => {
       <td></td>
       <td className="flex justify-center py-10">
         {"status" in error &&
-          error?.data &&
-          typeof error.data === "object" &&
-          "errorMessage" in error.data ? (
+        error?.data &&
+        typeof error.data === "object" &&
+        "errorMessage" in error.data ? (
           <p>{(error.data as { errorMessage: string }).errorMessage}</p>
         ) : (
           <p>Something went wrong.</p>
@@ -36,37 +36,34 @@ export const ErrorUi = ({ error }: { error: any }) => {
 
 export const LoadingUi = () => {
   return (
-    <tr>
-      <td></td>
-      <td className=" flex justify-center">
-        <ThreeDots
-          visible={true}
-          height="80"
-          width="60"
-          color="#4b5563"
-          radius="9"
-          ariaLabel="three-dots-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
+    <div className=" w-full h-40 flex justify-center items-center">
+      <TailSpin
+        visible={true}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+    </div>
   );
 };
 
 const TeamPage = () => {
-   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   // Roles state
   const searchParams = useSearchParams();
-  const page = searchParams.get('page')
-  const pageNumber = Number(page) 
-  const { data, isLoading, error, isError } = useGetTeamMemberQuery({ page: pageNumber, search: searchQuery  }, {
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
-  });
-
+  const page = searchParams.get("page");
+  const pageNumber = Number(page);
+  const { data, isLoading, error, isError } = useGetTeamMemberQuery(
+    { page: pageNumber, search: searchQuery },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    },
+  );
 
   const [AddTeamMember, { isLoading: isChangeRoleLoading }] =
     useAddTeamMemeberMutation();
@@ -101,38 +98,40 @@ const TeamPage = () => {
     }
   };
 
-  console.log(searchQuery)
-
   // Handle Search User
-  const handleSearchUser = (e: ChangeEvent<HTMLInputElement>)=>{
-         const value = e.target.value;
-         setSearchQuery(value);
-  }
+  const handleSearchUser = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  };
 
   return (
-    <div className="bg-white min-h-screen">
-      <div className="px-6 sticky z-50 top-0 py-3 bg-white flex justify-between items-center">
+    <div className="min-h-screen">
+      <div className="px-6 sticky z-50 top-0 py-3 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
         <div className=" flex gap-x-3">
-          
           <div className="flex">
-              <Input type="search" placeholder="Search users" value={searchQuery} onChange={handleSearchUser}  />
+            <Input
+              type="search"
+              className=" min-w-60"
+              placeholder="🔍 Search Team Member"
+              value={searchQuery}
+              onChange={handleSearchUser}
+            />
           </div>
-          
+
           <AddTeamMemberModal
             roles={["admin", "manager"]}
             onAdd={handleAddMember}
             isLoading={isChangeRoleLoading}
           />
-
         </div>
       </div>
       <div className="flex p-6 flex-col  gap-8">
         {/* Team Members */}
         <section className="flex-1">
           <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-200 text-left text-sm">
-              <thead className="bg-gray-50">
+            <table className="min-w-full border border-gray-200 bg-white rounded-md overflow-hidden text-left text-sm">
+              <thead className="bg-black text-white">
                 <tr>
                   <th className="p-3 border-b">Name</th>
                   <th className="p-3 border-b">Email</th>
@@ -142,7 +141,6 @@ const TeamPage = () => {
               </thead>
               <tbody>
                 {isError && <ErrorUi error={error} />}
-                {isLoading && <LoadingUi />}
                 {teamMember?.map((member: TUser) => (
                   <TeamCard member={member} key={member._id} />
                 ))}
@@ -155,11 +153,17 @@ const TeamPage = () => {
                 )}
               </tbody>
             </table>
+            {isLoading && <LoadingUi />}
           </div>
-          <div className="mt-5">
-            <PaginationWithLinks page={meta?.page as number} pageSize={meta?.limit as number} totalCount={meta?.total as number} />
-          </div>
-
+          {!isLoading && (
+            <div className="mt-5">
+              <PaginationWithLinks
+                page={meta?.page as number}
+                pageSize={meta?.limit as number}
+                totalCount={meta?.total as number}
+              />
+            </div>
+          )}
         </section>
       </div>
     </div>

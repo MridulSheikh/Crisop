@@ -40,7 +40,7 @@ const AdminLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="flex min-h-screen bg-[#f9f9f9]">
       <Sidebar />
-      <div className="flex-1 h-screen overflow-y-scroll bg-white">
+      <div className="flex-1 h-screen overflow-y-scroll bg-[#f6f6f6]">
         {children}
       </div>
     </main>

@@ -15,15 +15,15 @@ export default function WarehousePage() {
     const warehouses = data?.data
 
   return (
-    <div className="p-6 bg-white min-h-screen">
+    <div className="p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Warehouses</h1>
         <AddWarehouse />
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 text-left text-sm">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-gray-200 text-left text-sm rounded-md">
+          <thead className="bg-black text-white sticky top-0">
             <tr>
               <th className="p-3 border-b">Name</th>
               <th className="p-3 border-b">Location</th>
@@ -31,7 +31,7 @@ export default function WarehousePage() {
               <th className="p-3 border-b text-right">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className=" bg-white">
             {isError && <ErrorUi error={error} />}
                 {isLoading && <LoadingUi />}
             {warehouses?.map((wh, index) => (

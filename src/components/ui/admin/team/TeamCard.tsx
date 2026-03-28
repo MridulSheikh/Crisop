@@ -26,7 +26,7 @@ const TeamCard = (props: IProps) => {
     <tr className="hover:bg-gray-50 transition duration-150">
       <td className="p-3 font-medium text-gray-800 flex gap-x-3 items-center">
           <Avatar className={cn("cursor-pointer size-7 ")}>
-            <AvatarImage src="https://i.pravatar.cc/300" alt="@shadcn" />
+            <AvatarImage src={member.image} alt="@shadcn" />
           </Avatar>
         {member.name}</td>
       <td className="p-3 text-gray-600">{member.email}</td>
