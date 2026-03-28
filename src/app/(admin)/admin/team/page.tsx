@@ -16,9 +16,7 @@ import { toast } from "react-toastify";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ErrorUi = ({ error }: { error: any }) => {
   return (
-    <tr>
-      <td></td>
-      <td className="flex justify-center py-10">
+      <div className="flex justify-center py-10">
         {"status" in error &&
         error?.data &&
         typeof error.data === "object" &&
@@ -27,10 +25,7 @@ export const ErrorUi = ({ error }: { error: any }) => {
         ) : (
           <p>Something went wrong.</p>
         )}
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
+      </div>
   );
 };
 
@@ -140,7 +135,6 @@ const TeamPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {isError && <ErrorUi error={error} />}
                 {teamMember?.map((member: TUser) => (
                   <TeamCard member={member} key={member._id} />
                 ))}
@@ -153,6 +147,7 @@ const TeamPage = () => {
                 )}
               </tbody>
             </table>
+            {isError && <ErrorUi error={error} />}
             {isLoading && <LoadingUi />}
           </div>
           {!isLoading && (

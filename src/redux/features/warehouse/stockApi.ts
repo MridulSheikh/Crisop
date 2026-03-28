@@ -5,8 +5,8 @@ const stockApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         getStock: builder.query<TStockBuilderQueries, {[key: string]: string | any}>({
-            query: ()=> ({
-                url: `/stock`,
+            query: ({page = 1, search, limit})=> ({
+                url: `/stock?page=${page}&limit=${limit}${search ? `&searchTerm=${search}`: ""}`,
                 method: 'GET',
             }),
             providesTags: ["stocks"]

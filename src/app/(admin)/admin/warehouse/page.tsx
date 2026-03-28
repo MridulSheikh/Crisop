@@ -62,7 +62,6 @@ export default function WarehousePage() {
             </tr>
           </thead>
           <tbody className=" bg-white">
-            {isError && <ErrorUi error={error} />}
             {warehouses?.map((wh, index) => (
               <tr
                 key={index}
@@ -88,6 +87,7 @@ export default function WarehousePage() {
           </tbody>
         </table>
         {isLoading && <LoadingUi />}
+        {isError && <ErrorUi error={error} />}
       </div>
       {!isLoading && (
         <div className="mt-5">
