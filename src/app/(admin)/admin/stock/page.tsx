@@ -5,24 +5,15 @@ import DeleteStockModal from "@/components/ui/admin/stock/DeleteStockModal";
 import UpdateStock from "@/components/ui/admin/stock/UpdateStockModal";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useGetStockQuery } from "@/redux/features/warehouse/stockApi";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import {useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { ErrorUi, LoadingUi } from "../team/page";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-  SelectItem,
-} from "@/components/ui/select";
+import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
+import SearchInput from "@/components/shared/searchInput/SearchInput";
 
 const StockPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
-  const router = useRouter();
   const page = searchParams.get("page");
   const pageNumber = Number(page) || 1;
   const limit = Number(searchParams.get("limit")) || 15;
@@ -37,20 +28,6 @@ const StockPage = () => {
   const stock = data?.data?.data;
   const meta = data?.data?.meta;
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-  };
-
-  const handleLimitChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    params.set("limit", value);
-    params.set("page", "1");
-
-    router.push(`?${params.toString()}`);
-  };
-
   return (
     <div className="p-6 min-h-screen">
       <div className="flex items-center justify-between mb-6">
@@ -59,29 +36,11 @@ const StockPage = () => {
         </h1>
         <div className=" flex gap-x-4 items-center">
           <div>
-            <Select value={String(limit)} onValueChange={handleLimitChange}>
-              <SelectTrigger className="w-full max-w-48">
-                <SelectValue placeholder="Select Item Per Page" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Item</SelectLabel>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="15">15</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <LimitSelect />
           </div>
 
           <div className="flex">
-            <Input
-              type="search"
-              className=" min-w-60"
-              placeholder="🔍 Search Stock by name, sku"
-              value={searchQuery}
-              onChange={handleSearch}
-            />
+            <SearchInput searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder="🔍 Search Stock by Product Name" />
           </div>
           <AddStock />
         </div>

@@ -1,7 +1,8 @@
 "use client";
+import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
+import SearchInput from "@/components/shared/searchInput/SearchInput";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
-import { Input } from "@/components/ui/input";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import {
   useAddTeamMemeberMutation,
@@ -9,23 +10,23 @@ import {
 } from "@/redux/features/user/userApi";
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ErrorUi = ({ error }: { error: any }) => {
   return (
-      <div className="flex justify-center py-10">
-        {"status" in error &&
-        error?.data &&
-        typeof error.data === "object" &&
-        "errorMessage" in error.data ? (
-          <p>{(error.data as { errorMessage: string }).errorMessage}</p>
-        ) : (
-          <p>Something went wrong.</p>
-        )}
-      </div>
+    <div className="flex justify-center py-10">
+      {"status" in error &&
+      error?.data &&
+      typeof error.data === "object" &&
+      "errorMessage" in error.data ? (
+        <p>{(error.data as { errorMessage: string }).errorMessage}</p>
+      ) : (
+        <p>Something went wrong.</p>
+      )}
+    </div>
   );
 };
 
@@ -51,9 +52,10 @@ const TeamPage = () => {
   // Roles state
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
-  const pageNumber = Number(page);
+  const pageNumber = Number(page) || 1;
+   const limit = Number(searchParams.get("limit")) || 15;
   const { data, isLoading, error, isError } = useGetTeamMemberQuery(
-    { page: pageNumber, search: searchQuery },
+    { page: pageNumber, search: searchQuery, limit : limit },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
@@ -93,25 +95,23 @@ const TeamPage = () => {
     }
   };
 
-  // Handle Search User
-  const handleSearchUser = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-  };
-
   return (
     <div className="min-h-screen">
       <div className="px-6 sticky z-50 top-0 py-3 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
         <div className=" flex gap-x-3">
-          <div className="flex">
-            <Input
-              type="search"
-              className=" min-w-60"
-              placeholder="🔍 Search Team Member"
-              value={searchQuery}
-              onChange={handleSearchUser}
-            />
+          <div className="flex gap-x-3">
+            <div>
+              <LimitSelect />
+            </div>
+
+            <div className="flex">
+              <SearchInput
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                placeholder="🔍 Search Team Member by Name or Email"
+              />
+            </div>
           </div>
 
           <AddTeamMemberModal

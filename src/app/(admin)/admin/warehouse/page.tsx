@@ -6,17 +6,19 @@ import EditWarehouse from "@/components/ui/admin/warehouse/EditWarehouseModal";
 import { useGetWarehouseQuery } from "@/redux/features/warehouse/warehouseApi";
 import { ErrorUi, LoadingUi } from "../team/page";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/input";
+import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
+import SearchInput from "@/components/shared/searchInput/SearchInput";
 
 export default function WarehousePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
-  const pageNumber = Number(page);
+  const pageNumber = Number(page) || 1;
+  const limit = Number(searchParams.get("limit")) || 15;
   const { data, isLoading, error, isError } = useGetWarehouseQuery(
-    { page: pageNumber, search: searchQuery },
+    { page: pageNumber, search: searchQuery, limit: limit },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
@@ -26,25 +28,19 @@ export default function WarehousePage() {
   const warehouses = data?.data?.data;
   const meta = data?.data?.meta;
 
-  console.log(meta);
-
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-  };
-
   return (
     <div className="p-6 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">Warehouses</h1>
         <div className=" flex gap-x-4 items-center">
+          <div>
+            <LimitSelect />
+          </div>
           <div className="flex">
-            <Input
-              type="search"
-              className=" min-w-60"
-              placeholder="🔍 Search Warehouse by name, location"
-              value={searchQuery}
-              onChange={handleSearch}
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="🔍 Search Warehouse by name,location"
             />
           </div>
           <AddWarehouse />
