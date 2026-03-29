@@ -10,6 +10,7 @@ import { useState } from "react";
 import { ErrorUi, LoadingUi } from "../team/page";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
+import { cn } from "@/lib/utils";
 
 const StockPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,24 +72,15 @@ const StockPage = () => {
                     {item.productName}
                   </td>
                   <td className="p-3 text-gray-600">{item.sku}</td>
-                  <td className="p-3 text-gray-600">{item.quantity} {item.unit}</td>
+                  <td className="p-3 text-gray-600"><span className={cn("text-green-500",{
+                    "text-red-500" : item.quantity < 10
+                  })}>{item.quantity}</span> {item.unit}</td>
                   <td className="p-3 text-gray-600">{item.warehouse.name}</td>
                   <td className=" flex justify-end">
                     <UpdateStock
-                      stock={{
-                        product: "Sugar 25kg",
-                        quantity: 50,
-                        warehouseId: "wh-1",
-                      }}
-                      warehouses={[
-                        { id: "wh-1", name: "Dhaka Warehouse" },
-                        { id: "wh-2", name: "Chittagong Warehouse" },
-                      ]}
-                      onUpdate={(updatedStock) => {
-                        console.log("Updated stock:", updatedStock);
-                      }}
+                      stock={item}
                     />
-                    <DeleteStockModal />
+                    <DeleteStockModal stockId={item._id} />
                   </td>
                 </tr>
               ))}
