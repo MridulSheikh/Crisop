@@ -15,10 +15,11 @@ const LimitSelect = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
+  const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 15;
   const handleLimitChange = (value: string) => {
     params.set("limit", value);
-    params.set("page", "1");
+    params.set("page",  String(page));
     router.push(`?${params.toString()}`);
   };
   return (

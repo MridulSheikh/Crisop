@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Label } from "../../label";
 import {
   Command,
@@ -21,19 +22,31 @@ type Props = {
 };
 
 export function SelectWarehouse({ value, onChange }: Props) {
-  const { data, isLoading, error, isError } = useGetWarehouseQuery({
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
-  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data, isLoading, error, isError } = useGetWarehouseQuery(
+    { search: searchTerm },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    },
+  );
 
   const warehouses = data?.data;
+  console.log(warehouses);
 
   return (
     <div>
       <Label className="block mb-1">Warehouse</Label>
       {!value && (
-        <Command className="w-full border rounded-lg">
-          <CommandInput placeholder="Search warehouse..." />
+        <Command
+          className="w-full border rounded-lg"
+          shouldFilter={false}
+        >
+          <CommandInput
+            placeholder="Search warehouse..."
+            value={searchTerm}
+            onValueChange={(value) => setSearchTerm(value)}
+          />
           <CommandList>
             <CommandGroup>
               {isError && <ErrorUi error={error} />}
@@ -43,12 +56,12 @@ export function SelectWarehouse({ value, onChange }: Props) {
                 </div>
               ) : (
                 <>
-                  {warehouses?.length === 0 && (
+                  {warehouses?.data?.length === 0 && (
                     <CommandEmpty>No warehouse found.</CommandEmpty>
                   )}
                 </>
               )}
-              {warehouses?.map((wh) => (
+              {warehouses?.data?.map((wh) => (
                 <CommandItem
                   key={wh?._id}
                   value={wh?._id}
@@ -73,7 +86,7 @@ export function SelectWarehouse({ value, onChange }: Props) {
       {value && (
         <div className="w-full rounded-lg border flex justify-between">
           <p className="text-muted-foreground px-2 py-2">
-            {warehouses?.find((wh) => wh._id === value)?.name}
+            {warehouses?.data?.find((wh) => wh._id === value)?.name}
           </p>
           <Button variant={"ghost"} onClick={() => onChange("")}>
             <MdClose />

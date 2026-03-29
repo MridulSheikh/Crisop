@@ -43,6 +43,7 @@ export type TStock = {
   quantity: number;
   warehouse: TWareHouse;
   isDeleted?: boolean;
+  unit: string;
 };
 
 export type TStockBuilderQueries = {

@@ -71,7 +71,7 @@ const StockPage = () => {
                     {item.productName}
                   </td>
                   <td className="p-3 text-gray-600">{item.sku}</td>
-                  <td className="p-3 text-gray-600">{item.quantity}</td>
+                  <td className="p-3 text-gray-600">{item.quantity} {item.unit}</td>
                   <td className="p-3 text-gray-600">{item.warehouse.name}</td>
                   <td className=" flex justify-end">
                     <UpdateStock
