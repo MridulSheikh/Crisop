@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useAddStocksMutation } from "@/redux/features/warehouse/stockApi";
 import { toast } from "react-toastify";
 import { SelectWarehouse } from "./SelectWarehouse";
+import { TStock } from "@/types/user";
 
 /* -------------------- Schema -------------------- */
 const stockSchema = z.object({

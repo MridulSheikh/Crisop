@@ -46,6 +46,13 @@ export type TStock = {
   unit: string;
 };
 
+export type TCategory = {
+  _id: string;
+  name: string;
+  description: string;
+  productsCount: number;
+}
+
 export type TStockBuilderQueries = {
   data: {
     meta: {
@@ -57,3 +64,17 @@ export type TStockBuilderQueries = {
     data: TStock[];
   };
 };
+
+
+export type TCategoryQueryBuilder = {
+  data: {
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+    data: TCategory[];
+  };
+}
+
