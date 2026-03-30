@@ -29,7 +29,6 @@ const CategoryPage = () => {
 
   const categories = data?.data?.data;
   const meta = data?.data?.meta;
-  console.log(categories)
 
   return (
     <div className="p-6 min-h-screen">
@@ -88,8 +87,8 @@ const CategoryPage = () => {
                   </td>
 
                   <td className="flex justify-end">
-                    <EditCategoryModal />
-                    <DeleteCategoryAlert />
+                    <EditCategoryModal category = {category} />
+                    <DeleteCategoryAlert categoryId={category._id} />
                   </td>
                 </tr>
               ))}
