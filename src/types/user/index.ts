@@ -51,7 +51,7 @@ export type TCategory = {
   name: string;
   description: string;
   productsCount: number;
-}
+};
 
 export type TStockBuilderQueries = {
   data: {
@@ -65,7 +65,6 @@ export type TStockBuilderQueries = {
   };
 };
 
-
 export type TCategoryQueryBuilder = {
   data: {
     meta: {
@@ -76,5 +75,29 @@ export type TCategoryQueryBuilder = {
     };
     data: TCategory[];
   };
-}
+};
 
+export type TProduct = {
+  _id: string;
+  name: string;
+  description?: string;
+  price: number;
+  discountPrice?: number;
+  stock: TStock;
+  category: TCategory;
+  tags?: string[];
+  images: string[];
+  isFeatured?: boolean;
+  isDeleted: boolean;
+  isPublished: boolean;
+};
+
+export type TProductBuilderQueries = {
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+    data: TProduct[];
+};

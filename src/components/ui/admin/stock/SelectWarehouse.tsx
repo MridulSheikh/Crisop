@@ -32,7 +32,6 @@ export function SelectWarehouse({ value, onChange }: Props) {
   );
 
   const warehouses = data?.data;
-  console.log(warehouses);
 
   return (
     <div>
