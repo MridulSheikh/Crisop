@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import SelectStockCommand from "@/components/shared/command/SelectStockCommad";
 import { useForm, Controller } from "react-hook-form";
+import ImgUpload from "@/components/shared/imgUpload/ImgUpload";
+import StockSelect from "./StockSelect";
 
 type FormValues = {
   name: string;
@@ -12,7 +13,7 @@ type FormValues = {
   category: string;
   stock: string;
   tags: string;
-  images: FileList;
+  images: File[];
   isFeatured: boolean;
   isPublished: boolean;
 };
@@ -23,6 +24,7 @@ const AddProductPage = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     defaultValues: {
       name: "",
@@ -32,12 +34,12 @@ const AddProductPage = () => {
       category: "",
       stock: "",
       tags: "",
+      images: [],
       isFeatured: false,
       isPublished: true,
     },
   });
 
-  /* ---------------- Submit ---------------- */
   const onSubmit = (data: FormValues) => {
     const formData = new FormData();
 
@@ -48,34 +50,33 @@ const AddProductPage = () => {
     formData.append("category", data.category);
     formData.append("stock", data.stock);
 
-    /* tags -> array */
     if (data.tags) {
-      const tagsArray = data.tags.split(",").map((tag) => tag.trim());
-      tagsArray.forEach((tag) => formData.append("tags", tag));
+      data.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .forEach((tag) => formData.append("tags", tag));
     }
 
-    /* multiple images */
-    if (data.images) {
-      Array.from(data.images).forEach((file) => {
-        formData.append("images", file);
-      });
-    }
+    data.images.forEach((file) => {
+      formData.append("images", file);
+    });
 
     formData.append("isFeatured", String(data.isFeatured));
     formData.append("isPublished", String(data.isPublished));
 
     console.log("Final FormData:", formData);
+
+    reset();
   };
 
-  /* ---------------- UI ---------------- */
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-semibold mb-6">Add New Product</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Product Name */}
+        {/* Name */}
         <div>
-          <label className="block mb-1">Product Name</label>
+          <label className="block mb-1 font-medium">Product Name</label>
           <input
             {...register("name", { required: "Product name is required" })}
             className="w-full border p-2 rounded"
@@ -88,7 +89,7 @@ const AddProductPage = () => {
 
         {/* Description */}
         <div>
-          <label className="block mb-1">Description</label>
+          <label className="block mb-1 font-medium">Description</label>
           <textarea
             {...register("description")}
             className="w-full border p-2 rounded"
@@ -98,7 +99,7 @@ const AddProductPage = () => {
 
         {/* Price */}
         <div>
-          <label className="block mb-1">Price</label>
+          <label className="block mb-1 font-medium">Price</label>
           <input
             type="number"
             {...register("price", { required: "Price is required" })}
@@ -110,9 +111,9 @@ const AddProductPage = () => {
           )}
         </div>
 
-        {/* Discount Price */}
+        {/* Discount */}
         <div>
-          <label className="block mb-1">Discount Price</label>
+          <label className="block mb-1 font-medium">Discount Price</label>
           <input
             type="number"
             {...register("discountPrice")}
@@ -123,7 +124,7 @@ const AddProductPage = () => {
 
         {/* Category */}
         <div>
-          <label className="block mb-1">Category</label>
+          <label className="block mb-1 font-medium">Category</label>
           <select
             {...register("category", { required: "Category is required" })}
             className="w-full border p-2 rounded"
@@ -131,35 +132,28 @@ const AddProductPage = () => {
             <option value="">Select category</option>
             <option value="electronics">Electronics</option>
             <option value="food">Food</option>
-            <option value="clothing">Clothing</option>
           </select>
           {errors.category && (
             <p className="text-red-500 text-sm">{errors.category.message}</p>
           )}
         </div>
 
-        {/* Stock Select (IMPORTANT PART) */}
-        <div>
+        {/* Stock */}
+        <>
           <Controller
             name="stock"
             control={control}
-            rules={{ required: "Select a stock item" }}
-            render={({ field }) => (
-              <SelectStockCommand
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
+            rules={{ required: "Select stock" }}
+            render={({ field }) => <StockSelect {...field} />}
           />
-
           {errors.stock && (
             <p className="text-red-500 text-sm">{errors.stock.message}</p>
           )}
-        </div>
+        </>
 
         {/* Tags */}
         <div>
-          <label className="block mb-1">Tags (comma separated)</label>
+          <label className="block mb-1 font-medium">Tags</label>
           <input
             {...register("tags")}
             className="w-full border p-2 rounded"
@@ -169,37 +163,35 @@ const AddProductPage = () => {
 
         {/* Images */}
         <div>
-          <label className="block mb-1">Product Images</label>
-          <input
-            type="file"
-            multiple
-            {...register("images", {
-              required: "At least one image is required",
-            })}
-            className="w-full border p-2 rounded"
+          <label className="block mb-2 font-medium">Product Images</label>
+          <Controller
+            name="images"
+            control={control}
+            rules={{ required: "At least 1 image required" }}
+            render={({ field }) => (
+              <ImgUpload value={field.value} onChange={field.onChange} />
+            )}
           />
           {errors.images && (
             <p className="text-red-500 text-sm">{errors.images.message}</p>
           )}
         </div>
 
-        {/* Featured */}
-        <div className="flex items-center gap-2">
-          <input type="checkbox" {...register("isFeatured")} />
-          <label>Featured Product</label>
-        </div>
+        {/* Checkboxes */}
+        <div className="flex gap-6">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" {...register("isFeatured")} />
+            Featured Product
+          </label>
 
-        {/* Published */}
-        <div className="flex items-center gap-2">
-          <input type="checkbox" {...register("isPublished")} />
-          <label>Publish Product</label>
+          <label className="flex items-center gap-2">
+            <input type="checkbox" {...register("isPublished")} />
+            Publish Product
+          </label>
         </div>
 
         {/* Submit */}
-        <button
-          type="submit"
-          className="bg-black text-white px-6 py-2 rounded hover:opacity-90"
-        >
+        <button className="bg-black text-white px-6 py-2 rounded hover:opacity-90">
           Add Product
         </button>
       </form>

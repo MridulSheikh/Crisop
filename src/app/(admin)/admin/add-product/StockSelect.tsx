@@ -1,0 +1,56 @@
+"use client";
+
+import React, { useState } from "react";
+import { useGetStockQuery } from "@/redux/features/warehouse/stockApi";
+import { TStock } from "@/types/user";
+import SelectCommand from "@/components/shared/command/SelectCommand";
+
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+const StockSelect = ({ value, onChange }: Props) => {
+  const [search, setSearch] = useState("");
+
+  const { data, isLoading, isError, error } = useGetStockQuery({
+    search,
+  });
+  
+
+  return (
+    <SelectCommand<TStock>
+      label="Stock"
+      value={value}
+      onChange={onChange}
+      data={data?.data?.data || []} 
+      isLoading={isLoading}
+      isError={isError}
+      error={error}
+      onSearch={setSearch}
+      getOptionValue={(s) => s._id}
+      renderItem={(s) => (
+        <div className="flex flex-col">
+          <span className="font-medium">
+            {s.productName} - {s.warehouse?.name}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Qty: {s.quantity} {s.unit}
+          </span>
+        </div>
+      )}
+      renderSelectValue={(s) => (
+        <div className="flex flex-col">
+          <span className="font-medium">
+            {s.productName} - {s.warehouse?.name}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Qty: {s.quantity} {s.unit}
+          </span>
+        </div>
+      )}
+    />
+  );
+};
+
+export default StockSelect;
