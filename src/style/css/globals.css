@@ -77,3 +77,12 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror:focus {
+  outline: none;
+  box-shadow: none;
+}

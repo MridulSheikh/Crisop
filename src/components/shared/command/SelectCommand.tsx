@@ -49,8 +49,7 @@ function SelectCommand<T>({
     (item) => getOptionValue(item) === value
   );
 
-
-  console.log(data)
+  console.log(error)
 
   return (
     <div>
@@ -70,7 +69,7 @@ function SelectCommand<T>({
             <CommandList className="max-h-60 overflow-y-auto bg-white border rounded-lg shadow-lg absolute left-0 right-0 top-full mt-1 z-50">
               <CommandGroup>
                 {isError && (
-                  <p className="text-red-500">Error: {String(error)}</p>
+                  <p className="text-red-500 text-center p-5">{error?.data?.errorMessage || "Something went wrong"}</p>
                 )}
 
                 {isLoading && <p className="p-2 text-center">Loading...</p>}
@@ -79,7 +78,7 @@ function SelectCommand<T>({
                   <CommandEmpty>No results found</CommandEmpty>
                 )}
 
-                {data?.map((item) => {
+                {(!isError || isLoading) && data?.map((item) => {
                   const id = getOptionValue(item);
                   return (
                     <CommandItem
@@ -104,7 +103,7 @@ function SelectCommand<T>({
       )}
 
       {value && selectedValue && (
-        <div className="flex justify-between border rounded-lg px-3 py-2">
+        <div className="flex justify-between border rounded-lg px-3 py-2 bg-white">
           {renderSelectValue(selectedValue)}
           <button onClick={() => onChange("")}>✕</button>
         </div>

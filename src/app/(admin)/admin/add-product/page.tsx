@@ -2,8 +2,12 @@
 
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
+
 import ImgUpload from "@/components/shared/imgUpload/ImgUpload";
 import StockSelect from "./StockSelect";
+import ProductTagInput from "./ProductTagInput";
+import CategorySelect from "./CategorySelect";
+import TiptapEditor from "@/components/shared/TiptapEditor";
 
 type FormValues = {
   name: string;
@@ -12,7 +16,7 @@ type FormValues = {
   discountPrice: number;
   category: string;
   stock: string;
-  tags: string;
+  tags: string[];
   images: File[];
   isFeatured: boolean;
   isPublished: boolean;
@@ -33,7 +37,7 @@ const AddProductPage = () => {
       discountPrice: 0,
       category: "",
       stock: "",
-      tags: "",
+      tags: [],
       images: [],
       isFeatured: false,
       isPublished: true,
@@ -50,13 +54,12 @@ const AddProductPage = () => {
     formData.append("category", data.category);
     formData.append("stock", data.stock);
 
-    if (data.tags) {
-      data.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .forEach((tag) => formData.append("tags", tag));
-    }
+    // ✅ tags array
+    data.tags.forEach((tag) => {
+      formData.append("tags", tag);
+    });
 
+    // ✅ images
     data.images.forEach((file) => {
       formData.append("images", file);
     });
@@ -64,7 +67,10 @@ const AddProductPage = () => {
     formData.append("isFeatured", String(data.isFeatured));
     formData.append("isPublished", String(data.isPublished));
 
-    console.log("Final FormData:", formData);
+    console.log("Final FormData:");
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     reset();
   };
@@ -80,7 +86,6 @@ const AddProductPage = () => {
           <input
             {...register("name", { required: "Product name is required" })}
             className="w-full border p-2 rounded"
-            placeholder="iPhone 15 Pro Max"
           />
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -90,10 +95,13 @@ const AddProductPage = () => {
         {/* Description */}
         <div>
           <label className="block mb-1 font-medium">Description</label>
-          <textarea
-            {...register("description")}
-            className="w-full border p-2 rounded"
-            placeholder="Write product description..."
+
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <TiptapEditor value={field.value} onChange={field.onChange} />
+            )}
           />
         </div>
 
@@ -104,7 +112,6 @@ const AddProductPage = () => {
             type="number"
             {...register("price", { required: "Price is required" })}
             className="w-full border p-2 rounded"
-            placeholder="1000"
           />
           {errors.price && (
             <p className="text-red-500 text-sm">{errors.price.message}</p>
@@ -118,28 +125,25 @@ const AddProductPage = () => {
             type="number"
             {...register("discountPrice")}
             className="w-full border p-2 rounded"
-            placeholder="900"
           />
         </div>
 
         {/* Category */}
         <div>
-          <label className="block mb-1 font-medium">Category</label>
-          <select
-            {...register("category", { required: "Category is required" })}
-            className="w-full border p-2 rounded"
-          >
-            <option value="">Select category</option>
-            <option value="electronics">Electronics</option>
-            <option value="food">Food</option>
-          </select>
+          <Controller
+            name="category"
+            control={control}
+            rules={{ required: "Select category" }}
+            render={({ field }) => <CategorySelect {...field} />}
+          />
+
           {errors.category && (
             <p className="text-red-500 text-sm">{errors.category.message}</p>
           )}
         </div>
 
         {/* Stock */}
-        <>
+        <div>
           <Controller
             name="stock"
             control={control}
@@ -149,16 +153,24 @@ const AddProductPage = () => {
           {errors.stock && (
             <p className="text-red-500 text-sm">{errors.stock.message}</p>
           )}
-        </>
+        </div>
 
         {/* Tags */}
         <div>
           <label className="block mb-1 font-medium">Tags</label>
-          <input
-            {...register("tags")}
-            className="w-full border p-2 rounded"
-            placeholder="iphone, apple, mobile"
+
+          <Controller
+            name="tags"
+            control={control}
+            rules={{ required: "At least 1 tag required" }}
+            render={({ field }) => (
+              <ProductTagInput value={field.value} onChange={field.onChange} />
+            )}
           />
+
+          {errors.tags && (
+            <p className="text-red-500 text-sm">{errors.tags.message}</p>
+          )}
         </div>
 
         {/* Images */}
