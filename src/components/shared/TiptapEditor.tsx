@@ -164,7 +164,7 @@ const RichTextEditor = ({ value, onChange }: Props) => {
       {/* Editor */}
       <EditorContent
         editor={editor}
-        className="prose max-w-none p-4 min-h-[200px] 
+        className="prose max-w-none p-4 min-h-[200px] 2xl:min-h-[500px] 
              [&_.ProseMirror>p:first-child]:mt-0
              [&_.ProseMirror]:outline-none"
       />

@@ -22,7 +22,7 @@ const ImgUpload = ({ value, onChange }: Props) => {
         alert("Some files rejected (size/type)");
       }
 
-      // 🔥 REMOVE DUPLICATES
+      // REMOVE DUPLICATES
       const newFiles = acceptedFiles.filter((newFile) => {
         return !value.some(
           (file) =>
@@ -69,7 +69,7 @@ const ImgUpload = ({ value, onChange }: Props) => {
     );
   };
 
-  // 🔥 FIX MEMORY LEAK
+  // FIX MEMORY LEAK
   useEffect(() => {
     const urls = value.map((file) => URL.createObjectURL(file));
 
