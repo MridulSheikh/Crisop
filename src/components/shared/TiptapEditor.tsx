@@ -5,6 +5,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
+
 import { Button } from "@/components/ui/button";
 import {
   Bold,
@@ -22,22 +23,30 @@ type Props = {
 const RichTextEditor = ({ value, onChange }: Props) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+
       Placeholder.configure({
         placeholder: "Write product description...",
       }),
+
       Link.configure({
         openOnClick: false,
       }),
     ],
+
     content: value || "",
-    immediatelyRender: false, // ✅ FIX SSR ERROR
+    immediatelyRender: false,
+
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   });
 
-  // sync external value (react-hook-form reset support)
+  // Sync external value (important for form reset)
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || "");
@@ -47,13 +56,16 @@ const RichTextEditor = ({ value, onChange }: Props) => {
   if (!editor) return null;
 
   return (
-    <div className="border rounded-lg overflow-hidden bg-white">
+    <div className="border rounded-xl overflow-hidden bg-white shadow-sm">
       {/* Toolbar */}
-      <div className="flex gap-2 p-2 border-b bg-gray-50 flex-wrap">
+      <div className="flex flex-wrap gap-2 p-2 border-b bg-gray-50">
+        {/* Heading */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={
+            editor.isActive("heading", { level: 1 }) ? "default" : "ghost"
+          }
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
@@ -64,7 +76,9 @@ const RichTextEditor = ({ value, onChange }: Props) => {
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={
+            editor.isActive("heading", { level: 2 }) ? "default" : "ghost"
+          }
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -75,57 +89,71 @@ const RichTextEditor = ({ value, onChange }: Props) => {
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={
+            editor.isActive("heading", { level: 3 }) ? "default" : "ghost"
+          }
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
         >
           H3
         </Button>
+
+        {/* Bold */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={editor.isActive("bold") ? "default" : "ghost"}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
           <Bold size={16} />
         </Button>
 
+        {/* Italic */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={editor.isActive("italic") ? "default" : "ghost"}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
           <Italic size={16} />
         </Button>
 
+        {/* Bullet List */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={editor.isActive("bulletList") ? "default" : "ghost"}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           <List size={16} />
         </Button>
 
+        {/* Ordered List */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={editor.isActive("orderedList") ? "default" : "ghost"}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           <ListOrdered size={16} />
         </Button>
 
+        {/* Link */}
         <Button
           type="button"
           size="sm"
-          variant="ghost"
+          variant={editor.isActive("link") ? "default" : "ghost"}
           onClick={() => {
             const url = prompt("Enter URL");
+
             if (url) {
-              editor.chain().focus().setLink({ href: url }).run();
+              editor
+                .chain()
+                .focus()
+                .extendMarkRange("link")
+                .setLink({ href: url })
+                .run();
             }
           }}
         >
@@ -136,7 +164,9 @@ const RichTextEditor = ({ value, onChange }: Props) => {
       {/* Editor */}
       <EditorContent
         editor={editor}
-        className="p-3 min-h-[180px] focus:outline-none"
+        className="prose max-w-none p-4 min-h-[200px] 
+             [&_.ProseMirror>p:first-child]:mt-0
+             [&_.ProseMirror]:outline-none"
       />
     </div>
   );
