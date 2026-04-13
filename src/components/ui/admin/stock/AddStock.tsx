@@ -18,6 +18,7 @@ import { useState } from "react";
 import { useAddStocksMutation } from "@/redux/features/warehouse/stockApi";
 import { toast } from "react-toastify";
 import { SelectWarehouse } from "./SelectWarehouse";
+import AddWarehouse from "../warehouse/AddWarehouse";
 import { TStock } from "@/types/user";
 
 /* -------------------- Schema -------------------- */
@@ -92,12 +93,12 @@ export default function AddStock() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md ">
         <DialogHeader>
           <DialogTitle>Add Stock</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2 flex flex-col">
           {/* Product Name */}
           <div>
             <Label htmlFor="product">Product Name</Label>
@@ -147,6 +148,8 @@ export default function AddStock() {
               </p>
             )}
           </div>
+
+          <AddWarehouse />
 
           {/* Unit Select */}
           <div>

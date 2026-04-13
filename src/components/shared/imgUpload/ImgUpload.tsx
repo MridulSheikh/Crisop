@@ -99,7 +99,7 @@ const ImgUpload = ({ value, onChange }: Props) => {
       </Card>
 
       {value.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {value.map((file) => {
             const preview = URL.createObjectURL(file);
 

@@ -25,19 +25,24 @@ export const productApi = baseApi.injectEndpoints({
     // CREATE PRODUCT (MUTATION)
     createProduct: builder.mutation({
       query: (data: FormData) => {
-        console.log([...data.entries()]);
         return {
           url: "/product",
           method: "POST",
-          body: data, 
+          body: data,
         };
       },
       invalidatesTags: ["products"], // auto refetch list
     }),
+
+    // DELETE PRODUCT (MUTATION)
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/product/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["products"],
+    }),
   }),
 });
 
-export const {
-  useGetProductQuery,
-  useCreateProductMutation,
-} = productApi;
+export const { useGetProductQuery, useCreateProductMutation, useDeleteProductMutation } = productApi;

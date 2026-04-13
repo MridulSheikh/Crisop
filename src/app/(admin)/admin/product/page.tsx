@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import EditProduct from "@/components/ui/admin/products/EditeProductModal";
 import DeleteProductAlert from "@/components/ui/admin/products/DeleteProductAlert";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useSearchParams } from "next/navigation";
@@ -28,8 +27,6 @@ export default function ProductPage() {
 
   const products = data?.data;
   const meta = data?.meta;
-
-  console.log(products);
 
   return (
     <div className="p-6 min-h-screen">
@@ -107,19 +104,7 @@ export default function ProductPage() {
                     </span>
                   </td>
                   <td className="p-3 text-right space-x-2">
-                    {/* <EditProduct
-                      product={{
-                        name: product.name,
-                        description: product.description || "",
-                        category: product.category || "",
-                        stockLocation: product.stockLocation || "",
-                        status: product.status,
-                        regularPrice: product.price.toString(),
-                        discountPrice: product.discountPrice?.toString(),
-                        images: product.image,
-                      }}
-                    /> */}
-                    {/* <DeleteProductAlert productId={product._id} /> */}
+                    <DeleteProductAlert productId={product?._id} />
                   </td>
                 </tr>
               ))}

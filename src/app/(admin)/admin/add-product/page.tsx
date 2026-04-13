@@ -10,6 +10,8 @@ import CategorySelect from "./CategorySelect";
 import TiptapEditor from "@/components/shared/TiptapEditor";
 import { toast } from "react-toastify";
 import { useCreateProductMutation } from "@/redux/features/product/productApi";
+import AddStock from "@/components/ui/admin/stock/AddStock";
+import AddCategory from "@/components/ui/admin/category/AddCategory";
 
 type FormValues = {
   name: string;
@@ -95,21 +97,21 @@ const AddProductPage = () => {
     } catch (error: any) {
       console.error(error);
 
-      toast.error(error?.data?.message || "Failed to create product ❌");
+      toast.error(error?.data?.errorMessage || "Failed to create product ❌");
     }
 
     reset();
   };
 
   return (
-    <div className="p-6 max-w-4xl 2xl:max-w-full mx-auto">
+    <div className="p-6 max-w-4xl xl:max-w-full mx-auto">
       <h1 className="text-2xl font-semibold mb-6">Add New Product</h1>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 grid 2xl:grid-cols-6 gap-x-10"
+        className="space-y-5 grid xl:grid-cols-6 gap-x-10"
       >
-        <div className=" flex flex-col 2xl:col-span-4 gap-y-5">
+        <div className=" flex flex-col xl:col-span-4 gap-y-5">
           {/* Name */}
           <div>
             <label className="block mb-1 font-medium">Product Name</label>
@@ -135,13 +137,14 @@ const AddProductPage = () => {
             />
           </div>
         </div>
-        <div className=" flex flex-col 2xl:col-span-2 gap-y-5">
+        <div className=" flex flex-col xl:col-span-2 gap-y-5">
           {/* Price */}
           <div>
             <label className="block mb-1 font-medium">Price</label>
             <input
               min="0"
               type="number"
+              step="any"
               {...register("price", {
                 required: "Price is required",
                 min: { value: 0, message: "Price cannot be negative" },
@@ -159,8 +162,16 @@ const AddProductPage = () => {
             <input
               min="0"
               type="number"
+              step="any"
               {...register("discountPrice", {
                 min: { value: 0, message: "Cannot be negative" },
+
+                validate: (value) => {
+                  if (value > price) {
+                    return "Discount price cannot be greater than regular price";
+                  }
+                  return true;
+                },
               })}
               onChange={() => {
                 isDiscountTouched.current = true; // user override detected
@@ -186,6 +197,7 @@ const AddProductPage = () => {
               <p className="text-red-500 text-sm">{errors.category.message}</p>
             )}
           </div>
+          <AddCategory />
 
           {/* Stock */}
           <div>
@@ -199,6 +211,7 @@ const AddProductPage = () => {
               <p className="text-red-500 text-sm">{errors.stock.message}</p>
             )}
           </div>
+          <AddStock />
 
           {/* Tags */}
           <div>
