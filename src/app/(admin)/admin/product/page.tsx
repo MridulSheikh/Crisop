@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import DeleteProductAlert from "@/components/ui/admin/products/DeleteProductAlert";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useSearchParams } from "next/navigation";
 import { useGetProductQuery } from "@/redux/features/product/productApi";
@@ -11,6 +9,7 @@ import SearchInput from "@/components/shared/searchInput/SearchInput";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import ProductCard from "./ProductCard";
 
 export default function ProductPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,46 +66,7 @@ export default function ProductPage() {
             </thead>
             <tbody>
               {products?.map((product) => (
-                <tr
-                  key={product._id}
-                  className="hover:bg-gray-50 transition duration-150"
-                >
-                  <td className="p-3">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      width={40}
-                      height={40}
-                      className="rounded object-cover"
-                    />
-                  </td>
-                  <td className="p-3 font-medium text-gray-800">
-                    {product.name}
-                  </td>
-                  <td className="p-3 font-medium text-gray-800">
-                    {product.category.name}
-                  </td>
-                  <td className="p-3 text-gray-600">
-                    ${product.price.toFixed(2)}
-                  </td>
-                  <td className="p-3 text-gray-600">
-                    {product.stock.quantity}
-                  </td>
-                  <td className="p-3">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        product.isPublished === true
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {product.isPublished === true ? "Published" : "Pending"}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right space-x-2">
-                    <DeleteProductAlert productId={product?._id} />
-                  </td>
-                </tr>
+                 <ProductCard product={product} key={product._id} />
               ))}
               {products?.length === 0 && !isLoading && (
                 <tr>

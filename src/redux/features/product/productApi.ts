@@ -42,7 +42,31 @@ export const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["products"],
     }),
+
+    // UPDATE PRODUCT MUTATION
+    updateProduct: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/product/${id}`,
+        method: "PATCH",
+        body: body,
+      }),
+      invalidatesTags: ["products"],
+    }),
+    // GET SINGLE PRODUCT
+    getSingleProduct: builder.query({
+      query: (id: string) => ({
+        url: `/product/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["products"],
+    }),
   }),
 });
 
-export const { useGetProductQuery, useCreateProductMutation, useDeleteProductMutation } = productApi;
+export const {
+  useGetProductQuery,
+  useCreateProductMutation,
+  useDeleteProductMutation,
+  useUpdateProductMutation,
+  useGetSingleProductQuery
+} = productApi;

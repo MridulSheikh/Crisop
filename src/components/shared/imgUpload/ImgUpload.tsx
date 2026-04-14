@@ -6,31 +6,33 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, X } from "lucide-react";
 
-const MAX_FILES = 5;
 const MAX_SIZE = 2 * 1024 * 1024;
 
 type Props = {
-  value: File[];
+  value?: File[];
   onChange: (files: File[]) => void;
+  max_file?: number;
 };
 
-const ImgUpload = ({ value, onChange }: Props) => {
+const ImgUpload = ({ value = [], onChange, max_file = 5 }: Props) => {
+  const MAX_FILES = max_file;
+
   const onDrop = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (acceptedFiles: File[], rejectedFiles: any[]) => {
-      if (rejectedFiles.length > 0) {
+      if (rejectedFiles?.length > 0) {
         alert("Some files rejected (size/type)");
       }
 
-      // REMOVE DUPLICATES
-      const newFiles = acceptedFiles.filter((newFile) => {
-        return !value.some(
-          (file) =>
-            file.name === newFile.name &&
-            file.size === newFile.size &&
-            file.lastModified === newFile.lastModified
-        );
-      });
+      const newFiles = acceptedFiles.filter(
+        (newFile) =>
+          !value.some(
+            (file) =>
+              file.name === newFile.name &&
+              file.size === newFile.size &&
+              file.lastModified === newFile.lastModified
+          )
+      );
 
       if (newFiles.length !== acceptedFiles.length) {
         alert("Duplicate file skipped");
@@ -43,7 +45,7 @@ const ImgUpload = ({ value, onChange }: Props) => {
 
       onChange([...value, ...newFiles]);
     },
-    [value, onChange]
+    [value, onChange, MAX_FILES]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -69,7 +71,7 @@ const ImgUpload = ({ value, onChange }: Props) => {
     );
   };
 
-  // FIX MEMORY LEAK
+  // memory cleanup
   useEffect(() => {
     const urls = value.map((file) => URL.createObjectURL(file));
 
@@ -92,13 +94,12 @@ const ImgUpload = ({ value, onChange }: Props) => {
           <p className="text-sm text-muted-foreground">
             {isDragActive
               ? "Drop images here..."
-              : `Drag & drop (Max ${MAX_FILES}, 2MB each)`
-            }
+              : `Drag & drop (Max ${MAX_FILES}, 2MB each)`}
           </p>
         </CardContent>
       </Card>
 
-      {value.length > 0 && (
+      {(value?.length ?? 0) > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {value.map((file) => {
             const preview = URL.createObjectURL(file);
@@ -129,10 +130,10 @@ const ImgUpload = ({ value, onChange }: Props) => {
       )}
 
       <p className="text-xs text-muted-foreground">
-        {value.length} / {MAX_FILES} uploaded
+        {(value?.length ?? 0)} / {MAX_FILES} uploaded
       </p>
     </div>
   );
 };
 
-export default ImgUpload; 
+export default ImgUpload;

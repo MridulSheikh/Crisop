@@ -77,6 +77,11 @@ export type TCategoryQueryBuilder = {
   };
 };
 
+export type TProductImage = {
+  url: string;
+  public_id: string;
+}
+
 export type TProduct = {
   _id: string;
   name: string;
@@ -86,7 +91,7 @@ export type TProduct = {
   stock: TStock;
   category: TCategory;
   tags?: string[];
-  images: string[];
+  images: TProductImage[];
   isFeatured?: boolean;
   isDeleted: boolean;
   isPublished: boolean;
