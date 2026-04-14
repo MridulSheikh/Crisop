@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import React, { FC, useState } from "react";
 import { Button } from "../../button";
@@ -9,13 +8,12 @@ import { MdClose } from "react-icons/md";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 const navigationData = [
   {
-    name: "Home",
+    name: "Recycle",
     link: "/",
   },
   {
@@ -24,43 +22,15 @@ const navigationData = [
   },
 ];
 
-const hashLink = [
-  {
-    name: "Categories",
-    link: "/#categories",
-  },
-  {
-    name: "About us",
-    link: "/#about-us",
-  },
-  {
-    name: "Contact us",
-    link: "/#contact-us",
-  },
-];
-
-const NavBar: FC = () => {
+const AdminNavBar: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const user = useAppSelector(useCurrentUser);
-  const pathname = usePathname();
-  const parentRoute = pathname.split("/")[1];
   return (
     <div
-      className={cn("py-5 z-50 w-full top-0 ", {
-        "bg-[#f4f5f6] ": isOpen || pathname != "/",
-        "bg-white shadow-md sticky top-0" : parentRoute === "admin",
-        "absolute ": pathname === "/",
-      })}
+      className={cn(" py-3 z-50 w-full bg-gray-950 text-white shadow-md")}
     >
-      <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
-        <div className=" w-[150px] h-[50px] relative">
-          <Image
-            src={"/img/logo.png"}
-            alt="logo"
-            fill
-            className=" object-contain object-center"
-          />
-        </div>
+      <div className=" mx-auto px-5 flex justify-between items-center">
+        <h1 className="text-white font-semibold text-xl">Admin Panel</h1>
         <div className=" flex gap-x-7 items-center">
            <ul className="  hidden lg:flex justify-center  items-center gap-x-7 h-full list-none">
           {navigationData.map((dt, i) => (
@@ -69,30 +39,11 @@ const NavBar: FC = () => {
                 href={dt.link}
                 className={cn(
                   " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
-                  {
-                    "after:w-[100%] text-[#F76364] duration-300":
-                      pathname === dt.link,
-                  }
+                  
                 )}
               >
                 {dt.name}
               </Link>
-            </li>
-          ))}
-          {hashLink.map((dt, i) => (
-            <li key={i} className=" relative">
-              <a
-                href={dt.link}
-                className={cn(
-                  " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
-                  {
-                    "after:w-[100%] text-[#F76364] duration-300":
-                      pathname === dt.link,
-                  }
-                )}
-              >
-                {dt.name}
-              </a>
             </li>
           ))}
         </ul>
@@ -163,4 +114,4 @@ const NavBar: FC = () => {
   );
 };
 
-export default NavBar;
+export default AdminNavBar;

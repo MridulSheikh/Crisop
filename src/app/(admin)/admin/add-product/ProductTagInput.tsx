@@ -11,7 +11,7 @@ type Props = {
 const ProductTagInput = ({ value = [], onChange }: Props) => {
   const [input, setInput] = useState("");
 
-  // ➕ Add Tag
+  // Add Tag
   const addTag = (tag: string) => {
     const trimmed = tag.trim();
 
@@ -24,12 +24,12 @@ const ProductTagInput = ({ value = [], onChange }: Props) => {
     setInput("");
   };
 
-  // ❌ Remove Tag
+  // Remove Tag
   const removeTag = (tag: string) => {
     onChange(value.filter((t) => t !== tag));
   };
 
-  // ⌨️ Handle Key
+  //  Handle Key
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();

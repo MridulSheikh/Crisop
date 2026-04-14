@@ -21,7 +21,7 @@ import { SelectWarehouse } from "./SelectWarehouse";
 import AddWarehouse from "../warehouse/AddWarehouse";
 import { TStock } from "@/types/user";
 
-/* -------------------- Schema -------------------- */
+// Schema 
 const stockSchema = z.object({
   productName: z.string().min(1, "Product name is required"),
   quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
@@ -31,7 +31,7 @@ const stockSchema = z.object({
 
 type StockFormValues = z.infer<typeof stockSchema>;
 
-/* -------------------- Component -------------------- */
+
 export default function AddStock() {
   const [open, setOpen] = useState(false);
   const [addStock] = useAddStocksMutation();
@@ -52,12 +52,12 @@ export default function AddStock() {
     },
   });
 
-  /* -------------------- Submit -------------------- */
+  // onSubmit
   const onSubmit = async (data: StockFormValues) => {
     const toastId = toast.loading("Adding Stock...");
 
     try {
-      const response = await addStock(data).unwrap();
+      const response = await addStock(data as Omit<TStock, "_id" | "sku" | "isDeleted">&{warehouse : string}).unwrap();
 
       toast.update(toastId, {
         render: response?.data?.message || "Stock added successfully",
@@ -84,7 +84,7 @@ export default function AddStock() {
     }
   };
 
-  /* -------------------- UI -------------------- */
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

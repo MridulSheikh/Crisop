@@ -21,7 +21,7 @@ import { useUpdateStocksMutation } from "@/redux/features/warehouse/stockApi";
 import { toast } from "react-toastify";
 import { TStock } from "@/types/user";
 
-/* -------------------- Schema -------------------- */
+
 const stockSchema = z.object({
   productName: z.string().min(1, "Product name is required"),
   quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
@@ -35,7 +35,6 @@ type UpdateStockProps = {
   stock: TStock;
 };
 
-/* -------------------- Component -------------------- */
 export default function UpdateStock({ stock }: UpdateStockProps) {
   const [open, setOpen] = useState(false);
   const [updateStock] = useUpdateStocksMutation();
@@ -47,8 +46,6 @@ export default function UpdateStock({ stock }: UpdateStockProps) {
     unit: stock.unit
   }
 
-console.log(stock.warehouse)
-
   const {
     register,
     handleSubmit,
@@ -59,8 +56,8 @@ console.log(stock.warehouse)
     resolver: zodResolver(stockSchema),
     defaultValues: defaultValue,
   });
-
-  /* form reset when modal opens */
+  
+  // when modal open
   useEffect(() => {
     if (open) reset(defaultValue);
   }, [open, stock, reset]);

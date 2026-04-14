@@ -16,6 +16,7 @@ import StockSelect from "../../add-product/StockSelect";
 import ProductTagInput from "../../add-product/ProductTagInput";
 import Image from "next/image";
 import { Undo } from "lucide-react";
+import { LoadingUi } from "../../team/page";
 
 const MAX_TOTAL_IMAGES = 5;
 
@@ -27,7 +28,7 @@ type FormValues = {
   category: string;
   stock: string;
   tags: string[];
-  images: File[];
+  newImages: File[];
   isFeatured: boolean;
   isPublished: boolean;
 };
@@ -61,7 +62,7 @@ const EditProductPage = () => {
   } = useForm<FormValues>();
 
   const price = watch("price");
-  const totalImages = keepImages.length + (watch("images")?.length || 0);
+  const totalImages = keepImages?.length + (watch("newImages")?.length || 0);
 
   // 🟢 Prefill data
   useEffect(() => {
@@ -72,11 +73,10 @@ const EditProductPage = () => {
         name: product.name,
         description: product.description,
         price: product.price,
-        discountPrice: product.discountPrice,
-        category: product.category,
-        stock: product.stock,
+        discountPrice:product.discountPrice,
+        category: product.category?._id || product.category,
+        stock: product.stock?._id || product.stock,
         tags: product.tags,
-        images: [], // new images only
         isFeatured: product.isFeatured,
         isPublished: product.isPublished,
       });
@@ -105,20 +105,30 @@ const EditProductPage = () => {
       formData.append("tags", tag);
     });
 
-    // ⚠️ optional image update
-    if (data.images.length > 0) {
-      data.images.forEach((file) => {
+    // optional image update
+    if (data.newImages?.length > 0) {
+      data.newImages.forEach((file) => {
         formData.append("newImages", file);
+      });
+    }
+
+    if (removeImages?.length > 0) {
+      removeImages.forEach((image) => {
+        formData.append("removedImages", JSON.stringify(image));
       });
     }
 
     formData.append("isFeatured", String(data.isFeatured));
     formData.append("isPublished", String(data.isPublished));
-
+    
     try {
-      await updateProduct({ id, data: formData }).unwrap();
+      const result = await updateProduct({ id, body: formData }).unwrap();
 
-      toast.success("Product updated successfully 🚀");
+     
+      if (result.success) {
+        toast.success(result.message);
+        SetRemoveImages([]);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error?.data?.errorMessage || "Update failed ❌");
@@ -157,9 +167,12 @@ const EditProductPage = () => {
     });
   };
 
-  console.log(data?.data);
-
-  if (isFetching) return <p>Loading...</p>;
+  if (isFetching)
+    return (
+      <div className=" w-full h-screen flex justify-center items-center">
+        <LoadingUi />
+      </div>
+    );
 
   return (
     <div className="p-6 max-w-4xl xl:max-w-full mx-auto">
@@ -172,11 +185,14 @@ const EditProductPage = () => {
         {/* LEFT */}
         <div className="flex flex-col xl:col-span-4 gap-y-5">
           <div>
-             <label className="block mb-1 font-medium">Name</label>
-            <input {...register("name")} className="border p-2 rounded w-full" />
+            <label className="block mb-1 font-medium">Name</label>
+            <input
+              {...register("name")}
+              className="border p-2 rounded w-full"
+            />
           </div>
           <div>
-             <label className="block mb-1 font-medium">Description</label>
+            <label className="block mb-1 font-medium">Description</label>
             <Controller
               name="description"
               control={control}
@@ -205,12 +221,13 @@ const EditProductPage = () => {
               className="border p-2 w-full"
             />
           </div>
-
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => <CategorySelect {...field} />}
-          />
+          <div>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => <CategorySelect {...field} />}
+            />
+          </div>
 
           <Controller
             name="stock"
@@ -218,6 +235,7 @@ const EditProductPage = () => {
             render={({ field }) => <StockSelect {...field} />}
           />
           <div>
+            <label className="block mb-1 font-medium">Tags</label>
             <Controller
               name="tags"
               control={control}
@@ -230,11 +248,11 @@ const EditProductPage = () => {
           {keepImages?.length != 0 && (
             <div>
               <label className="block mb-1 font-medium">Keep images</label>
-              <div className="flex gap-x-5 flex-wrap">
+              <div className="flex gap-5 flex-wrap">
                 {keepImages?.map((image: TKeepImage) => (
                   <div
                     key={image.public_id}
-                    className="relative w-40 h-40 overflow-hidden rounded group"
+                    className="relative w-32 h-32 overflow-hidden rounded group"
                   >
                     <Image
                       src={image.url}
@@ -261,11 +279,11 @@ const EditProductPage = () => {
           {removeImages?.length != 0 && (
             <div>
               <label className="block mb-1 font-medium">Remove images</label>
-              <div className="flex gap-x-5 flex-wrap">
+              <div className="flex gap-5 flex-wrap">
                 {removeImages?.map((image: TKeepImage) => (
                   <div
                     key={image.public_id}
-                    className="relative w-40 h-40 overflow-hidden rounded group"
+                    className="relative w-32 h-32 overflow-hidden rounded group"
                   >
                     <Image
                       src={image.url}
@@ -296,7 +314,7 @@ const EditProductPage = () => {
           <div>
             <label className="block mb-1 font-medium">New images</label>
             <Controller
-              name="images"
+              name="newImages"
               control={control}
               render={({ field }) => (
                 <ImgUpload

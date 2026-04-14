@@ -14,7 +14,7 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-import { useGetCategoryQuery } from "@/redux/features/category/categoryApi";
+import { useGetCategoryQuery, useGetSingleCategoryQuery } from "@/redux/features/category/categoryApi";
 
 const CategorySelect = ({ value, onChange }: Props) => {
   const [search, setSearch] = useState("");
@@ -25,10 +25,13 @@ const CategorySelect = ({ value, onChange }: Props) => {
 
   const categories: TCategory[] = data?.data?.data || [];
 
-  console.log(categories)
+   const { data: selectedCategory } = useGetSingleCategoryQuery(value, {
+      skip: !value,
+    });
 
   return (
     <SelectCommand<TCategory>
+      selectedValue={selectedCategory?.data}
       label="Category"
       value={value}
       onChange={onChange}

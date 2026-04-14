@@ -86,17 +86,16 @@ const AddProductPage = () => {
 
     try {
       const res = await createProduct(formData).unwrap();
+      if (res.success) {
+        toast.success("Product created successfully 🚀");
 
-      toast.success("Product created successfully 🚀");
+        reset();
+        isDiscountTouched.current = false;
 
-      reset();
-      isDiscountTouched.current = false;
-
-      console.log("Created:", res);
+        console.log("Created:", res);
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
-
       toast.error(error?.data?.errorMessage || "Failed to create product ❌");
     }
 

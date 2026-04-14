@@ -28,6 +28,7 @@ type Props<T> = {
   renderItem: (item: T) => React.ReactNode;
   onSearch: (value: string) => void;
   renderSelectValue: (item: T) => React.ReactNode;
+  selectedValue: T,
 };
 
 function SelectCommand<T>({
@@ -41,15 +42,10 @@ function SelectCommand<T>({
   getOptionValue,
   renderItem,
   onSearch,
-  renderSelectValue
+  renderSelectValue,
+  selectedValue
 }: Props<T>) {
   const [search, setSearch] = useState("");
-
-   const selectedValue = data.find(
-    (item) => getOptionValue(item) === value
-  );
-
-  console.log(error)
 
   return (
     <div>

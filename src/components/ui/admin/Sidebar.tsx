@@ -11,7 +11,6 @@ import {
   Boxes,
   Warehouse,
   Settings,
-  LogOut,
 } from 'lucide-react'
 
 const Sidebar = () => {
@@ -29,8 +28,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <aside className="w-64 min-h-screen bg-[#f6f6f6] p-4 flex flex-col justify-between">
-      <div>
+    <aside className="w-64  p-4 fixed top-0 left-0 h-screen bg-[#f6f6f6] z-50">
         <div className="w-[120px] h-[60px] relative mb-8">
           <Image
             src="/img/logo.png"
@@ -59,21 +57,6 @@ const Sidebar = () => {
             )
           })}
         </nav>
-      </div>
-
-      {/* Logout Button */}
-      <div className="pt-4 border-t mt-6">
-        <button
-          onClick={() => {
-            // Replace this with your actual logout logic
-            console.log('Logging out...')
-          }}
-          className="flex items-center gap-3 w-full text-left px-4 py-2 rounded-lg transition text-sm font-medium text-red-600 hover:bg-red-100"
-        >
-          <LogOut size={18} />
-          Logout
-        </button>
-      </div>
     </aside>
   )
 }

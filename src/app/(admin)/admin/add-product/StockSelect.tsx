@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useGetStockQuery } from "@/redux/features/warehouse/stockApi";
+import { useGetSingleStockQuery, useGetStockQuery } from "@/redux/features/warehouse/stockApi";
 import { TStock } from "@/types/user";
 import SelectCommand from "@/components/shared/command/SelectCommand";
 
@@ -16,10 +16,14 @@ const StockSelect = ({ value, onChange }: Props) => {
   const { data, isLoading, isError, error } = useGetStockQuery({
     search,
   });
-  
+
+   const { data: selectedStock } = useGetSingleStockQuery(value, {
+    skip: !value,
+  });
 
   return (
     <SelectCommand<TStock>
+      selectedValue={selectedStock?.data}
       label="Stock"
       value={value}
       onChange={onChange}

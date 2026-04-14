@@ -34,9 +34,15 @@ const stockApi = baseApi.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags: ['stocks']
+        }),
+        getSingleStock: builder.query({
+            query: (id)=>({
+                url: `/stock/${id}`,
+                method: 'GET'
+            })
         })
     })
 })
 
 
-export const {useGetStockQuery, useAddStocksMutation, useDeleteStocksMutation, useUpdateStocksMutation} = stockApi;
+export const {useGetStockQuery, useAddStocksMutation, useDeleteStocksMutation, useUpdateStocksMutation, useGetSingleStockQuery} = stockApi;
