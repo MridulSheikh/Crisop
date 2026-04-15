@@ -8,7 +8,7 @@ import React from "react";
 
 const ProductCard = ({ product }: { product: TProduct }) => {
   return (
-    <tr className="hover:bg-gray-50 transition duration-150">
+    <tr className="hover:bg-gray-50 transition duration-150 border-b">
       <td className="p-3">
         <Image
           src={product.images[0].url}

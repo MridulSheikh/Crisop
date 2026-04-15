@@ -28,7 +28,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <aside className="w-64  p-4 fixed top-0 left-0 h-screen bg-white border-r z-50">
+    <aside className="w-64  p-4 fixed top-0 left-0 h-screen z-50 bg-white shadow-md">
         <div className="w-[120px] h-[60px] relative mb-8">
           <Image
             src="/img/logo.png"

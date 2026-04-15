@@ -23,7 +23,7 @@ const TeamCard = (props: IProps) => {
   const isSameAdmin = user?.role === "admin" && member.role === "admin";
   const isSuper = member?.role === "super";
   return (
-    <tr className="hover:bg-gray-50 transition duration-150">
+    <tr className="hover:bg-gray-50 transition duration-150 border-b">
       <td className="p-3 font-medium text-gray-800 flex gap-x-3 items-center">
           <Avatar className={cn("cursor-pointer size-7 ")}>
             <AvatarImage src={member.image} alt="@shadcn" />

@@ -124,8 +124,8 @@ const TeamPage = () => {
       <div className="flex p-6 flex-col  gap-8">
         {/* Team Members */}
         <section className="flex-1">
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-200 bg-white rounded-md overflow-hidden text-left text-sm">
+          <div className="">
+            <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
               <thead className="bg-black text-white">
                 <tr>
                   <th className="p-3 border-b">Name</th>

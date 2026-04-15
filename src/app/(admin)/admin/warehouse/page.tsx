@@ -47,8 +47,8 @@ export default function WarehousePage() {
         </div>
       </div>
 
-      <div className="overflow-hidden">
-        <table className="min-w-full border border-gray-200 text-left text-sm rounded-md">
+      <div className="">
+        <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
           <thead className="bg-black text-white sticky top-0">
             <tr>
               <th className="p-3 border-b">Name</th>
@@ -61,7 +61,7 @@ export default function WarehousePage() {
             {warehouses?.map((wh, index) => (
               <tr
                 key={index}
-                className="hover:bg-gray-50 transition duration-150"
+                className="hover:bg-gray-50 transition duration-150 border-b"
               >
                 <td className="p-3 font-medium text-gray-800">{wh.name}</td>
                 <td className="p-3 text-gray-600">{wh.location}</td>

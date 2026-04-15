@@ -52,13 +52,13 @@ const CategoryPage = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="">
         {isError ? (
           <div className="bg-white">
             <ErrorUi error={error} />
           </div>
         ) : (
-          <table className="min-w-full bg-white border border-gray-200 text-sm">
+          <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
             <thead className="bg-black text-white text-left">
               <tr>
                 <th className="p-3 border-b">Name</th>
@@ -72,7 +72,7 @@ const CategoryPage = () => {
               {categories?.map((category : TCategory) => (
                 <tr
                   key={category._id}
-                  className="hover:bg-gray-50 transition duration-150"
+                  className="hover:bg-gray-50 transition duration-150 border-b"
                 >
                   <td className="p-3 font-medium text-gray-800">
                     {category.name}
