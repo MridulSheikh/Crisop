@@ -52,7 +52,7 @@ export default function ProductPage() {
         {isError ? (
           <ErrorUi error={error} />
         ) : (
-          <table className="min-w-full border border-gray-200 bg-white text-sm">
+          <table className="min-w-full border border-gray-200 bg-white text-sm rounded-md overflow-hidden">
             <thead className="bg-black text-white text-left">
               <tr>
                 <th className="p-3 border-b">Image</th>
