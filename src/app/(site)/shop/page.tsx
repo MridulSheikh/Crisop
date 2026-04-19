@@ -1,74 +1,62 @@
 import ProductCard from "@/components/shared/card/ProductCard";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import ProductFillter from "@/components/ui/products/ProductFillter";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import React from "react";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import LimitSelectClient from "@/components/ui/products/LimitClientComponent";
+import { TProduct } from "@/types/user";
+import { cookies } from "next/headers";
 
-const Products = () => {
+const Products = async ({
+  searchParams,
+}: {
+  searchParams: {
+    page?: string;
+    limit?: string;
+    category?: string;
+  };
+}) => {
+  const page = Number(searchParams.page) || 1;
+  const limit = Number(searchParams.limit) || 10;
+  const category = searchParams.category;
+  const cookieStore = cookies();
+  const token = cookieStore.get("token")?.value;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/product?page=${page}&limit=${limit}${
+    category ? `&category=${category}` : ""
+  }`;
+  const res = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const products = await res.json();
+  const meta = products.meta;
+
   return (
-    <div className=" max-w-screen-xl px-5 mx-auto mt-10">
-      <div className=" flex justify-between items-center">
-        <ProductFillter />
-        <div className=" flex gap-x-4 items-center">
-          <p className=" text-sm">Showing 1–12 of 24 item(s)</p>
-          <Select>
-            <SelectTrigger className="w-[180px] rounded-full border-black">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="relevency">Relevency</SelectItem>
-              <SelectItem value="price_desc">Highest Price</SelectItem>
-              <SelectItem value="price_asc">Lowest Price</SelectItem>
-              <SelectItem value="date_desc">Most Recent</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="max-w-screen-xl px-5 mx-auto mt-10">
+      <div className="flex justify-between items-center">
+        <div className="flex gap-x-4 items-center">
+          <p className="text-sm flex items-center gap-x-2">
+            Showing <LimitSelectClient /> of {meta?.total} items
+          </p>
         </div>
       </div>
-      <div className=" grid lg:grid-cols-4  gap-[29px] mt-[34px]">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+      <div>
+        <div className="grid lg:grid-cols-4 gap-[29px] mt-[34px]">
+          {products?.data?.map((product: TProduct) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
       </div>
-      <div className=" mt-10">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      {/* 🔥 Product Grid */}
+      {}
+      <div className="mt-10">
+        <div className="mt-5">
+          <PaginationWithLinks
+            page={meta?.page}
+            pageSize={meta?.limit}
+            totalCount={meta?.total}
+          />
+        </div>
       </div>
     </div>
   );

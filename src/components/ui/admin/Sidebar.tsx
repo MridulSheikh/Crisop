@@ -5,9 +5,7 @@ import { usePathname } from 'next/navigation'
 import {
   Package,
   ShoppingCart,
-  Users,
   Tag,
-  BadgePercent,
   Boxes,
   Warehouse,
   Settings,
@@ -19,9 +17,7 @@ const Sidebar = () => {
   const links = [
     { href: '/admin/product', label: 'Products', icon: Package },
     { href: '/admin/order', label: 'Orders', icon: ShoppingCart },
-    { href: '/admin/customer', label: 'Customers', icon: Users },
     { href: '/admin/category', label: 'Categories', icon: Tag },
-    { href: '/admin/coupon', label: 'Coupons', icon: BadgePercent },
     { href: '/admin/stock', label: 'Stock', icon: Boxes },
     { href: '/admin/warehouse', label: 'Warehouse', icon: Warehouse },
     { href: '/admin/team', label: 'Manage Team', icon: Settings },

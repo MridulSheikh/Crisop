@@ -1,5 +1,6 @@
 import DeleteProductAlert from "@/components/ui/admin/products/DeleteProductAlert";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { TProduct } from "@/types/user";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
@@ -19,7 +20,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
         />
       </td>
       <td className="p-3 font-medium text-gray-800">{product.name}</td>
-      <td className="p-3 font-medium text-gray-800">{product.category.name}</td>
+      <td className={cn("p-3 font-medium text-gray-800",{"bg-red-300 text-red-900" : !(product?.category)})}>{product?.category ? product?.category?.name : 'Category not found'}</td>
       <td className="p-3 text-gray-600">${product.price.toFixed(2)}</td>
       <td className="p-3 text-gray-600">{product.stock.quantity}</td>
       <td className="p-3">

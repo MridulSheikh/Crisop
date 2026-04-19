@@ -73,7 +73,7 @@ const EditProductPage = () => {
         name: product.name,
         description: product.description,
         price: product.price,
-        discountPrice:product.discountPrice,
+        discountPrice: product.discountPrice,
         category: product.category?._id || product.category,
         stock: product.stock?._id || product.stock,
         tags: product.tags,
@@ -120,11 +120,10 @@ const EditProductPage = () => {
 
     formData.append("isFeatured", String(data.isFeatured));
     formData.append("isPublished", String(data.isPublished));
-    
+
     try {
       const result = await updateProduct({ id, body: formData }).unwrap();
 
-     
       if (result.success) {
         toast.success(result.message);
         SetRemoveImages([]);
@@ -324,6 +323,19 @@ const EditProductPage = () => {
                 />
               )}
             />
+          </div>
+
+          {/* Checkboxes */}
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isFeatured")} />
+              Featured Product
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isPublished")} />
+              Publish Product
+            </label>
           </div>
 
           <button className="bg-black text-white py-2 rounded">

@@ -4,6 +4,24 @@ import { TProductBuilderQueries } from "@/types/user";
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET PRODUCTS
+    getAdminProduct: builder.query<
+      TProductBuilderQueries,
+      { page?: number; search?: string; limit?: number }
+    >({
+      query: ({ page = 1, search = "", limit = 10 }) => {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("limit", limit.toString());
+        if (search) params.append("searchTerm", search);
+
+        return {
+          url: `/product/admin?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["products"],
+    }),
+
     getProduct: builder.query<
       TProductBuilderQueries,
       { page?: number; search?: string; limit?: number }
@@ -64,9 +82,9 @@ export const productApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetProductQuery,
+  useGetAdminProductQuery,
   useCreateProductMutation,
   useDeleteProductMutation,
   useUpdateProductMutation,
-  useGetSingleProductQuery
+  useGetSingleProductQuery,
 } = productApi;

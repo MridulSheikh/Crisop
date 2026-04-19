@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useSearchParams } from "next/navigation";
-import { useGetProductQuery } from "@/redux/features/product/productApi";
 import { LoadingUi, ErrorUi } from "../team/page"; // assuming you have loading/error components
 import SearchInput from "@/components/shared/searchInput/SearchInput";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
+import { useGetAdminProductQuery } from "@/redux/features/product/productApi";
 
 export default function ProductPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,7 +18,7 @@ export default function ProductPage() {
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
 
-  const { data, isLoading, isError, error } = useGetProductQuery({
+  const { data, isLoading, isError, error } = useGetAdminProductQuery({
     page,
     limit,
     search: searchQuery,
