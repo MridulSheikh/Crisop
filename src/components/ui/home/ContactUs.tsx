@@ -11,7 +11,6 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
@@ -87,8 +86,8 @@ const Contact = () => {
       .finally(() => setLoading(false));
   };
   return (
-    <section id="contact-us" className="overflow-hidden">
-      <div className=" mt-[117px] max-w-screen-xl px-5 mx-auto">
+    <section id="contact-us" className="overflow-hidden pb-20">
+      <div className=" mt-[117px] max-w-screen-2xl px-5 mx-auto">
         <div className=" grid lg:grid-cols-2 gap-x-7">
           <motion.div
             ref={ref}
@@ -101,7 +100,7 @@ const Contact = () => {
             }}
             className=" flex flex-col">
             <div>
-              <h1 className=" text-xl font-bold">Contact Us</h1>
+              <h1 className=" text-5xl font-bold">Contact Us</h1>
               <p className="text-[#566B84] font-normal text-[18px] mt-[24px]">
                 Ut posuere felis arcu tellus tempus in in ultricies. Gravida id
                 nibh ornare viverra.Ut posuere felis arcu tellus tempus in in

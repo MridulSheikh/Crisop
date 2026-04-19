@@ -1,23 +1,27 @@
 "use client";
+
 import { useInView, motion } from "framer-motion";
 import { CircleHelp, Package, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
-const imgVariant = {
-  hidden: { x: 150, opacity: 0 },
-  visible: { x: 0, opacity: 1 },
-};
-
-const ParentVariant = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
-
-const childrenVariant = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
+const features = [
+  {
+    icon: ShieldCheck,
+    title: "Quality Products",
+    desc: "We source only fresh and verified groceries from trusted suppliers.",
+  },
+  {
+    icon: CircleHelp,
+    title: "24/7 Support",
+    desc: "Our support team is always ready to help you anytime.",
+  },
+  {
+    icon: Package,
+    title: "Fast Delivery",
+    desc: "Quick and safe delivery right to your doorstep.",
+  },
+];
 
 const companyImage = [
   "/img/footer/shefinds-logo 1.png",
@@ -29,132 +33,92 @@ const companyImage = [
 
 const AboutUs = () => {
   const ref = useRef(null);
-  const inView = useInView(ref, {
-    once: true,
-  });
+  const inView = useInView(ref, { once: true });
+
   return (
     <section
-      className="max-w-screen-xl px-5 mx-auto mt-[117px] overflow-hidden"
-      id="about-us">
-      <div className="grid lg:grid-cols-2 gap-[92px]">
+      id="about-us"
+      className="max-w-screen-2xl mx-auto px-5 mt-24"
+    >
+      <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+        {/* LEFT CONTENT */}
         <motion.div
           ref={ref}
-          variants={ParentVariant}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          transition={{
-            duration: 0.8,
-            delayChildren: 0,
-            staggerChildren: 0.5,
-          }}
-          className=" flex flex-col justify-center">
-          <motion.h1
-            className=" text-[40px] font-extrabold text-[#061c3c]"
-            variants={childrenVariant}>
-            ABOUT US
-          </motion.h1>
-          <motion.p
-            variants={childrenVariant}
-            className="text-[#566B84] font-normal text-[18px] mt-[24px]">
-            At Crisop, we are committed to providing you with the freshest and
-            highest-quality groceries at affordable prices. Our mission is to
-            simplify your shopping experience, save you time, and ensure you
-            have access to a wide range of products to meet all your household
-            needs.
-          </motion.p>
-          <motion.div
-            variants={childrenVariant}
-            transition={{
-              delayChildren: 0.5,
-              staggerChildren: 0.5,
-            }}
-            className="mt-[48px] bg-[#e3f7da] rounded-[16px]">
-            <motion.div
-              variants={childrenVariant}
-              className="flex space-x-[20px] p-[32px]">
-              <div>
-                <ShieldCheck />
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-4xl font-bold text-[#106D42]">
+            About <span className="text-gray-900">Us</span>
+          </h1>
+
+          <p className="mt-5 text-gray-600 leading-relaxed">
+            At Crisop, we deliver fresh, organic, and high-quality groceries
+            directly to your home. Our goal is to make your daily shopping
+            faster, easier, and healthier.
+          </p>
+
+          {/* FEATURES */}
+          <div className="mt-10 space-y-5">
+            {features.map((item, i) => (
+              <div
+                key={i}
+                className="flex gap-4 p-4 rounded-xl bg-white border hover:shadow-md transition"
+              >
+                <div className="text-[#86a628]">
+                  <item.icon />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-[20px] font-medium text-[#061C3D]">
-                  Quality
-                </h3>
-                <p className=" text-[16px] text-[#42526B] mt-[8px]">
-                  We source our products from reputable suppliers to ensure you
-                  receive only the best quality items.
-                </p>
-              </div>
-            </motion.div>
-            <motion.div
-              variants={childrenVariant}
-              className="mx-[32px] h-[2px] bg-[#061C3D] bg-opacity-10"
-            />
-            <motion.div
-              variants={childrenVariant}
-              className="flex space-x-[20px] p-[32px]">
-              <div>
-                <CircleHelp />
-              </div>
-              <div>
-                <h3 className="text-[20px] font-medium text-[#061C3D]">
-                  Customer Support
-                </h3>
-                <p className=" text-[16px] text-[#42526B] mt-[8px]">
-                  Our friendly and knowledgeable customer support team is
-                  available to assist you with any inquiries or concerns.
-                </p>
-              </div>
-            </motion.div>
-            <motion.div
-              variants={childrenVariant}
-              className="mx-[32px] h-[2px] bg-[#061C3D] bg-opacity-10"
-            />
-            <motion.div
-              variants={childrenVariant}
-              className="flex space-x-[20px] p-[32px]">
-              <div>
-                <Package />
-              </div>
-              <div>
-                <h3 className="text-[20px] font-medium text-[#061C3D]">
-                  Fast and Reliable Delivery
-                </h3>
-                <p className=" text-[16px] text-[#42526B] mt-[8px]">
-                  We ensure your order reaches your doorstep promptly and in
-                  pristine condition.
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
+            ))}
+          </div>
         </motion.div>
+
+        {/* RIGHT IMAGE */}
         <motion.div
-          ref={ref}
-          variants={imgVariant}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          transition={{
-            duration: 0.8,
-          }}
-          className=" w-full h-[300px] lg:h-auto rounded-[26px] overflow-hidden relative">
-          <motion.img
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="relative h-[400px] lg:h-[791px] rounded-2xl overflow-hidden"
+        >
+          <Image
             src="/img/about-us/delevery-boy.jpg"
-            className=" object-cover object-center w-full h-full"
+            alt="delivery"
+            fill
+            className="object-cover"
           />
+
+          {/* overlay glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         </motion.div>
       </div>
-      <div className=" mt-32 p-10 rounded-md border-2 border-dashed relative border-[#ff7c08]">
-        <h1 className=" bg-white absolute -top-7 left-7 p-3 text-xl font-bold text-[#061c3c] ">
-          The Most Popular Brand&apos;s
-        </h1>
-        <div className=" flex justify-between items-center">
-          {companyImage.map((img: string, index: number) => (
-            <div key={index} className=" p-5 rounded-md border">
-              <div className=" relative w-[159px] h-[49px] ">
+
+      {/* BRAND SECTION */}
+      <div className="mt-24 border border-dashed border-[#86a628] rounded-2xl p-8 relative">
+        <h2 className="absolute -top-4 left-6 bg-white px-4 text-lg font-semibold text-[#106D42]">
+          Trusted Brands
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
+          {companyImage.map((img, i) => (
+            <div
+              key={i}
+              className="p-4 border rounded-xl bg-white hover:shadow-md transition"
+            >
+              <div className="relative h-12">
                 <Image
                   src={img}
-                  alt={"logo_icon"}
+                  alt="brand"
                   fill
-                  className=" object-contain object-center"
+                  className="object-contain"
                 />
               </div>
             </div>

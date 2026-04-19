@@ -1,81 +1,60 @@
+"use client";
+
 import Image from "next/image";
-import React, { FC } from "react";
+import React from "react";
+
 import { Button } from "../button";
 
-const Banner: FC = () => {
-  return (
-    <div className=" lg:h-screen relative bg-[#EFEEEE] overflow-hidden">
-      <div className="absolute size-80 rounded-full bg-gradient-to-r from-[#FF5F2C] to-[#FF5F2C]/10  top-[35%] left-[40%] opacity-40 blur-3xl filter block" />
-      <div className="absolute size-80 rounded-full bg-gradient-to-r from-[#FF5F2C] to-[#FF5F2C]/10  -top-64 -right-36 opacity-40 blur-3xl filter block" />
 
-      <div className=" max-w-screen-xl mx-auto h-full px-5 pt-10 lg:py-0 grid lg:grid-cols-12  relative z-10">
-        <div className="flex col-span-5 items-center">
-          <div className="mt-20">
-            <div className=" flex gap-x-3 p-3 rounded-full bg-[#FEF2F2] w-[250px]">
-              <div className=" size-5 relative">
-                <Image alt="vagitable img" src="/img/vegetables 1.png" fill />
-              </div>
-              <p className=" text-[#F54B4C] font-semibold text-sm">
-                Grocery Delivery Service
-              </p>
-            </div>
-            <div className="relative mt-5">
-              <h1 className="text-4xl lg:text-6xl lg:leading-[4.75rem] font-bold lg:font-semibold text-[#2F2F2E]">
-                Make healthy <br /> life with{" "}
-                <span className=" text-[#106D42]">fresh</span> grocery
-              </h1>
-            </div>
-            <p className="mt-5 text-[#595959]">
-              Get the best quality and most delicious grocery food in the{" "}
-              <br className="hidden lg:inline-block" /> world, you can get them
-              all use our website
-            </p>
-            <Button className="bg-[#FF5F2C] hover:bg-[#FF5F2C]/90 mt-7 text-lg">
+const Banner = () => {
+  return (
+    <div className="relative overflow-hidden bg-[#f6f7f6] min-h-[85vh] flex items-center">
+
+      {/* 🌿 green blur background */}
+      <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-green-500/20 rounded-full blur-[120px]" />
+      <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-emerald-400/20 rounded-full blur-[120px]" />
+
+      <div className="max-w-screen-2xl mx-auto px-5 grid lg:grid-cols-12 items-center relative z-10">
+
+        {/* LEFT CONTENT */}
+        <div className="col-span-5 space-y-6">
+
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border text-sm text-green-700 font-medium">
+            🥬 Fresh Grocery Delivery
+          </div>
+
+          <h1 className="text-4xl lg:text-7xl font-bold leading-tight text-gray-900">
+            Fresh & Organic <br />
+            <span className="text-[#106D42]">Grocery</span> at Your Door
+          </h1>
+
+          <p className="text-gray-600 text-sm lg:text-base">
+            Get fresh vegetables, fruits, and daily essentials delivered fast with premium quality guarantee.
+          </p>
+
+          <div className="flex gap-4">
+            <Button className="bg-[#106D42] hover:bg-[#0c5132]">
               Shop Now
             </Button>
+            <Button variant="outline">Explore</Button>
           </div>
         </div>
-        <div className="relative h-full col-span-7">
-          <div className=" hidden lg:flex absolute p-2 lg:bottom-[50%] left-0 lg:left-16 z-10 items-center  gap-x-3 rounded-md border shadow-xl bg-white">
-            <div className=" relative size-8">
-              <Image alt={"location icon"} fill src={"/img/destination.png"} />
-            </div>
-            <div>
-              <h1 className=" text-sm font-bold">Fast Delivery</h1>
-              <p className=" text-xs text-[#ADADAD]">
-                Free of cost any devlivery
-              </p>
-            </div>
-          </div>
-          <div className=" hidden lg:inline absolute p-2 bottom-[60%] right-14 z-10  gap-x-3 rounded-md border shadow-xl bg-white">
-            <div className=" size-14 rounded-full bg-[#EBE3E3] border border-[#C8C8C8] m-auto flex justify-center items-center">
-              <div className=" relative size-8">
-                <Image alt={"location icon"} fill src={"/img/vegitable.png"} />
-              </div>
-            </div>
-            <div className="text-center mt-1.5">
-              <h1 className="text-sm font-bold">100% Fresh</h1>
-              <p className="text-xs text-[#ADADAD]">Quality maintain</p>
-            </div>
-          </div>
 
-          <div className=" relative w-[100%] hidden lg:inline-block h-full">
-            <Image
-              alt="hero-image"
-              src="/img/hero.png"
-              fill
-              className="object-contain object-bottom"
-            />
-          </div>
-          <div className=" relative w-[100%] lg:hidden h-96 lg:h-full">
-            <Image
-              alt="hero-image"
-              src="/img/hero_2.png"
-              fill
-              className="object-contain object-bottom"
-            />
-          </div>
+        {/* RIGHT IMAGE */}
+        <div className="col-span-7 relative flex justify-center lg:justify-end">
+
+          {/* floating glow behind image */}
+          <div className="absolute w-[450px] h-[450px] bg-green-400/20 blur-[100px] rounded-full" />
+
+          <Image
+            src="/img/hero.png"
+            alt="hero"
+            width={700}
+            height={700}
+            className="object-contain relative z-10 lg:translate-y-10 scale-110 lg:scale-125"
+          />
         </div>
+
       </div>
     </div>
   );

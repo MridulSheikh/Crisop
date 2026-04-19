@@ -1,70 +1,105 @@
-import Image from "next/image";
-import React, { FC } from "react";
+"use client";
 
-const OurCategories: FC = () => {
+import Image from "next/image";
+import React from "react";
+
+const categories = [
+  {
+    name: "Vegetables",
+    img: "/img/vagitable_category.png",
+    large: true,
+  },
+  {
+    name: "Meat",
+    img: "/img/meat_category.png",
+  },
+  {
+    name: "Fruits",
+    img: "/img/fruits_category.png",
+  },
+  {
+    name: "Fish",
+    img: "/img/fish_category.png",
+    large: true,
+  },
+];
+
+const OurCategories = () => {
   return (
-    <section id="categories" className=" max-w-screen-xl mx-auto px-5">
-      <div className=" text-center mt-[117px]">
-        <h1 className=" text-[36px] font-bold text-[#2F2F2E]">
+    <section id="categories" className="max-w-screen-2xl mx-auto px-5 mt-28">
+
+      {/* HEADER */}
+      <div className="text-center mb-14">
+        <h1 className="text-5xl font-bold text-[#106D42]">
           Our Categories
         </h1>
-        <p className=" mt-[12px] md:w-3/6 mx-auto text-[#666666]">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-          nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam.
+        <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
+          Fresh groceries, meat, fish and fruits delivered with premium quality.
+          Choose your favorite category and start shopping.
         </p>
       </div>
-      <div className="mt-[50px] grid grid-cols-1 lg:grid-cols-3 gap-y-5 lg:gap-y-0 gap-x-5">
-        <div className=" relative cursor-pointer h-40 lg:h-[513px] rounded-xl overflow-hidden">
+
+      {/* GRID */}
+      <div className="grid lg:grid-cols-3 gap-6">
+
+        {/* LEFT BIG */}
+        <div className="relative h-[250px] lg:h-[520px] rounded-2xl overflow-hidden group cursor-pointer">
+
           <Image
-            src={"/img/vagitable_category.png"}
-            alt="vagitable_category"
+            src={categories[0].img}
+            alt={categories[0].name}
             fill
-            className=" object-cover object-center"
+            className="object-cover group-hover:scale-110 transition duration-500"
           />
-          <div className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50" />
-          <h1 className="text-[22px] absolute bottom-5 left-5 text-white">
-            Vegetables
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+          <h1 className="absolute bottom-5 left-5 text-white text-2xl font-semibold">
+            {categories[0].name}
           </h1>
-        </div>
-        <div className=" grid grid-cols-1 gap-y-5">
-          <div className=" relative h-40 lg:h-auto cursor-pointer rounded-xl overflow-hidden">
-            <Image
-              src={"/img/meat_category.png"}
-              alt="meat_category"
-              fill
-              className=" object-cover object-center"
-            />
-            <div className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50" />
-            <h1 className="text-[22px] absolute bottom-5 left-5 text-white">
-              Meat
-            </h1>
-          </div>
-          <div className=" relative h-40 lg:h-auto cursor-pointer rounded-xl overflow-hidden">
-            <Image
-              src={"/img/fruits_category.png"}
-              alt="fruits_category"
-              fill
-              className=" object-cover object-center"
-            />
-            <div className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50" />
-            <h1 className="text-[22px] absolute bottom-5 left-5 text-white">
-              Fruits
-            </h1>
-          </div>
         </div>
 
-        <div className=" relative cursor-pointer  h-40 lg:h-[513px] rounded-xl overflow-hidden">
+        {/* MIDDLE */}
+        <div className="grid gap-6">
+
+          {[categories[1], categories[2]].map((item, i) => (
+            <div
+              key={i}
+              className="relative h-[180px] lg:h-[250px] rounded-2xl overflow-hidden group cursor-pointer"
+            >
+              <Image
+                src={item.img}
+                alt={item.name}
+                fill
+                className="object-cover group-hover:scale-110 transition duration-500"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+              <h1 className="absolute bottom-4 left-4 text-white text-xl font-medium">
+                {item.name}
+              </h1>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT BIG */}
+        <div className="relative h-[250px] lg:h-[520px] rounded-2xl overflow-hidden group cursor-pointer">
+
           <Image
-            src={"/img/fish_category.png"}
-            alt="fish_category"
+            src={categories[3].img}
+            alt={categories[3].name}
             fill
-            className=" object-cover object-center"
+            className="object-cover group-hover:scale-110 transition duration-500"
           />
-          <div className="w-full h-full absolute top-0 left-0 bg-black bg-opacity-50" />
-          <h1 className="text-[22px] absolute bottom-5 left-5 text-white">
-            Fish
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+          <h1 className="absolute bottom-5 left-5 text-white text-2xl font-semibold">
+            {categories[3].name}
           </h1>
         </div>
+
       </div>
     </section>
   );

@@ -2,164 +2,163 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../button";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
+import { FiShoppingCart } from "react-icons/fi";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import ProductSearchBar from "../../products/ProductSearchBar";
 
 const navigationData = [
-  {
-    name: "Home",
-    link: "/",
-  },
-  {
-    name: "Shop",
-    link: "/shop",
-  },
+  { name: "Home", link: "/" },
+  { name: "Shop", link: "/shop" },
 ];
 
-const hashLink = [
-  {
-    name: "Categories",
-    link: "/#categories",
-  },
-  {
-    name: "About us",
-    link: "/#about-us",
-  },
-  {
-    name: "Contact us",
-    link: "/#contact-us",
-  },
-];
+const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
-const NavBar: FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const user = useAppSelector(useCurrentUser);
   const pathname = usePathname();
-  const parentRoute = pathname.split("/")[1];
+
+  const isHome = pathname === "/";
+  const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    const currentScrollY = window.scrollY;
+
+    setScrolled(currentScrollY > 20);
+
+
+    if (!isHome) {
+      setShowSearch(true);
+      return;
+    }
+
+   
+    setShowSearch(currentScrollY > 120);
+
+    let lastScrollY = currentScrollY;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      setScrolled(scrollY > 20);
+
+      if (scrollY > lastScrollY && scrollY > 80) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+
+      setShowSearch(scrollY > 120);
+
+      lastScrollY = scrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHome]);
+
   return (
-    <div
-      className={cn("py-5 z-50 w-full top-0 ", {
-        "bg-[#f4f5f6] ": isOpen || pathname != "/",
-        "bg-white shadow-md sticky top-0" : parentRoute === "admin",
-        "absolute ": pathname === "/",
-      })}
+    <motion.div
+      initial={false}
+      animate={{ y: showNavbar ? 0 : -100 }}
+      transition={
+        showNavbar ? { duration: 0.3, ease: "easeInOut" } : { duration: 0 }
+      }
+      className={cn(
+        "fixed top-0 left-0 w-full z-50 transition-all bg-[#f6f6f6]",
+        {
+          "bg-transparent": !scrolled && !isOpen,
+          "bg-white/90 backdrop-blur-md shadow-sm": scrolled || isOpen,
+        },
+      )}
     >
-      <div className=" max-w-screen-xl mx-auto px-5 flex justify-between items-center">
-        <div className=" w-[150px] h-[50px] relative">
-          <Image
-            src={"/img/logo.png"}
-            alt="logo"
-            fill
-            className=" object-contain object-center"
-          />
+      <div className="max-w-screen-2xl mx-auto px-5 flex justify-between items-center py-4 gap-x-5">
+        {/* LEFT */}
+        <div className="flex items-center gap-x-5">
+          <div className="w-[140px] h-[45px] relative">
+            <Image
+              src={"/img/logo.png"}
+              alt="logo"
+              fill
+              className="object-contain"
+            />
+          </div>
         </div>
-        <div className=" flex gap-x-7 items-center">
-           <ul className="  hidden lg:flex justify-center  items-center gap-x-7 h-full list-none">
-          {navigationData.map((dt, i) => (
-            <li key={i} className=" relative">
-              <Link
-                href={dt.link}
-                className={cn(
-                  " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
-                  {
-                    "after:w-[100%] text-[#F76364] duration-300":
-                      pathname === dt.link,
-                  }
-                )}
-              >
-                {dt.name}
-              </Link>
-            </li>
-          ))}
-          {hashLink.map((dt, i) => (
-            <li key={i} className=" relative">
-              <a
-                href={dt.link}
-                className={cn(
-                  " ease-in-out duration-300 font-semibold hover:text-[#F76364] after:content-[''] after:bg-[#F76364] after:h-[3px] after:w-[0%] after:left-0 after:-bottom-[5px] after:rounded-xl after:absolute after:duration-300",
-                  {
-                    "after:w-[100%] text-[#F76364] duration-300":
-                      pathname === dt.link,
-                  }
-                )}
-              >
-                {dt.name}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <div className=" flex gap-x-4 items-center">
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-x-5 w-full">
+          {/* 🔥 SEARCH BAR CONDITION */}
+          {showSearch && (
+            <div className="w-full">
+              <ProductSearchBar />
+            </div>
+          )}
+
+          <ul className="hidden lg:flex items-center gap-x-8 ml-auto">
+            {navigationData.map((item) => (
+              <li key={item.link}>
+                <Link
+                  href={item.link}
+                  className={cn(
+                    "font-semibold transition hover:text-green-700",
+                    pathname === item.link && "text-green-700",
+                  )}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* CART */}
+          <Link href="/cart">
+            <div className="relative">
+              <FiShoppingCart className="text-2xl" />
+              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                0
+              </span>
+            </div>
+          </Link>
+
+          {/* USER */}
           {user ? (
-            <UserAvatar className="hidden lg:inline-block mx-auto size-10 " userName={user.name} />
+            <UserAvatar
+              className="hidden lg:inline-block size-9"
+              userName={user.name}
+            />
           ) : (
-            <Link href={"/login"}>
-              <Button className=" hidden lg:inline-block rounded-full">
-                {" "}
-                Login{" "}
+            <Link href="/login">
+              <Button className="hidden lg:inline-block rounded-full">
+                Login
               </Button>
             </Link>
           )}
 
+          {/* MOBILE */}
           <Button
-            onClick={() => setIsOpen((prev) => !prev)}
-            variant={"ghost"}
-            className=" lg:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+            variant="ghost"
+            className="lg:hidden"
           >
             {isOpen ? (
-              <MdClose className=" text-3xl" />
+              <MdClose className="text-3xl" />
             ) : (
-              <HiMenuAlt3 className=" text-3xl" />
+              <HiMenuAlt3 className="text-3xl" />
             )}
           </Button>
         </div>
-        </div>
-       
       </div>
-      <motion.div
-        variants={{
-          visible: { x: 0, opacity: "100%" },
-          hidden: { x: "1000%", display: "none" },
-        }}
-        initial={{ x: "1000%" }}
-        animate={!isOpen ? "hidden" : "visible"}
-        transition={{
-          duration: 0.35,
-          ease: "easeInOut",
-          opacity: {
-            duration: 0.8,
-          },
-        }}
-        className="mt-5 lg:hidden overflow-hidden"
-      >
-        <ul className="text-lg pb-5 text-center">
-          {navigationData.map((dt, i) => (
-            <li
-              key={i}
-              className=" hover:text-[#F76364] ease-in-out duration-300 hover:font-bold font-semibold px-5 py-4 bg-[#EFEEEE]"
-            >
-              <Link href={dt.link}>{dt.name}</Link>
-            </li>
-          ))}
-        </ul>
-        <div className=" px-5 text-center">
-          {user ? (
-            <div className="">
-              <UserAvatar className="mx-auto size-14 mb-5" userName={user.name} />
-            </div>
-          ) : (
-            <Button className="w-full"> Login </Button>
-          )}
-        </div>
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
