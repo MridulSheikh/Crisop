@@ -14,7 +14,7 @@ const LimitSelectClient = () => {
   const searchParams = useSearchParams();
 
   const currentPage = searchParams.get("page") || 1;
-  const currentLimit = searchParams.get("limit") || 10;
+  const currentLimit = searchParams.get("limit") || 12;
   const category = searchParams.get("category");
 
   const handleChange = (value: string) => {
@@ -40,6 +40,7 @@ const LimitSelectClient = () => {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="10">10</SelectItem>
+        <SelectItem value="12">12</SelectItem>
         <SelectItem value="15">15</SelectItem>
         <SelectItem value="20">20</SelectItem>
       </SelectContent>

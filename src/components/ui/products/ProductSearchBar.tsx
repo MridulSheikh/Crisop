@@ -1,20 +1,140 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "../button";
+import { Search, Loader2, X } from "lucide-react";
+import {
+  useSearchParams,
+  useRouter,
+} from "next/navigation";
+import { TProduct } from "@/types/user";
+import { useGetProductQuery } from "@/redux/features/product/productApi";
 
 const ProductSearchBar = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initialQuery = searchParams.get("searchTerm") || "";
+
+  const [query, setQuery] = useState(initialQuery);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  const { data, isFetching } = useGetProductQuery(
+    { search: query, limit: 5 },
+    { skip: query.length === 0 }
+  );
+
+  const products = data?.data || [];
+
+  //  ALWAYS GO TO /shop
+  const goToShop = (paramsString: string) => {
+    router.push(`/shop?${paramsString}`);
+  };
+
+  const handleSuggestionClick = (title: string) => {
+    setQuery(title);
+    setShowSuggestions(false);
+
+    const params = new URLSearchParams();
+    params.set("searchTerm", title);
+
+    goToShop(params.toString());
+  };
+
+  const handleSearch = () => {
+    if (!query.trim()) return;
+
+    setShowSuggestions(false);
+
+    const params = new URLSearchParams();
+    params.set("searchTerm", query);
+
+    goToShop(params.toString());
+  };
+
+  const handleClear = () => {
+    setQuery("");
+    setShowSuggestions(false);
+
+    router.push("/shop");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleSearch();
+  };
+
   return (
-    <div className="flex items-center bg-white border rounded-md overflow-hidden shadow-sm text-black w-full">
-      <div className="pl-4 ">
-        <FiSearch />
+    <div className="relative w-full mx-auto">
+
+      {/* SEARCH BOX */}
+      <div className="flex items-center bg-white border border-gray-300 rounded-md shadow-sm w-full focus-within:ring-1 focus-within:ring-green-600 focus-within:border-green-600 transition">
+
+        <div className="pl-4 text-gray-500">
+          <FiSearch />
+        </div>
+
+        <input
+          className="w-full px-3 py-3 outline-none text-sm"
+          placeholder="Search products..."
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowSuggestions(true);
+          }}
+          onKeyDown={handleKeyDown}
+          onFocus={() => query.length > 0 && setShowSuggestions(true)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+        />
+
+        {query && (
+          <button
+            onClick={handleClear}
+            className="p-2 text-gray-400 hover:text-red-500"
+          >
+            <X size={18} />
+          </button>
+        )}
+
+        <Button
+          onClick={handleSearch}
+          className="bg-green-600 hover:bg-green-700 rounded-md mr-1"
+        >
+          Search
+        </Button>
       </div>
-      <input
-        className="w-full px-3 py-3 outline-none text-sm"
-        placeholder="Search products..."
-      />
-      <Button className="rounded-md bg-[#FF5F2C] hover:bg-[#e74e1d] mr-1">
-        Search
-      </Button>
+
+      {/* SUGGESTIONS */}
+      {showSuggestions && query.length > 0 && (
+        <ul className="absolute z-50 w-full bg-white border border-gray-200 rounded-md mt-1 shadow-md max-h-60 overflow-y-auto">
+
+          {isFetching ? (
+            <li className="px-4 py-2 text-sm text-gray-500 flex items-center gap-2">
+              <Loader2 className="animate-spin" size={15} />
+              Loading...
+            </li>
+          ) : products.length > 0 ? (
+            products.map((item: TProduct, index: number) => (
+              <li
+                key={index}
+                onClick={() => handleSuggestionClick(item.name)}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm flex items-center gap-2"
+              >
+                <Search size={14} />
+                {item.name}
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-sm text-gray-500">
+              No products found
+            </li>
+          )}
+        </ul>
+      )}
     </div>
   );
 };

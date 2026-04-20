@@ -30,7 +30,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
               src={product?.images[0]?.url}
               alt={product?.name}
               fill
-              className="object-fill object-center group-hover:scale-110 transition-transform duration-500 ease-in-out"
+              className="object-cover object-center group-hover:scale-110 transition-transform duration-500 ease-in-out"
             />
           </div>
         </Link>

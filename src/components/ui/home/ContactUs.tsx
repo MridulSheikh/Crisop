@@ -10,9 +10,10 @@ import {
   MailCheck,
   MapPin,
   Phone,
+  Send,
 } from "lucide-react";
-import React, { useRef, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import React, { ReactNode, useRef, useState } from "react";
+import { useForm, SubmitHandler, UseFormRegisterReturn } from "react-hook-form";
 import axios from "axios";
 
 type Inputs = {
@@ -34,27 +35,17 @@ type responseType = {
 const FakeContactData = [
   {
     address: "+880 1883992408",
-    icon: <Phone className=" text-gray-600" />,
+    icon: <Phone className="text-green-600" />,
   },
   {
     address: "info@crisop.com",
-    icon: <Mail className=" text-gray-600" />,
+    icon: <Mail className="text-green-600" />,
   },
   {
-    address: "24/12 Dhanmondi, Dhaka, Bangladesh",
-    icon: <MapPin className="text-gray-600" />,
+    address: "Dhanmondi, Dhaka, Bangladesh",
+    icon: <MapPin className="text-green-600" />,
   },
 ];
-
-const leftVariant = {
-  hidden: { x: -150, opacity: 0 },
-  visible: { x: 0, opacity: 1 },
-};
-
-const rightVariant = {
-  hidden: { x: 150, opacity: 0 },
-  visible: { x: 0, opacity: 1 },
-};
 
 const Contact = () => {
   const {
@@ -62,208 +53,150 @@ const Contact = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  const ref = useRef(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<responseType | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [responseError, setResponseError] = useState<any>(null);
-  const inView = useInView(ref, {
-    once: true,
-  });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    setResponseError(null);
-    setResponse(null);
-    setLoading(true);
-    axios
-      .post("http://localhost:5000/api/v1/contact/email", data)
-      .then(function (response) {
-        setResponse(response.data);
-      })
-      .catch(function (error) {
-        setResponse(error);
-      })
-      .finally(() => setLoading(false));
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState<responseType | null>(null);
+  const [responseError, setResponseError] = useState(false);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      setLoading(true);
+      setResponse(null);
+      setResponseError(false);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/contact/email",
+        data
+      );
+
+      setResponse(res.data);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      setResponseError(true);
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
-    <section id="contact-us" className="overflow-hidden pb-20">
-      <div className=" mt-[117px] max-w-screen-2xl px-5 mx-auto">
-        <div className=" grid lg:grid-cols-2 gap-x-7">
+    <section className="pb-24 bg-gradient-to-b from-white to-green-50" id="contact">
+      <div className="mt-28 max-w-screen-2xl px-5 mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          
+          {/* LEFT */}
           <motion.div
             ref={ref}
-            variants={leftVariant}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            transition={{
-              ease: "easeInOut",
-              duration: 0.5,
-            }}
-            className=" flex flex-col">
-            <div>
-              <h1 className=" text-5xl font-bold">Contact Us</h1>
-              <p className="text-[#566B84] font-normal text-[18px] mt-[24px]">
-                Ut posuere felis arcu tellus tempus in in ultricies. Gravida id
-                nibh ornare viverra.Ut posuere felis arcu tellus tempus in in
-                ultricies.
-              </p>
-            </div>
-            <div className=" mt-10">
+            initial={{ x: -80, opacity: 0 }}
+            animate={inView ? { x: 0, opacity: 1 } : {}}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-800">
+              Get in touch 👋
+            </h1>
+
+            <p className="text-gray-500 mt-5 leading-relaxed max-w-md">
+              Have questions about products, delivery, or your orders?  
+              Our team is here to help you anytime.
+            </p>
+
+            <div className="mt-10 space-y-5">
               {FakeContactData.map((dt) => (
                 <div
                   key={dt.address}
-                  className="flex gap-x-3 items-center font-normal text-[18px] mt-4">
-                  <div className="bg-[#e3f7da] rounded-full w-10 h-10 flex justify-center items-center">
+                  className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition"
+                >
+                  <div className="w-11 h-11 flex items-center justify-center bg-green-100 rounded-full">
                     {dt.icon}
                   </div>
-                  <div className="">
-                    <span>{dt.address}</span>
-                  </div>
+                  <span className="text-gray-700">{dt.address}</span>
                 </div>
               ))}
             </div>
           </motion.div>
+
+          {/* RIGHT FORM */}
           <motion.div
-            ref={ref}
-            variants={rightVariant}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            transition={{
-              ease: "easeInOut",
-              delay: 0.5,
-              duration: 0.5,
-            }}
-            className=" flex flex-col">
+            initial={{ x: 80, opacity: 0 }}
+            animate={inView ? { x: 0, opacity: 1 } : {}}
+            transition={{ duration: 0.5 }}
+          >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="p-[30px] rounded-[20px] w-full bg-[#e3f7da] mt-20 lg:mt-0">
-              <div className=" grid grid-cols-1 lg:grid-cols-2 gap-7">
-                <div>
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    First Name
-                  </label>
-                  <input
-                    disabled={loading}
-                    {...register("firstName", {
-                      required: "First name is required",
-                    })}
-                    type="text"
-                    placeholder="John"
-                    className=" mt-1 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    Last Name
-                  </label>
-                  <input
-                    disabled={loading}
-                    {...register("lastName", {
-                      required: "Last name is required",
-                    })}
-                    type="text"
-                    placeholder="Doie"
-                    className=" mt-1 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    Email
-                  </label>
-                  <input
-                    disabled={loading}
-                    {...register("email", { required: "Email is required" })}
-                    type="email"
-                    placeholder="example@gmail.com"
-                    className=" mt-1 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    Phone Number
-                  </label>
-                  <input
-                    disabled={loading}
-                    {...register("phoneNumber", {
-                      required: "Phone Number is required",
-                    })}
-                    type="text"
-                    placeholder="+880 1XXXXXXXXX"
-                    className=" mt-1 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none"
-                  />
-                </div>
+              className="p-8 rounded-2xl bg-white shadow-xl border border-gray-100"
+            >
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                Send Message
+              </h2>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <InputField label="First Name" register={register("firstName")} />
+                <InputField label="Last Name" register={register("lastName")} />
+                <InputField label="Email" register={register("email")} />
+                <InputField label="Phone" register={register("phoneNumber")} />
+
                 <div className="lg:col-span-2">
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    Subject
-                  </label>
-                  <input
-                    disabled={loading}
-                    {...register("subject", {
-                      required: "Subject is required",
-                    })}
-                    type="text"
-                    placeholder="e.g."
-                    className=" mt-1 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none"
-                  />
+                  <InputField label="Subject" register={register("subject")} />
                 </div>
+
                 <div className="lg:col-span-2">
-                  <label htmlFor="" className=" text-sm font-normal  block">
-                    Your message
-                  </label>
+                  <label className="text-sm text-gray-600">Message</label>
                   <textarea
-                    disabled={loading}
-                    {...register("message", {
-                      required: "Message is required",
-                    })}
-                    className=" mt-1 h-48 text-base p-2 border rounded-md w-full outline-none focus:outline-green-300 focus:border-none resize-none"
+                    {...register("message")}
+                    className="mt-1 w-full h-40 p-3 border rounded-lg focus:ring-2 focus:ring-green-400 outline-none resize-none"
                   />
                 </div>
               </div>
-              {responseError && (
-                <div className=" gap-x-4 flex items-center mt-5 px-3 rounded-md border-2 text-red-500 border-red-500 py-2">
-                  <CircleX />
-                  Faild to send message
-                </div>
-              )}
-              {response && (
-                <div className=" gap-x-4 flex items-center mt-5 px-3 rounded-md border-2 text-green-500 border-green-500 py-2">
-                  <MailCheck />
-                  {response.message}
-                </div>
-              )}
-              {loading && (
-                <div className=" gap-x-4 flex items-center mt-5 px-3 rounded-md border-2 text-gray-500 border-gray-500 py-2">
-                  <ReactLoading
-                    width={20}
-                    height={20}
-                    type={"spin"}
-                    color="#6b7280"
+
+              {/* STATUS */}
+              <div className="mt-5 space-y-3">
+                {responseError && (
+                  <StatusBox
+                    color="red"
+                    icon={<CircleX />}
+                    text="Failed to send message"
                   />
-                  sending...
-                </div>
-              )}
-              {(errors.firstName ||
-                errors.lastName ||
-                errors.email ||
-                errors.phoneNumber ||
-                errors.subject ||
-                errors.message) && (
-                <div className=" gap-x-4 flex items-center mt-5 px-3 rounded-md border-2 text-yellow-500 border-yellow-500 py-2">
-                  <AlertCircle />
-                  {errors.firstName?.message ||
-                    errors.lastName?.message ||
-                    errors.email?.message ||
-                    errors.phoneNumber?.message ||
-                    errors.subject?.message ||
-                    errors.message?.message}
-                </div>
-              )}
-              <div className=" flex justify-start mt-5">
-                <Button
-                  disabled={loading}
-                  className="w-full lg:w-36 text-lg font-medium">
-                  Send
-                </Button>
+                )}
+
+                {response && (
+                  <StatusBox
+                    color="green"
+                    icon={<MailCheck />}
+                    text={response.message}
+                  />
+                )}
+
+                {loading && (
+                  <StatusBox
+                    color="gray"
+                    icon={<ReactLoading width={20} height={20} type="spin" />}
+                    text="Sending..."
+                  />
+                )}
+
+                {(errors.firstName ||
+                  errors.lastName ||
+                  errors.email ||
+                  errors.phoneNumber ||
+                  errors.subject ||
+                  errors.message) && (
+                  <StatusBox
+                    color="yellow"
+                    icon={<AlertCircle />}
+                    text="All fields are required"
+                  />
+                )}
               </div>
+
+              <Button
+                disabled={loading}
+                className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white text-lg rounded-lg"
+              >
+                <Send />
+                Send Message
+              </Button>
             </form>
           </motion.div>
         </div>
@@ -273,3 +206,44 @@ const Contact = () => {
 };
 
 export default Contact;
+
+/* 🔥 Reusable Components */
+
+const InputField = ({ label, register }: {label: string, register: UseFormRegisterReturn}) => (
+  <div>
+    <label className="text-sm text-gray-600">{label}</label>
+    <input
+      {...register}
+      className="mt-1 w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
+    />
+  </div>
+);
+
+type StatusColor = "red" | "green" | "yellow" | "gray";
+
+
+const StatusBox = ({
+  color,
+  icon,
+  text,
+}: {
+  color: StatusColor;
+  icon: ReactNode;
+  text: string;
+}) => {
+  const colors: Record<StatusColor, string> = {
+    red: "text-red-500 border-red-500",
+    green: "text-green-500 border-green-500",
+    yellow: "text-yellow-500 border-yellow-500",
+    gray: "text-gray-500 border-gray-300",
+  };
+
+  return (
+    <div
+      className={`flex items-center gap-3 px-4 py-2 border rounded-lg ${colors[color]}`}
+    >
+      {icon}
+      <span>{text}</span>
+    </div>
+  );
+};

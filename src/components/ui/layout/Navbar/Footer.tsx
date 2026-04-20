@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React from "react";
 import { FaPhoneSquareAlt, FaFacebook } from "react-icons/fa";
 import { FaLocationDot, FaTelegram } from "react-icons/fa6";

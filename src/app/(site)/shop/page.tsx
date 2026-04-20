@@ -13,16 +13,17 @@ const Products = async ({
     page?: string;
     limit?: string;
     category?: string;
+    searchTerm?:string;
   };
 }) => {
   const page = Number(searchParams.page) || 1;
-  const limit = Number(searchParams.limit) || 20;
+  const limit = Number(searchParams.limit) || 12;
   const category = searchParams.category;
+  const searchTerm = searchParams.searchTerm;
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/product?page=${page}&limit=${limit}${
-    category ? `&category=${category}` : ""
-  }`;
+    category ? `&category=${category}` : ""}${searchTerm ? `&searchTerm=${searchTerm}` : ''}`;
   const res = await fetch(url, {
     cache: "no-store",
     headers: {

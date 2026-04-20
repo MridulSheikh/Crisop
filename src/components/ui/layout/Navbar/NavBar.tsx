@@ -31,41 +31,41 @@ const NavBar = () => {
   const isHome = pathname === "/";
   const [showSearch, setShowSearch] = useState(false);
 
-  useEffect(() => {
-    const currentScrollY = window.scrollY;
+useEffect(() => {
+  const currentScrollY = window.scrollY;
 
-    setScrolled(currentScrollY > 20);
+  // Initialize states
+  setScrolled(currentScrollY > 20);
+  // Set initial search bar visibility
+  setShowSearch(isHome ? currentScrollY > 120 : true);
 
+  let lastScrollY = currentScrollY;
 
-    if (!isHome) {
-      setShowSearch(true);
-      return;
+  const handleScroll = () => {
+    const scrollY = window.scrollY;
+
+    // 1. Logic for Navbar visibility (always run)
+    setScrolled(scrollY > 20);
+    if (scrollY > lastScrollY && scrollY > 80) {
+      setShowNavbar(false);
+    } else {
+      setShowNavbar(true);
     }
 
-   
-    setShowSearch(currentScrollY > 120);
-
-    let lastScrollY = currentScrollY;
-
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-
-      setScrolled(scrollY > 20);
-
-      if (scrollY > lastScrollY && scrollY > 80) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
-
+    // 2. Logic for Search Bar visibility
+    // On home, only show > 120px. On other pages, keep it visible (true)
+    if (isHome) {
       setShowSearch(scrollY > 120);
+    } else {
+      setShowSearch(true);
+    }
 
-      lastScrollY = scrollY;
-    };
+    lastScrollY = scrollY;
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome]);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [isHome]);
 
   return (
     <motion.div
@@ -77,7 +77,7 @@ const NavBar = () => {
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all bg-[#f6f6f6]",
         {
-          "bg-transparent": !scrolled && !isOpen,
+          "bg-transparent": !scrolled && !isOpen && isHome,
           "bg-white/90 backdrop-blur-md shadow-sm": scrolled || isOpen,
         },
       )}
