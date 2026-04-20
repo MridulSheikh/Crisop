@@ -53,8 +53,6 @@ export const CheckoutDialog = ({ isOpen, onClose }: CheckoutDialogProps) => {
       reset({
         fullName: user.name || "",
         email: user.email || "",
-        address: user.address || "",
-        number: user.phone || "",
       });
     }
   }, [user, isOpen, reset]);
