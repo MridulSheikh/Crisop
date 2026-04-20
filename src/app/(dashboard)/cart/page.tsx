@@ -1,9 +1,132 @@
-import React from 'react'
+"use client";
+
+import React, { useState } from "react";
+import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeFromCart, addToCart } from "@/redux/features/cart/cartSlice";
+import { Button } from "@/components/ui/button";
+import { Trash2, Plus, Minus } from "lucide-react";
+import { CheckoutDialog } from "./CheckOutDialouge";
 
 const CartPage = () => {
-  return (
-    <div>CartPage</div>
-  )
-}
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-export default CartPage
+  // total price
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto ">
+      <h1 className="text-2xl font-semibold">Shopping Cart</h1>
+      <div className="grid lg:grid-cols-3 gap-8 mt-5">
+        {/* LEFT - CART ITEMS */}
+        <div className="lg:col-span-2 space-y-4">
+          {cartItems.length === 0 ? (
+            <div className="bg-white p-6 rounded-lg shadow text-center text-gray-500">
+              Your cart is empty 🛒
+            </div>
+          ) : (
+            cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white p-4 rounded-xl shadow flex gap-4 items-center"
+              >
+                {/* IMAGE */}
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+
+                {/* DETAILS */}
+                <div className="flex-1">
+                  <h2 className="font-medium">{item.name}</h2>
+                  <p className="text-sm text-gray-500">
+                    ${item.price.toFixed(2)}
+                  </p>
+
+                  {/* QUANTITY CONTROLS */}
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      className="p-1 border rounded"
+                      onClick={() =>
+                        dispatch(addToCart({ ...item, quantity: -1 }))
+                      }
+                    >
+                      <Minus size={14} />
+                    </button>
+
+                    <span className="px-3">{item.quantity}</span>
+
+                    <button
+                      className="p-1 border rounded"
+                      onClick={() =>
+                        dispatch(addToCart({ ...item, quantity: 1 }))
+                      }
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* PRICE + REMOVE */}
+                <div className="text-right">
+                  <p className="font-semibold">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </p>
+
+                  <button
+                    onClick={() => dispatch(removeFromCart(item.id))}
+                    className="text-red-500 mt-2"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* RIGHT - SUMMARY */}
+        <div className="bg-white p-6 rounded-xl shadow h-fit">
+          <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${totalPrice.toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span className="text-green-600">Free</span>
+            </div>
+
+            <div className="border-t pt-2 flex justify-between font-semibold">
+              <span>Total</span>
+              <span>${totalPrice.toFixed(2)}</span>
+            </div>
+          </div>
+
+          <Button onClick={() => setIsCheckoutOpen(true)} className="w-full mt-5 bg-green-600 hover:bg-green-700">
+            Proceed to Checkout
+          </Button>
+        </div>
+      </div>
+      {/* Checkout Modal */}
+      <CheckoutDialog 
+        isOpen={isCheckoutOpen} 
+        onClose={() => setIsCheckoutOpen(false)} 
+      />
+    </div>
+  );
+};
+
+export default CartPage;

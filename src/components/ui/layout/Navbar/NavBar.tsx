@@ -25,47 +25,51 @@ const NavBar = () => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [scrolled, setScrolled] = useState(false);
 
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   const user = useAppSelector(useCurrentUser);
   const pathname = usePathname();
 
   const isHome = pathname === "/";
   const [showSearch, setShowSearch] = useState(false);
 
-useEffect(() => {
-  const currentScrollY = window.scrollY;
+  useEffect(() => {
+    const currentScrollY = window.scrollY;
 
-  // Initialize states
-  setScrolled(currentScrollY > 20);
-  // Set initial search bar visibility
-  setShowSearch(isHome ? currentScrollY > 120 : true);
+    // Initialize states
+    setScrolled(currentScrollY > 20);
+    // Set initial search bar visibility
+    setShowSearch(isHome ? currentScrollY > 120 : true);
 
-  let lastScrollY = currentScrollY;
+    let lastScrollY = currentScrollY;
 
-  const handleScroll = () => {
-    const scrollY = window.scrollY;
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
 
-    // 1. Logic for Navbar visibility (always run)
-    setScrolled(scrollY > 20);
-    if (scrollY > lastScrollY && scrollY > 80) {
-      setShowNavbar(false);
-    } else {
-      setShowNavbar(true);
-    }
+      // 1. Logic for Navbar visibility (always run)
+      setScrolled(scrollY > 20);
+      if (scrollY > lastScrollY && scrollY > 80) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
 
-    // 2. Logic for Search Bar visibility
-    // On home, only show > 120px. On other pages, keep it visible (true)
-    if (isHome) {
-      setShowSearch(scrollY > 120);
-    } else {
-      setShowSearch(true);
-    }
+      // 2. Logic for Search Bar visibility
+      // On home, only show > 120px. On other pages, keep it visible (true)
+      if (isHome) {
+        setShowSearch(scrollY > 120);
+      } else {
+        setShowSearch(true);
+      }
 
-    lastScrollY = scrollY;
-  };
+      lastScrollY = scrollY;
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [isHome]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHome]);
 
   return (
     <motion.div
@@ -124,9 +128,11 @@ useEffect(() => {
           <Link href="/cart">
             <div className="relative">
               <FiShoppingCart className="text-2xl" />
-              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                0
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+              )}
             </div>
           </Link>
 
