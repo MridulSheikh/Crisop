@@ -21,9 +21,7 @@ import { TProduct } from "@/types/user";
 import DOMPurify from "dompurify";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { addToCart } from "@/redux/features/cart/cartSlice";
-
-import { toast } from "react-toastify";
+import { handleAddToCartUtil } from "@/utils/cart/handleAddToCart";
 
 export default function ProductDetailsClient({
   product,
@@ -62,45 +60,11 @@ export default function ProductDetailsClient({
     return { __html: DOMPurify.sanitize(htmlContent) };
   };
 
-  const handleAddToCart = async () => {
-    if (stock.quantity === 0) return;
-
+  const handleAddToCart = () =>{
     setLoading(true);
-
-    try {
-      const finalPrice =
-        discountPrice && discountPrice < price
-          ? discountPrice
-          : price;
-
-      const existingItem = cartItems.find(
-        (item) => item.id === product._id
-      );
-
-      const cartItem = {
-        id: product._id,
-        name,
-        price: finalPrice,
-        quantity,
-        image: images?.[0]?.url || "",
-      };
-
-      dispatch(addToCart(cartItem));
-
-      if (existingItem) {
-        toast.info("Cart updated");
-      } else {
-        toast.success(`${name} added to cart`);
-      }
-
-      setQuantity(1);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      toast.error("Failed to add to cart");
-    } finally {
-      setLoading(false);
-    }
-  };
+    handleAddToCartUtil({product , quantity, cartItems, dispatch})
+    setLoading(false);
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground mt-20">

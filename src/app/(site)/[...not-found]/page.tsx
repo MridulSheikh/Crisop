@@ -6,7 +6,7 @@ const NotFoundPage = () => {
   const router = useRouter();
 
   return (
-    <div className=" max-w-screen-xl h-96 mx-auto px-5 flex items-center justify-center">
+    <div className=" max-w-screen-xl h-screen mx-auto px-5 flex items-center justify-center">
       <div>
         <h1 className=" text-4xl font-bold">Congratulations!</h1>
         <p className=" mt-2">
