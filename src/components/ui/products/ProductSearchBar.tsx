@@ -72,7 +72,7 @@ const ProductSearchBar = () => {
     <div className="relative w-full mx-auto">
 
       {/* SEARCH BOX */}
-      <div className="flex items-center bg-white border border-gray-300 rounded-md shadow-sm w-full focus-within:ring-1 focus-within:ring-green-600 focus-within:border-green-600 transition">
+      <div className="flex items-center bg-white border border-gray-300 rounded-full overflow-hidden lg:rounded-md shadow-sm w-full focus-within:ring-1 focus-within:ring-green-600 focus-within:border-green-600 transition">
 
         <div className="pl-4 text-gray-500">
           <FiSearch />
@@ -102,7 +102,7 @@ const ProductSearchBar = () => {
 
         <Button
           onClick={handleSearch}
-          className="bg-green-600 hover:bg-green-700 rounded-md mr-1"
+          className="bg-green-600 hover:bg-green-700 rounded-md mr-1 hidden lg:block"
         >
           Search
         </Button>

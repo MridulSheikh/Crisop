@@ -22,6 +22,8 @@ import DOMPurify from "dompurify";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { handleAddToCartUtil } from "@/utils/cart/handleAddToCart";
+import { toggleWishlist } from "@/redux/features/wishlist/wishListSlice";
+import { toast } from "react-toastify";
 
 export default function ProductDetailsClient({
   product,
@@ -32,14 +34,22 @@ export default function ProductDetailsClient({
     product;
 
   const dispatch = useAppDispatch();
+
+  // 🛒 cart
   const cartItems = useAppSelector((state) => state.cart.items);
 
+  // ❤️ wishlist (GLOBAL STATE)
+  const wishlistItems = useAppSelector((state) => state.wishlist.products);
+  const isWishlisted = wishlistItems.includes(product._id);
+
+  // UI states
   const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [wishLoading, setWishLoading] = useState(false);
 
+  // carousel
   useEffect(() => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
@@ -48,6 +58,7 @@ export default function ProductDetailsClient({
     });
   }, [api]);
 
+  // quantity handlers
   const increment = () => {
     if (quantity < stock.quantity) setQuantity(quantity + 1);
   };
@@ -56,15 +67,45 @@ export default function ProductDetailsClient({
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
+  // sanitize HTML
   const createMarkup = (htmlContent: string) => {
     return { __html: DOMPurify.sanitize(htmlContent) };
   };
 
-  const handleAddToCart = () =>{
-    setLoading(true);
-    handleAddToCartUtil({product , quantity, cartItems, dispatch})
-    setLoading(false);
-  }
+  // 🛒 add to cart
+  const handleAddToCart = async () => {
+    try {
+      setLoading(true);
+
+      await handleAddToCartUtil({
+        product,
+        quantity,
+        cartItems,
+        dispatch,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ❤️ wishlist toggle
+  const handleToggleWishlist = () => {
+    if (wishLoading) return;
+
+    setWishLoading(true);
+
+    if (isWishlisted) {
+      toast.success("Removed from wishlist");
+    } else {
+      toast.success("Added to wishlist");
+    }
+
+    dispatch(toggleWishlist(product._id));
+
+    setTimeout(() => {
+      setWishLoading(false);
+    }, 300); // small debounce feel
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground mt-20">
@@ -79,7 +120,7 @@ export default function ProductDetailsClient({
                     <div className="relative aspect-square rounded-lg border bg-muted overflow-hidden">
                       <Image
                         src={img.url}
-                        alt=""
+                        alt={name}
                         fill
                         className="object-contain"
                       />
@@ -122,11 +163,16 @@ export default function ProductDetailsClient({
             <div className="flex justify-between items-start">
               <h1 className="text-3xl font-semibold">{name}</h1>
 
-              <button onClick={() => setIsFavorite(!isFavorite)}>
-                {isFavorite ? (
-                  <VscHeartFilled className="text-green-600 text-xl" />
+              {/* ❤️ Wishlist */}
+              <button
+                onClick={handleToggleWishlist}
+                disabled={wishLoading}
+                className="transition"
+              >
+                {isWishlisted ? (
+                  <VscHeartFilled className="text-red-500 text-2xl scale-110 transition" />
                 ) : (
-                  <Heart className="text-muted-foreground text-xl" />
+                  <Heart className="text-muted-foreground text-2xl hover:text-red-500 transition" />
                 )}
               </button>
             </div>
@@ -148,7 +194,7 @@ export default function ProductDetailsClient({
                 </span>
               )}
 
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground ml-2">
                 Per {stock.unit}
               </span>
             </div>

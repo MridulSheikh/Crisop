@@ -1,4 +1,5 @@
 "use client";
+
 import { TProduct } from "@/types/user";
 import { getDiscountPercentage } from "@/utils/getDiscountPercentage";
 import { Eye, Heart, ShoppingCart } from "lucide-react";
@@ -8,14 +9,27 @@ import React from "react";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { handleAddToCartUtil } from "@/utils/cart/handleAddToCart";
+import { toggleWishlist } from "@/redux/features/wishlist/wishListSlice";
+import { toast } from "react-toastify";
+
 
 const ProductCard = ({ product }: { product: TProduct }) => {
   const dispatch = useAppDispatch();
+
+  // 🛒 Cart
   const cartItems = useAppSelector((state) => state.cart.items);
-  const discoutnPercentage = getDiscountPercentage(
+
+  // ❤️ Wishlist
+  const wishlistItems = useAppSelector((state) => state.wishlist.products);
+  const isWishlisted = wishlistItems.includes(product._id);
+
+  // 💸 Discount
+  const discountPercentage = getDiscountPercentage(
     product?.price,
     product?.discountPrice as number,
   );
+
+  // 🛒 Add to cart
   const handleAddToCart = async () => {
     await handleAddToCartUtil({
       product,
@@ -24,22 +38,33 @@ const ProductCard = ({ product }: { product: TProduct }) => {
       dispatch,
     });
   };
+
+  // ❤️ Toggle wishlist
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isWishlisted) {
+      toast.success("Removed from wishlist");
+    } else {
+      toast.success("Added to wishlist");
+    }
+
+    dispatch(toggleWishlist(product._id));
+  };
+
   return (
     <div className="group rounded-md border border-gray-200 bg-white hover:shadow-[0px_4px_41px_6px_rgba(0,_0,_0,_0.1)] transition-all duration-500 overflow-hidden">
+      {/* IMAGE */}
       <div className="relative overflow-hidden">
-        {discoutnPercentage != 0 && (
+        {discountPercentage !== 0 && (
           <div className="bg-red-600 inline p-0.5 absolute top-0 left-0 text-white text-sm z-10">
-            -
-            {getDiscountPercentage(
-              product?.price,
-              product?.discountPrice as number,
-            )}
-            %
+            -{discountPercentage}%
           </div>
         )}
 
         <Link href={`/shop/${product?._id}`}>
-          <div className=" h-56 w-full relative overflow-hidden">
+          <div className=" h-60 lg:h-56 w-full relative overflow-hidden">
             <Image
               src={product?.images[0]?.url}
               alt={product?.name}
@@ -52,8 +77,8 @@ const ProductCard = ({ product }: { product: TProduct }) => {
 
       {/* CONTENT */}
       <div className="p-5">
-        {/* TITLE (ALWAYS VISIBLE) */}
-        <div className="text-center ">
+        {/* TITLE */}
+        <div className="text-center">
           <h1 className="text-md font-semibold">{product?.name}</h1>
 
           <h2 className="mt-3 text-sm group-hover:hidden">
@@ -65,20 +90,34 @@ const ProductCard = ({ product }: { product: TProduct }) => {
           </h2>
         </div>
 
-        {/* ACTION BUTTONS (smooth hover reveal only) */}
+        {/* ACTION BUTTONS */}
         <div className="flex justify-center space-x-3 mt-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out">
-          <button className="size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-green-700 hover:text-white transition">
-            <Heart className="size-5" />
+          
+          {/* ❤️ Wishlist */}
+          <button
+            onClick={handleToggleWishlist}
+            className={`size-10 flex justify-center items-center rounded-full transition ${
+              isWishlisted
+                ? "bg-red-500 text-white"
+                : "bg-slate-200 hover:bg-green-700 hover:text-white"
+            }`}
+          >
+            <Heart
+              className="size-5"
+              fill={isWishlisted ? "currentColor" : "none"}
+            />
           </button>
 
+          {/* 🛒 Cart */}
           <button
             onClick={handleAddToCart}
             disabled={product.stock.quantity === 0}
-            className="size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-green-700 hover:text-white transition"
+            className="size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-green-700 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="size-5" />
           </button>
 
+          {/* 👁 View */}
           <Link href={`/shop/${product?._id}`}>
             <button className="size-10 flex justify-center items-center rounded-full bg-slate-200 hover:bg-green-700 hover:text-white transition">
               <Eye className="size-5" />

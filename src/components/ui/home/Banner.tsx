@@ -9,7 +9,7 @@ import { ShoppingBag } from "lucide-react";
 
 const Banner = () => {
   return (
-    <div className="relative overflow-hidden bg-[#f6f7f6] h-screen 2xl:h-[85vh] flex items-center">
+    <div className="relative overflow-hidden bg-[#f6f7f6] h-screen flex items-center">
       {/* green blur background */}
       <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-green-500/20 rounded-full blur-[120px]" />
       <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-emerald-400/20 rounded-full blur-[120px]" />
@@ -47,7 +47,7 @@ const Banner = () => {
         {/* RIGHT IMAGE */}
         <div className="lg:col-span-6 2xl:col-span-7 relative flex justify-center lg:justify-end">
           {/* floating glow behind image */}
-          <div className="absolute w-[450px] h-[450px] bg-green-400/20 blur-[100px] rounded-full" />
+          <div className="absolute bottom-0 w-[450px] h-[450px] bg-green-400/20 blur-[100px] rounded-full" />
 
           <Image
             src="/img/hero.png"
