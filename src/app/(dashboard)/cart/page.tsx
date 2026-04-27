@@ -7,6 +7,7 @@ import { removeFromCart, addToCart } from "@/redux/features/cart/cartSlice";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus } from "lucide-react";
 import Link from "next/link";
+import EmptyCart from "./EmptyCart";
 
 const CartPage = () => {
   const dispatch = useAppDispatch();
@@ -30,13 +31,7 @@ const CartPage = () => {
   return (
     <div className="max-w-6xl mx-auto ">
       <h1 className="text-2xl font-semibold">Shopping Cart</h1>
-      {cartItems.length === 0 ? (
-        <div className=" py-36 w-full flex justify-center items-center">
-          <div className=" p-6 rounded-lg text-center text-gray-500">
-            Your cart is empty 🛒
-          </div>
-        </div>
-      ) : (
+      {cartItems.length === 0 ?  <EmptyCart /> : (
         <div className="grid lg:grid-cols-3 gap-8 mt-5">
           {/* LEFT - CART ITEMS */}
           <div className="lg:col-span-2 space-y-4">

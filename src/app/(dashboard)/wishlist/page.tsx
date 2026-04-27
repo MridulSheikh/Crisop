@@ -3,6 +3,7 @@ import Container from "@/components/ui/layout/container/Container";
 import { useAppSelector } from "@/redux/hooks";
 import React from "react";
 import WishListCard from "./WishListCard";
+import EmptyWishlist from "./EmptyWishlist";
 
 const WishlistPage = () => {
   const wishlistItems = useAppSelector((state) => state.wishlist.products);
@@ -15,11 +16,7 @@ const WishlistPage = () => {
             Wishlist ({wishlistItems.length})
           </h1>
           {wishlistItems.length === 0 ? (
-            <div className=" py-36 w-full flex justify-center items-center">
-              <div className=" p-6 rounded-lg text-center text-gray-500">
-                Your wishlist is empty ❤️
-              </div>
-            </div>
+            <EmptyWishlist />
           ) : (
             <div className=" mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
               {wishlistItems.map((dt: string) => (
