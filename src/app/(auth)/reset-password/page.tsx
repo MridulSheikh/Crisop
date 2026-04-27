@@ -53,7 +53,6 @@ const ResetPassword = () => {
       }, 3000); 
       return () => clearTimeout(timer);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (err: any) => {
       let error;
       if (
@@ -62,7 +61,6 @@ const ResetPassword = () => {
       ) {
         error = "Invalid request, link already expire";
       }
-      console.log(err)
       toast.error(error || "Please try again!");
     }
   );

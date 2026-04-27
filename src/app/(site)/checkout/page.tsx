@@ -17,7 +17,10 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { toast } from "react-toastify";
-import { TOrder, usePostOrderUserMutation } from "@/redux/features/order/orderApi";
+import {
+  TOrder,
+  usePostOrderUserMutation,
+} from "@/redux/features/order/orderApi";
 import { useDispatch } from "react-redux";
 import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useRouter } from "next/navigation";
@@ -36,7 +39,6 @@ const divisions = [
   "Mymensingh",
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function StripeForm({ total, form, cartItems }: any) {
   const stripe = useStripe();
   const elements = useElements();
@@ -106,7 +108,7 @@ export default function CheckoutPage() {
   const user = useAppSelector(useCurrentUser);
   const [createOrder] = usePostOrderUserMutation();
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const [form, setForm] = useState({
     name: "",
@@ -160,15 +162,17 @@ export default function CheckoutPage() {
         })),
         isCod: true,
         isPaymentComplete: false,
-        total: total
+        total: total,
       };
 
-      const res = await createOrder(payload as   Partial<TOrder<string>>).unwrap();
+      const res = await createOrder(
+        payload as Partial<TOrder<string>>,
+      ).unwrap();
 
       toast.success("Order placed successfully!");
 
       if (res.success) {
-        router.push("/order")
+        router.push("/order");
         dispatch(clearCart());
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -177,6 +181,16 @@ export default function CheckoutPage() {
       toast.error(error?.data?.message || "❌ Order failed");
     }
   };
+
+  if (total <= 0) {
+    return (
+      <div className=" h-[80vh] w-full flex justify-center items-center">
+        <div className=" p-6 rounded-lg text-center text-gray-500">
+          Your cart is empty 🛒
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#f6f6f6]">

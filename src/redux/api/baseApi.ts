@@ -34,7 +34,6 @@ const baseQueryWithRefreshToken = async (
 ) => {
   let result = await baseQuery(args, api, extraoptions);
   const error = result.error as CustomBaseQueryError;
-  console.log(error)
   if (
     result.error?.status === 401 &&
     error?.data?.errorMessage === "TokenExpired"

@@ -42,7 +42,7 @@ export default function LoginPage() {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard/profile";
+  const redirectTo = searchParams.get("redirect");
   const user = useAppSelector(useCurrentUser);
   const [codeDigits, setCodeDigits] = useState<string[]>([
     "",
@@ -78,7 +78,7 @@ export default function LoginPage() {
         autoClose: 3000,
         position: "top-center",
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } catch (err: any) {
       if (
         err?.data?.errorMessage ===
@@ -120,10 +120,8 @@ export default function LoginPage() {
           autoClose: 3000,
           position: "top-center",
         });
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        console.log(error)
+        console.log(error);
         toast.update(toastId, {
           render:
             error?.data?.errorMessage ??
@@ -188,9 +186,14 @@ export default function LoginPage() {
   // rederect user
   useEffect(() => {
     if (user?.email) {
-      router.replace(redirectTo);
+      if (typeof redirectTo === "string") {
+        console.log(redirectTo)
+        router.push(redirectTo);
+      } else {
+        router.push("/profile");
+      }
     }
-  }, [user]);
+  }, [user, redirectTo]);
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-green-50">
@@ -326,7 +329,9 @@ export default function LoginPage() {
                     maxLength={1}
                     value={digit}
                     onChange={(e) => handleCodeChange(e.target.value, idx)}
-                    ref={(el) => {inputsRef.current[idx] = el}}
+                    ref={(el) => {
+                      inputsRef.current[idx] = el;
+                    }}
                     className="w-10 h-12 text-center border rounded text-lg focus:ring-2 focus:ring-black"
                   />
                 ))}

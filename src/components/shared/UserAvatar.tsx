@@ -13,12 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/redux/hooks";
-import { logout } from "@/redux/features/auth/authSlice";
+import useAuth from "@/hooks/useAuth";
 
-export function UserAvatar({ className, userName }: { className: string, userName: string }) {
+
+export function UserAvatar({
+  className,
+  userName,
+}: {
+  className: string;
+  userName: string;
+}) {
   const router = useRouter();
-   const dispatch = useAppDispatch();
+  const { handleLogout, isLogoutLoading } = useAuth()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,10 +43,10 @@ export function UserAvatar({ className, userName }: { className: string, userNam
             <AvatarFallback>{userName}</AvatarFallback>
           </Avatar>
         </div>
-        <h2 className=" mt-2 text-center text-sm" >{userName}</h2>
+        <h2 className=" mt-2 text-center text-sm">{userName}</h2>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-           <DropdownMenuItem
+          <DropdownMenuItem
             onClick={() => router.push("/profile")}
             className=" cursor-pointer"
           >
@@ -62,7 +68,11 @@ export function UserAvatar({ className, userName }: { className: string, userNam
             <span>My order</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => dispatch(logout())} className=" cursor-pointer">
+          <DropdownMenuItem
+            onClick={handleLogout}
+            className=" cursor-pointer"
+            disabled={isLogoutLoading}
+          >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
