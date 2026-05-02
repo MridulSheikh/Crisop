@@ -28,49 +28,75 @@ export default function ProductPage() {
   const meta = data?.meta;
 
   return (
-    <div className="p-6 min-h-screen">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">
+      <div className="p-4 sm:p-6 min-h-screen">
+      
+      {/* HEADER */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
+        
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Product Management
         </h1>
-        <div className="flex gap-x-6">
-          <LimitSelect />
 
-          <SearchInput
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="🔍 Search Product by Name"
-          />
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
 
-          <Link href={"/admin/add-product"}>
-              <Button>Add New Product</Button>          
+          {/* Limit Select */}
+          <div className="w-full">
+            <LimitSelect />
+          </div>
+
+          {/* Search */}
+          <div className="w-full ">
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="🔍 Search Product"
+            />
+          </div>
+
+          {/* Add Button */}
+          <Link href="/admin/add-product" className="w-full">
+            <Button className="w-full ">
+              Add Product
+            </Button>
           </Link>
+
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* TABLE SECTION */}
+      <div className="w-full overflow-x-auto rounded-md border bg-white shadow-sm">
+        
         {isError ? (
           <ErrorUi error={error} />
         ) : (
-          <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
-            <thead className="bg-black text-white text-left">
+          <table className="min-w-[800px] w-full text-sm text-left">
+            
+            <thead className="bg-black text-white">
               <tr>
-                <th className="p-3 border-b">Image</th>
-                <th className="p-3 border-b">Name</th>
-                <th className="p-3 border-b">Category</th>
-                <th className="p-3 border-b">Price</th>
-                <th className="p-3 border-b">Stock</th>
-                <th className="p-3 border-b">Status</th>
-                <th className="p-3 border-b text-right">Actions</th>
+                <th className="p-3">Image</th>
+                <th className="p-3">Name</th>
+                <th className="p-3">Category</th>
+                <th className="p-3">Price</th>
+                <th className="p-3">Stock</th>
+                <th className="p-3">Status</th>
+                <th className="p-3 text-right">Actions</th>
               </tr>
             </thead>
+
             <tbody>
-              {products?.map((product) => (
-                 <ProductCard product={product} key={product._id} />
+              {products?.map((product: any) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                />
               ))}
-              {products?.length === 0 && !isLoading && (
+
+              {!isLoading && products?.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-4 text-center text-gray-500">
+                  <td
+                    colSpan={7}
+                    className="p-6 text-center text-gray-500"
+                  >
                     No products found.
                   </td>
                 </tr>
@@ -78,19 +104,25 @@ export default function ProductPage() {
             </tbody>
           </table>
         )}
-
-        {isLoading && <LoadingUi />}
-
-        {!isLoading && meta && (
-          <div className="mt-5">
-            <PaginationWithLinks
-              page={meta.page}
-              pageSize={meta.limit}
-              totalCount={meta.total}
-            />
-          </div>
-        )}
       </div>
+
+      {/* LOADING */}
+      {isLoading && (
+        <div className="mt-4 text-center text-gray-500">
+          Loading products...
+        </div>
+      )}
+
+      {/* PAGINATION */}
+      {!isLoading && meta && (
+        <div className="mt-6 flex justify-center sm:justify-end">
+          <PaginationWithLinks
+            page={meta.page}
+            pageSize={meta.limit}
+            totalCount={meta.total}
+          />
+        </div>
+      )}
     </div>
   );
 }

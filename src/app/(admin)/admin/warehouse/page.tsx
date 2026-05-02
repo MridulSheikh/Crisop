@@ -14,86 +14,123 @@ import SearchInput from "@/components/shared/searchInput/SearchInput";
 export default function WarehousePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
-  const page = searchParams.get("page");
-  const pageNumber = Number(page) || 1;
+
+  const pageNumber = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 15;
+
   const { data, isLoading, error, isError } = useGetWarehouseQuery(
-    { page: pageNumber, search: searchQuery, limit: limit },
+    { page: pageNumber, search: searchQuery, limit },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    },
+    }
   );
 
   const warehouses = data?.data?.data;
   const meta = data?.data?.meta;
 
   return (
-    <div className="p-6 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Warehouses</h1>
-        <div className=" flex gap-x-4 items-center">
-          <div>
-            <LimitSelect />
-          </div>
-          <div className="flex">
+    <div className="p-4 sm:p-6 min-h-screen">
+
+      {/* HEADER */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+          Warehouses
+        </h1>
+
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
+
+          <LimitSelect />
+
+          <div className="w-full sm:w-[260px]">
             <SearchInput
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              placeholder="🔍 Search Warehouse by name,location"
+              placeholder="🔍 Search warehouse"
             />
           </div>
+
           <AddWarehouse />
         </div>
       </div>
 
-      <div className="">
-        <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
-          <thead className="bg-black text-white sticky top-0">
-            <tr>
-              <th className="p-3 border-b">Name</th>
-              <th className="p-3 border-b">Location</th>
-              <th className="p-3 border-b">Capacity (units)</th>
-              <th className="p-3 border-b text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className=" bg-white">
-            {warehouses?.map((wh, index) => (
-              <tr
-                key={index}
-                className="hover:bg-gray-50 transition duration-150 border-b"
-              >
-                <td className="p-3 font-medium text-gray-800">{wh.name}</td>
-                <td className="p-3 text-gray-600">{wh.location}</td>
-                <td className="p-3 text-gray-600">{wh.capacity}</td>
-                <td className="p-3 text-right space-x-3">
-                  <EditWarehouse initialData={wh} />
-                  <DeleteWarehouseModal id={wh._id} />
-                </td>
-              </tr>
-            ))}
+      {/* TABLE */}
+      <div className="w-full overflow-x-auto rounded-lg border bg-white shadow-sm">
 
-            {warehouses?.length === 0 && (
+        {isError ? (
+          <ErrorUi error={error} />
+        ) : (
+          <table className="min-w-[700px] w-full text-sm text-left">
+
+            <thead className="bg-black text-white">
               <tr>
-                <td colSpan={4} className="p-4 text-center text-gray-500">
-                  No warehouses found.
-                </td>
+                <th className="p-3">Name</th>
+                <th className="p-3">Location</th>
+                <th className="p-3">Capacity</th>
+                <th className="p-3 text-right">Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-        {isLoading && <LoadingUi />}
-        {isError && <ErrorUi error={error} />}
+            </thead>
+
+            <tbody>
+              {warehouses?.map((wh: any) => (
+                <tr
+                  key={wh._id}
+                  className="border-b hover:bg-gray-50 transition"
+                >
+                  <td className="p-3 font-medium text-gray-800">
+                    {wh.name}
+                  </td>
+
+                  <td className="p-3 text-gray-600">
+                    {wh.location}
+                  </td>
+
+                  <td className="p-3 text-gray-600">
+                    {wh.capacity}
+                  </td>
+
+                  {/* ACTIONS FIXED */}
+                  <td className="p-3">
+                    <div className="flex justify-end gap-2">
+                      <EditWarehouse initialData={wh} />
+                      <DeleteWarehouseModal id={wh._id} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+
+              {!isLoading && warehouses?.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="p-6 text-center text-gray-500">
+                    No warehouses found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+
+          </table>
+        )}
       </div>
-      {!isLoading && (
-        <div className="mt-5">
+
+      {/* LOADING */}
+      {isLoading && (
+        <div className="mt-4">
+          <LoadingUi />
+        </div>
+      )}
+
+      {/* PAGINATION */}
+      {!isLoading && meta && (
+        <div className="mt-6 flex justify-center sm:justify-end">
           <PaginationWithLinks
-            page={meta?.page as number}
-            pageSize={meta?.limit as number}
-            totalCount={meta?.total as number}
+            page={meta.page}
+            pageSize={meta.limit}
+            totalCount={meta.total}
           />
         </div>
       )}
+
     </div>
   );
 }

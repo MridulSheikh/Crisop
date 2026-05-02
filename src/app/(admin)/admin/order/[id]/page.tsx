@@ -24,16 +24,17 @@ import { toast } from "react-toastify";
 
 const STATUS_STEPS = ["pending", "packing", "shipped", "delivered"];
 
-const statusIcon = {
+const statusIcon: any = {
   pending: Clock,
   packing: Package,
   shipped: Truck,
   delivered: CheckCircle2,
 };
 
-const OrderDetailsPage = () => {
+export default function OrderDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
+
   const orderId = typeof id === "string" ? id : "";
 
   const { data, isLoading, isError } = useGetSingleOrderQuery(orderId, {
@@ -64,11 +65,8 @@ const OrderDetailsPage = () => {
     );
   }
 
-  // ================= HANDLERS =================
   const handleStatusChange = async (status: string) => {
-    if (!order?._id) return;
-
-    const toastId = toast.loading("Updating status...");
+    const toastId = toast.loading("Updating...");
 
     try {
       await updateStatus({
@@ -77,66 +75,61 @@ const OrderDetailsPage = () => {
       }).unwrap();
 
       toast.update(toastId, {
-        render: "Order status updated ✅",
+        render: "Status updated",
         type: "success",
         isLoading: false,
-        autoClose: 2500,
+        autoClose: 2000,
       });
     } catch (err: any) {
-      console.log(err)
       toast.update(toastId, {
-        render: err?.data?.message || "Failed ❌",
+        render: err?.data?.message || "Failed",
         type: "error",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 2500,
       });
     }
   };
 
   const handleCancel = async () => {
-    if (!order?._id) return;
-
-    const toastId = toast.loading("Cancelling order...");
+    const toastId = toast.loading("Cancelling...");
 
     try {
       await cancelOrder({ id: order._id }).unwrap();
 
       toast.update(toastId, {
-        render: "Order cancelled 🚫",
+        render: "Order cancelled",
         type: "success",
         isLoading: false,
-        autoClose: 2500,
+        autoClose: 2000,
       });
     } catch (err: any) {
       toast.update(toastId, {
-        render: err?.data?.message || "Cancel failed ❌",
+        render: err?.data?.message || "Failed",
         type: "error",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 2500,
       });
     }
   };
 
-  const currentStepIndex = STATUS_STEPS.indexOf(order.status);
+  const currentIndex = STATUS_STEPS.indexOf(order.status);
 
-  // ================= FORMAT =================
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString("en-US", {
+  const formatDate = (d: string) =>
+    new Date(d).toLocaleDateString("en-US", {
       day: "numeric",
       month: "short",
       year: "numeric",
     });
 
-  const formatCurrency = (num: number) =>
-    `$${num?.toLocaleString()}`;
+  const formatCurrency = (n: number) => `$${n?.toLocaleString()}`;
 
-  // ================= UI =================
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen p-4 sm:p-6">
 
       {/* HEADER */}
-      <div className="max-w-7xl mx-auto flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+
+        <div className="flex items-center gap-3">
           <button
             onClick={() => router.back()}
             className="p-2 border rounded-lg bg-white"
@@ -145,7 +138,7 @@ const OrderDetailsPage = () => {
           </button>
 
           <div>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-lg sm:text-xl font-bold">
               Order #{order.orderId || order._id.slice(0, 8)}
             </h1>
             <p className="text-sm text-gray-500">
@@ -154,7 +147,7 @@ const OrderDetailsPage = () => {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <span className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full">
             {order.isPaymentComplete ? "Paid" : "Unpaid"}
           </span>
@@ -167,69 +160,48 @@ const OrderDetailsPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-6">
+      {/* MAIN GRID */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* LEFT */}
         <div className="lg:col-span-8 space-y-6">
 
-          {/* STATUS STEPPER */}
-          <div className="bg-white p-6 rounded-xl shadow">
-            <div className="flex justify-between">
-              {STATUS_STEPS.map((step, index) => {
-                const Icon =
-                  statusIcon[step as keyof typeof statusIcon];
-                const active = index <= currentStepIndex;
+          {/* STEP INDICATOR */}
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
+            <div className="flex justify-between gap-2 overflow-x-auto">
+
+              {STATUS_STEPS.map((step, i) => {
+                const Icon = statusIcon[step];
+                const active = i <= currentIndex;
 
                 return (
-                  <div key={step} className="flex flex-col items-center flex-1">
-                    <button
-                      onClick={() => handleStatusChange(step)}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${
+                  <button
+                    key={step}
+                    onClick={() => handleStatusChange(step)}
+                    className="flex flex-col items-center min-w-[70px]"
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center border-2 ${
                         active
                           ? "bg-green-600 text-white border-green-600"
                           : "bg-white text-gray-400"
                       }`}
                     >
-                      <Icon size={16} />
-                    </button>
+                      <Icon size={14} />
+                    </div>
 
                     <span className="text-xs mt-2 capitalize">
                       {step}
                     </span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
           </div>
 
-          {/* QUICK TOGGLE */}
-          <div className="bg-white p-4 rounded-xl shadow flex gap-2 flex-wrap">
-            {STATUS_STEPS.map((status) => (
-              <button
-                key={status}
-                onClick={() => handleStatusChange(status)}
-                className={`px-3 py-1 text-sm rounded-md border ${
-                  order.status === status
-                    ? "bg-green-600 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-
-            {!order.isCancel && (
-              <button
-                onClick={handleCancel}
-                className="ml-auto px-3 py-1 text-sm rounded-md bg-red-500 text-white"
-              >
-                Cancel Order
-              </button>
-            )}
-          </div>
-
           {/* PRODUCTS */}
           <div className="bg-white rounded-xl shadow overflow-hidden">
+
             <div className="p-4 border-b flex items-center gap-2">
               <Package size={16} />
               <h2 className="font-semibold">Products</h2>
@@ -241,26 +213,23 @@ const OrderDetailsPage = () => {
                 className="flex items-center gap-4 p-4 border-b"
               >
                 <Image
-                  src={
-                    item?.product?.images?.[0]?.url ||
-                    "/placeholder.png"
-                  }
+                  src={item?.product?.images?.[0]?.url || "/placeholder.png"}
                   alt="product"
-                  width={60}
-                  height={60}
+                  width={55}
+                  height={55}
                   className="rounded-md"
                 />
 
                 <div className="flex-1">
-                  <p className="font-medium">
+                  <p className="font-medium text-sm sm:text-base">
                     {item?.product?.name}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs sm:text-sm text-gray-500">
                     Qty: {item.quantity}
                   </p>
                 </div>
 
-                <p className="font-semibold">
+                <p className="font-semibold text-sm">
                   {formatCurrency(item.price)}
                 </p>
               </div>
@@ -277,19 +246,19 @@ const OrderDetailsPage = () => {
 
           {/* CUSTOMER */}
           <div className="bg-white p-4 rounded-xl shadow space-y-3">
-            <h3 className="font-semibold">Customer Info</h3>
+            <h3 className="font-semibold">Customer</h3>
 
-            <div className="flex gap-2 items-center text-sm">
+            <div className="flex gap-2 text-sm">
               <Mail size={14} />
               {order.shippingInfo?.email}
             </div>
 
-            <div className="flex gap-2 items-center text-sm">
+            <div className="flex gap-2 text-sm">
               <Phone size={14} />
               {order.shippingInfo?.contact}
             </div>
 
-            <div className="flex gap-2 items-start text-sm">
+            <div className="flex gap-2 text-sm">
               <MapPin size={14} />
               <span>
                 {order.shippingInfo?.addressOneLine},{" "}
@@ -303,18 +272,25 @@ const OrderDetailsPage = () => {
             <h3 className="font-semibold">Payment</h3>
 
             <p className="text-sm">
-              Method: {order.isCod ? "Cash on Delivery" : "Online"}
+              Method: {order.isCod ? "COD" : "Online"}
             </p>
 
             <p className="text-sm">
-              Status:{" "}
-              {order.isPaymentComplete ? "Paid" : "Pending"}
+              Status: {order.isPaymentComplete ? "Paid" : "Pending"}
             </p>
+
+            {!order.isCancel && (
+              <button
+                onClick={handleCancel}
+                className="w-full mt-2 bg-red-500 text-white py-2 rounded-md text-sm"
+              >
+                Cancel Order
+              </button>
+            )}
           </div>
         </div>
+
       </div>
     </div>
   );
-};
-
-export default OrderDetailsPage;
+}

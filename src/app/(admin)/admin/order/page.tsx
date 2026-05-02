@@ -89,7 +89,7 @@ const OrdersPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-semibold">All Orders</h1>
 
-        <div className="flex gap-2">
+        <div className="flex flex-col lg:flex-row gap-2">
 
           {/* STATUS FILTER (SHADCN SELECT) */}
           <Select value={status} onValueChange={handleStatusChange}>
@@ -119,7 +119,7 @@ const OrdersPage = () => {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
+      <div className="bg-white shadow rounded-lg overflow-x-scroll">
         <table className="w-full text-left">
 
           {/* HEAD */}

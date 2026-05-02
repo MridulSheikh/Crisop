@@ -33,12 +33,12 @@ const CategoryPage = () => {
   return (
     <div className="p-6 min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="lg:flex lg:items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">
           Category Management
         </h1>
 
-        <div className="flex gap-x-4 items-center">
+        <div className="flex flex-col lg:flex-row gap-2 mt-5 lg:mt-0 lg:gap-4 lg:items-center">
           <LimitSelect />
 
           <SearchInput
@@ -52,7 +52,7 @@ const CategoryPage = () => {
       </div>
 
       {/* Table */}
-      <div className="">
+      <div className=" overflow-x-scroll">
         {isError ? (
           <div className="bg-white">
             <ErrorUi error={error} />

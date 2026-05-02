@@ -97,9 +97,9 @@ const TeamPage = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="px-6 sticky z-50 top-0 py-3 flex justify-between items-center">
+      <div className="px-6 py-3 lg:flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
-        <div className=" flex gap-x-3">
+        <div className=" flex flex-col lg:flex-row gap-2 mt-5 lg:mt-0 lg:gap-4 lg:items-center">
           <div className="flex gap-x-3">
             <div>
               <LimitSelect />
@@ -124,7 +124,7 @@ const TeamPage = () => {
       <div className="flex p-6 flex-col  gap-8">
         {/* Team Members */}
         <section className="flex-1">
-          <div className="">
+          <div className=" overflow-x-scroll">
             <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
               <thead className="bg-black text-white">
                 <tr>
