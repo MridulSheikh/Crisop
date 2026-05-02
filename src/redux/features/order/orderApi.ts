@@ -3,14 +3,14 @@ import { TProduct } from "@/types/user";
 
 // types
 
-export type TOrderItem <P> = {
+export type TOrderItem<P> = {
   product: P;
   quantity: number;
   price: number;
   discountPrice?: number;
 };
 
-export type TOrder <P> = {
+export type TOrder<P> = {
   orderId?: string;
   _id: string;
   customer: string;
@@ -19,6 +19,7 @@ export type TOrder <P> = {
     type: "Standard" | "24h" | "3d";
     contact: string;
     email: string;
+    division: string;
   };
   items: TOrderItem<P>[];
   status: "pending" | "packing" | "shipped" | "delivered";
@@ -29,15 +30,27 @@ export type TOrder <P> = {
   total: number;
 };
 
-export type TGetMyOrderQuery ={
-    data: TOrder<TProduct>[];
-}
-
+export type TGetOrderQuery<T> = {
+  data: T;
+};
+export type TGetAllOrder = {
+  data: {
+    items: TOrder<TProduct>[];
+    meta: {
+      limit: number;
+      page: number;
+      total: number;
+      totalPage: number;
+    };
+    message: string;
+    statusCode: number;
+    success: boolean;
+  };
+};
 // Api
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-
     // REATE ORDER
     postOrderUser: builder.mutation<
       { success: boolean; data: TOrder<string> },
@@ -52,7 +65,7 @@ export const orderApi = baseApi.injectEndpoints({
     }),
 
     // GET MY ORDERS
-    getMyOrders: builder.query<TGetMyOrderQuery, void>({
+    getMyOrders: builder.query<TGetOrderQuery<TOrder<TProduct>[]>, void>({
       query: () => ({
         url: `/order/my-orders`,
         method: "GET",
@@ -61,7 +74,7 @@ export const orderApi = baseApi.injectEndpoints({
     }),
 
     // GET SINGLE ORDER
-    getSingleOrder: builder.query<TOrder<TProduct>, string>({
+    getSingleOrder: builder.query<{ data: TOrder<TProduct> }, string>({
       query: (id) => ({
         url: `/order/${id}`,
         method: "GET",
@@ -75,7 +88,7 @@ export const orderApi = baseApi.injectEndpoints({
       { id: string; status: TOrder<string>["status"] }
     >({
       query: ({ id, status }) => ({
-        url: `/order/${id}`,
+        url: `/order/toggle/${id}`,
         method: "PATCH",
         body: { status },
       }),
@@ -83,10 +96,7 @@ export const orderApi = baseApi.injectEndpoints({
     }),
 
     // CANCEL ORDER
-    cancelOrder: builder.mutation<
-      { success: boolean },
-      { id: string }
-    >({
+    cancelOrder: builder.mutation<{ success: boolean }, { id: string }>({
       query: ({ id }) => ({
         url: `/order/${id}/cancel`,
         method: "PATCH",
@@ -94,7 +104,25 @@ export const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ["order"],
     }),
     // GET ALL ORDER
-    
+    getAllOrders: builder.query<
+      TGetAllOrder,
+      { page?: number; search?: string; limit?: number; status?: string }
+    >({
+      query: ({ status, page = 1, search = "", limit = 10 }) => {
+        const params = new URLSearchParams();
+        params.append("page", page.toString());
+        params.append("limit", limit.toString());
+        if (status) {
+          params.append("status", status.toString());
+        }
+        if (search) params.append("searchTerm", search);
+        return {
+          url: `/order?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["order"],
+    }),
   }),
 
   overrideExisting: false,
@@ -106,4 +134,5 @@ export const {
   useGetSingleOrderQuery,
   useUpdateOrderStatusMutation,
   useCancelOrderMutation,
+  useGetAllOrdersQuery,
 } = orderApi;

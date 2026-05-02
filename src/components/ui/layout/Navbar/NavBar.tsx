@@ -205,7 +205,7 @@ const NavBar = () => {
               />
             ) : (
               <Link href="/login">
-                <Button className="hidden lg:inline-block rounded-full">
+                <Button className=" rounded-full">
                   Login
                 </Button>
               </Link>
