@@ -93,7 +93,8 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["order"],
     }),
-
+    // GET ALL ORDER
+    
   }),
 
   overrideExisting: false,

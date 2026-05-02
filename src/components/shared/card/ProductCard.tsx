@@ -64,7 +64,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
         )}
 
         <Link href={`/shop/${product?._id}`}>
-          <div className=" h-60 lg:h-56 w-full relative overflow-hidden">
+          <div className=" h-28 md:h-60 lg:h-56 w-full relative overflow-hidden">
             <Image
               src={product?.images[0]?.url}
               alt={product?.name}
@@ -76,12 +76,12 @@ const ProductCard = ({ product }: { product: TProduct }) => {
       </div>
 
       {/* CONTENT */}
-      <div className="p-5">
+      <div className="p-2 md:p-5">
         {/* TITLE */}
         <div className="text-center">
           <h1 className="text-md font-semibold">{product?.name}</h1>
 
-          <h2 className="mt-3 text-sm group-hover:hidden">
+          <h2 className="mt-3 text-sm xl:group-hover:hidden">
             <span className="line-through text-gray-500">
               ${product?.price}
             </span>{" "}
@@ -91,7 +91,7 @@ const ProductCard = ({ product }: { product: TProduct }) => {
         </div>
 
         {/* ACTION BUTTONS */}
-        <div className="flex justify-center space-x-3 mt-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out">
+        <div className="flex justify-center space-x-3 mt-5 xl:opacity-0 xl:translate-y-3 xl:group-hover:opacity-100 xl:group-hover:translate-y-0 transition-all duration-300 ease-in-out">
           
           {/* ❤️ Wishlist */}
           <button

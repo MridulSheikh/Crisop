@@ -96,9 +96,6 @@ export default function OrderPage() {
                   <button className="text-blue-500 hover:underline text-sm">
                     View
                   </button>
-                  <button className="text-red-500 hover:underline text-sm">
-                    Delete
-                  </button>
                 </td>
               </tr>
             ))}

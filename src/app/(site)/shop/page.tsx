@@ -1,8 +1,11 @@
 import ProductCard from "@/components/shared/card/ProductCard";
+import { Button } from "@/components/ui/button";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import LimitSelectClient from "@/components/ui/products/LimitClientComponent";
+import MobileFilter from "@/components/ui/products/MobileShopFilter";
 import CategorySidebar from "@/components/ui/products/SelectCategorySidebar";
 import { TProduct } from "@/types/user";
+import { Menu } from "lucide-react";
 import { cookies } from "next/headers";
 import Image from "next/image";
 
@@ -35,8 +38,8 @@ const Products = async ({
   const meta = products.meta;
 
   return (
-    <div className="bg-[#f6f6f6] py-20">
-      <div className="max-w-screen-2xl mx-auto h-96 rounded-md flex items-center relative overflow-hidden">
+    <div className="bg-[#f6f6f6] pb-10 lg:py-20">
+      <div className="max-w-screen-2xl mx-auto h-72 lg:h-96 lg:rounded-md flex items-center relative overflow-hidden">
         {/* background image */}
         <Image
           src="/img/bag-banner.jpg"
@@ -78,16 +81,17 @@ const Products = async ({
       <div className="max-w-screen-2xl px-5 mx-auto pt-10">
         <div className="flex justify-between items-center">
           <div className="flex gap-x-4 items-center">
+            <MobileFilter />
             <p className="text-sm flex items-center gap-x-2">
               Showing <LimitSelectClient /> of {meta?.total} items
             </p>
           </div>
         </div>
         <div className=" flex flex-col xl:flex-row gap-x-5 mt-[34px] w-full">
-          <div>
+          <div className="hidden xl:block">
             <CategorySidebar />
           </div>
-          <div className="grid lg:grid-cols-4 gap-5 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
             {products?.data?.map((product: TProduct) => (
               <ProductCard key={product._id} product={product} />
             ))}

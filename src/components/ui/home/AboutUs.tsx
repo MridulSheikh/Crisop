@@ -38,9 +38,9 @@ const AboutUs = () => {
   return (
     <section
       id="about-us"
-      className="max-w-screen-2xl mx-auto px-5 mt-24"
+      className="max-w-screen-2xl mx-auto px-5 mt-10 md:mt-24"
     >
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="grid md:grid-cols-2 gap-16 items-center">
 
         {/* LEFT CONTENT */}
         <motion.div
@@ -49,11 +49,11 @@ const AboutUs = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl font-bold text-[#106D42]">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#106D42] text-center md:text-left">
             About <span className="text-gray-900">Us</span>
           </h1>
 
-          <p className="mt-5 text-gray-600 leading-relaxed">
+          <p className="mt-5 text-gray-600 leading-relaxed text-center md:text-left text-sm md:text-lg">
             At Crisop, we deliver fresh, organic, and high-quality groceries
             directly to your home. Our goal is to make your daily shopping
             faster, easier, and healthier.

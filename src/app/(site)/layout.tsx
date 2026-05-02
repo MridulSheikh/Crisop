@@ -8,7 +8,7 @@ const NormalLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div>
+    <div className=" overflow-x-hidden">
       <NavBar />
       <main>{children}</main>
       <Footer />

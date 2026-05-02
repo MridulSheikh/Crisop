@@ -5,8 +5,9 @@ import { useGetCategoryQuery } from "@/redux/features/category/categoryApi";
 import { TCategory } from "@/types/user";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
-const CategorySidebar = () => {
+const CategorySidebar = ({className} : {className?:string}) => {
   const { data, isLoading } = useGetCategoryQuery({ limit: 100 });
   const categories = data?.data?.data || [];
 
@@ -42,7 +43,7 @@ const CategorySidebar = () => {
   };
 
   return (
-    <div className="w-60 border-r p-4 bg-background rounded-md">
+    <div className={cn("w-60 border-r p-4 bg-background rounded-m", className)}>
       <h2 className="font-semibold mb-4">Categories</h2>
 
       {isLoading ? (

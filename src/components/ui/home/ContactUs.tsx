@@ -83,7 +83,7 @@ const Contact = () => {
 
   return (
     <section className="pb-24 bg-gradient-to-b from-white to-green-50" id="contact">
-      <div className="mt-28 max-w-screen-2xl px-5 mx-auto">
+      <div className="mt-10 md:mt-28 max-w-screen-2xl px-5 mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           
           {/* LEFT */}
@@ -125,7 +125,7 @@ const Contact = () => {
           >
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="p-8 rounded-2xl bg-white shadow-xl border border-gray-100"
+              className="md:p-8 rounded-2xl md:bg-white md:shadow-xl md:border md:border-gray-100"
             >
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 Send Message
