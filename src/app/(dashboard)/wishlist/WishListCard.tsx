@@ -13,26 +13,30 @@ const WishListCard = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetSingleProductQuery(id);
   const dispatch = useAppDispatch();
 
-  // 🛒 Cart
   const cartItems = useAppSelector((state) => state.cart.items);
-
-  // ❤️ Wishlist
   const wishlistItems = useAppSelector((state) => state.wishlist.products);
+
   const isWishlisted = wishlistItems.includes(id);
 
   if (isLoading) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="p-4 border rounded-xl animate-pulse">
+        Loading...
+      </div>
+    );
   }
 
-  if (isError) {
-    return <div className="p-4 text-red-500">Something went wrong</div>;
+  if (isError || !data?.data) {
+    return (
+      <div className="p-4 border rounded-xl text-red-500">
+        Something went wrong
+      </div>
+    );
   }
 
-  const product = data?.data as TProduct;
+  const product = data.data as TProduct;
+  const inStock = product.stock.quantity > 0;
 
-  const inStock = product?.stock.quantity > 0;
-
-  // Add to cart
   const handleAddToCart = async () => {
     await handleAddToCartUtil({
       product,
@@ -42,119 +46,129 @@ const WishListCard = ({ id }: { id: string }) => {
     });
   };
 
-  // wishlist
   const handleToggleWishlist = async (e: React.MouseEvent) => {
-  e.preventDefault();
-  e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
-  const toastId = toast.loading("Updating wishlist...");
+    const toastId = toast.loading("Updating wishlist...");
 
-  try {
-     dispatch(toggleWishlist(id));
+    try {
+      dispatch(toggleWishlist(id));
 
-    const message = isWishlisted
-      ? "Removed from wishlist"
-      : "Added to wishlist";
-
-    toast.update(toastId, {
-      render: message,
-      type: "success",
-      isLoading: false,
-      autoClose: 2000,
-    });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (err) {
-    toast.update(toastId, {
-      render: "Something went wrong!",
-      type: "error",
-      isLoading: false,
-      autoClose: 2000,
-    });
-  }
-};
+      toast.update(toastId, {
+        render: isWishlisted
+          ? "Removed from wishlist"
+          : "Added to wishlist",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    } catch {
+      toast.update(toastId, {
+        render: "Something went wrong!",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    }
+  };
 
   return (
-    <div className="border rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition bg-white">
-      {/* Product Image */}
-      <div className="relative w-full h-48">
-        <Image
-          src={product?.images?.[0]?.url || "/placeholder.png"}
-          alt={product?.name}
-          fill
-          className="object-cover"
-        />
+    <div className="h-full flex">
+      <div className="w-full border rounded-2xl shadow-sm hover:shadow-md transition bg-white flex flex-col">
 
-        {/* Stock Badge */}
-        <span
-          className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-full text-white ${
-            inStock ? "bg-green-600" : "bg-red-500"
-          }`}
-        >
-          {inStock ? "In Stock" : "Out of Stock"}
-        </span>
-      </div>
+        {/* IMAGE */}
+        <div className="relative w-full h-40 sm:h-44 md:h-48">
+          <Image
+            src={product?.images?.[0]?.url || "/placeholder.png"}
+            alt={product?.name}
+            fill
+            className="object-cover rounded-t-2xl"
+          />
 
-      {/* Content */}
-      <div className="p-4 space-y-3">
-        {/* Title */}
-        <h2 className="text-lg font-semibold line-clamp-1">{product?.name}</h2>
-
-        {/* Table-like Info */}
-        <div className="text-sm border rounded-lg divide-y">
-          {/* Price */}
-          <div className="flex justify-between p-2">
-            <span className="text-gray-500">Price</span>
-            <div className="flex gap-2">
-              <span className="font-semibold text-green-600">
-                ${product?.discountPrice || product?.price}
-              </span>
-
-              {product?.discountPrice && (
-                <span className="line-through text-gray-400">
-                  ${product?.price}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Stock সংখ্যা */}
-          <div className="flex justify-between p-2">
-            <span className="text-gray-500">Stock</span>
-            <span className="font-medium">{product?.stock.quantity}</span>
-          </div>
-
-          {/* Category (optional) */}
-          {product?.category && (
-            <div className="flex justify-between p-2">
-              <span className="text-gray-500">Category</span>
-              <span className="font-medium">{product?.category.name}</span>
-            </div>
-          )}
+          <span
+            className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-full text-white ${
+              inStock ? "bg-green-600" : "bg-red-500"
+            }`}
+          >
+            {inStock ? "In Stock" : "Out of Stock"}
+          </span>
         </div>
 
-        <div className=" flex items-center gap-x-5 mt-2 ">
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAddToCart}
-            disabled={!inStock}
-            className={`w-full py-2 rounded-lg transition ${
-              inStock
-                ? "bg-black text-white hover:bg-gray-800"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed"
-            }`}
-          >
-            {inStock ? "Add to Cart" : "Out of Stock"}
-          </button>
-          <button
-            onClick={handleToggleWishlist}
-            className={`flex justify-center  py-2 items-center rounded-md px-3 transition ${
-              isWishlisted
-                ? "bg-red-500 text-white"
-                : "bg-slate-200 hover:bg-green-700 hover:text-white"
-            }`}
-          >
-            Removed
-          </button>
+        {/* CONTENT */}
+        <div className="p-3 sm:p-4 flex flex-col gap-3 flex-1">
+
+          {/* TITLE */}
+          <h2 className="text-base sm:text-lg font-semibold line-clamp-1">
+            {product?.name}
+          </h2>
+
+          {/* INFO BOX */}
+          <div className="text-xs sm:text-sm border rounded-lg divide-y">
+            
+            {/* PRICE */}
+            <div className="flex justify-between p-2">
+              <span className="text-gray-500">Price</span>
+              <div className="flex gap-2">
+                <span className="font-semibold text-green-600">
+                  ${product?.discountPrice || product?.price}
+                </span>
+
+                {product?.discountPrice && (
+                  <span className="line-through text-gray-400">
+                    ${product?.price}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* STOCK */}
+            <div className="flex justify-between p-2">
+              <span className="text-gray-500">Stock</span>
+              <span className="font-medium">
+                {product?.stock.quantity}
+              </span>
+            </div>
+
+            {/* CATEGORY */}
+            {product?.category && (
+              <div className="flex justify-between p-2">
+                <span className="text-gray-500">Category</span>
+                <span className="font-medium">
+                  {product.category.name}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* ACTIONS */}
+          <div className="flex gap-2 mt-auto">
+
+            {/* ADD TO CART */}
+            <button
+              onClick={handleAddToCart}
+              disabled={!inStock}
+              className={`flex-1 py-2 rounded-lg text-sm transition ${
+                inStock
+                  ? "bg-black text-white hover:bg-gray-800"
+                  : "bg-gray-300 text-gray-600 cursor-not-allowed"
+              }`}
+            >
+              {inStock ? "Add to Cart" : "Out of Stock"}
+            </button>
+
+            {/* WISHLIST */}
+            <button
+              onClick={handleToggleWishlist}
+              className={`px-3 py-2 rounded-lg text-sm transition ${
+                isWishlisted
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-200 hover:bg-red-500 hover:text-white"
+              }`}
+            >
+              ♥
+            </button>
+          </div>
         </div>
       </div>
     </div>

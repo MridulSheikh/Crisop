@@ -16,10 +16,10 @@ const Dashboard = ({
       <NavBar />
 
       {/* Main Content */}
-      <main className="pt-10 md:pt-20 bg-[#f6f6f6]">
+      <main className="md:pt-20 bg-[#f6f6f6]">
 
         {/* Main Content Area */}
-        <section className="p-6 w-full">{children}</section>
+        <section className="p-5 w-full">{children}</section>
       </main>
 
       {/* Footer */}

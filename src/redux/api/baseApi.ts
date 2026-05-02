@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { logout, setUser, TAuthState } from "../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
-import config from "@/config/config";
+import {config} from "@/config/config";
 
 interface CustomError {
   errorMessage?: string;

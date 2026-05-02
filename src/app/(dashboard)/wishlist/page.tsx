@@ -18,7 +18,7 @@ const WishlistPage = () => {
           {wishlistItems.length === 0 ? (
             <EmptyWishlist />
           ) : (
-            <div className=" mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+            <div className=" mt-10 grid md:grid-cols-3 xl:grid-cols-4 gap-5">
               {wishlistItems.map((dt: string) => (
                 <WishListCard id={dt} key={dt} />
               ))}

@@ -3,23 +3,13 @@ import localFont from "next/font/local";
 import "@/style/css/globals.css";
 import { Providers } from "@/components/provider/Provider";
 import { ToastContainer } from "react-toastify";
+import TopLoaderProvider from "@/components/shared/TopLoader";
 
 const bdoGrotesk = localFont({
   src: "../fonts/BDOGroteskVF.woff2",
   variable: "--font-bdo-grotesk",
   weight: "100 900",
 });
-
-// const geistSans = localFont({
-//   src: "../fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "../fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
 
 export const metadata: Metadata = {
   title: "Crisop",
@@ -36,8 +26,11 @@ export default function RootLayout({
       <body
         className={`${bdoGrotesk.variable} font-bdoGrotesk antialiased scroll-smooth`}
       >
-         <ToastContainer position="top-center" />
-        <Providers>{children}</Providers>
+        <ToastContainer position="top-center" />
+
+        <Providers>
+          <TopLoaderProvider>{children}</TopLoaderProvider>
+        </Providers>
       </body>
     </html>
   );

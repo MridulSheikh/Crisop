@@ -86,3 +86,17 @@ html {
   outline: none;
   box-shadow: none;
 }
+
+#nprogress .bar {
+  height: 5px;
+  background: linear-gradient(
+    to right,
+    #10b981,
+    #22c55e,
+    #bef264
+  );
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}

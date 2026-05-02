@@ -30,18 +30,20 @@ const CartPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto ">
-      <h1 className="text-2xl font-semibold">Shopping Cart</h1>
-      {cartItems.length === 0 ?  <EmptyCart /> : (
+      <h1 className="text-xl md:text-2xl font-semibold">Shopping Cart</h1>
+      {cartItems.length === 0 ? (
+        <EmptyCart />
+      ) : (
         <div className="grid lg:grid-cols-3 gap-8 mt-5">
           {/* LEFT - CART ITEMS */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-white p-4 rounded-xl shadow flex gap-4 items-center"
+                className="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row gap-4 md:items-center"
               >
                 {/* IMAGE */}
-                <div className="relative w-20 h-20">
+                <div className="relative w-16 h-16 md:w-20 md:h-20 mx-auto md:mx-0">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -51,14 +53,16 @@ const CartPage = () => {
                 </div>
 
                 {/* DETAILS */}
-                <div className="flex-1">
-                  <h2 className="font-medium">{item.name}</h2>
-                  <p className="text-sm text-gray-500">
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="font-medium text-sm md:text-base">
+                    {item.name}
+                  </h2>
+                  <p className="text-xs md:text-sm text-gray-500">
                     ${item.price.toFixed(2)}
                   </p>
 
                   {/* QUANTITY CONTROLS */}
-                  <div className="flex items-center gap-2 mt-2">
+                  <div className="flex items-center justify-center md:justify-start gap-2 mt-2">
                     <button
                       className="p-1 border rounded"
                       onClick={() => handleDecrease(item)}
@@ -66,7 +70,9 @@ const CartPage = () => {
                       <Minus size={14} />
                     </button>
 
-                    <span className="px-3">{item.quantity}</span>
+                    <span className="px-3 text-sm md:text-base">
+                      {item.quantity}
+                    </span>
 
                     <button
                       className="p-1 border rounded"
@@ -80,8 +86,8 @@ const CartPage = () => {
                 </div>
 
                 {/* PRICE + REMOVE */}
-                <div className="text-right">
-                  <p className="font-semibold">
+                <div className="text-center md:text-right mt-2 md:mt-0">
+                  <p className="font-semibold text-sm md:text-base">
                     ${(item.price * item.quantity).toFixed(2)}
                   </p>
 

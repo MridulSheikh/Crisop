@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { useOauthLoginMutation } from "@/redux/features/auth/authApi";
 import { jwtDecode } from "jwt-decode";
 import { setUser } from "@/redux/features/auth/authSlice";
+import { config } from "@/config/config";
 
 const FacebookLoginButton = () => {
   const [oAuthLogin, { isLoading }] = useOauthLoginMutation();
@@ -15,7 +16,7 @@ const FacebookLoginButton = () => {
 
   return (
     <FacebookLogin
-      appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string}
+      appId={config.facebookAppId as string}
       onSuccess={async (res) => {
         const response = await oAuthLogin({
           accessToken: res.accessToken,

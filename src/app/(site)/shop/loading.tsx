@@ -2,7 +2,7 @@ import React from "react";
 
 const ProductsSkeleton = () => {
   return (
-    <div className="bg-[#f6f6f6] py-20 animate-pulse">
+    <div className="bg-[#f6f6f6] py-10 lg:py-20 animate-pulse">
       {/* Banner Skeleton */}
       <div className="max-w-screen-2xl mx-auto h-96 rounded-md bg-gray-300" />
 

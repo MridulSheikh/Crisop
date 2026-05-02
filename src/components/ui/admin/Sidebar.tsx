@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -12,10 +13,14 @@ import {
   Settings,
   Menu,
   X,
+  Home,
+  LogOut,
 } from 'lucide-react'
+import useAuth from '@/hooks/useAuth'
 
 const Sidebar = () => {
   const pathname = usePathname()
+   const { handleLogout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
 
   const links = [
@@ -31,42 +36,70 @@ const Sidebar = () => {
     setIsOpen(false)
   }, [pathname])
 
+
   const sidebarContent = (
-    <>
-      <div className="relative mb-8 h-[60px] w-[120px]">
-        <Image
-          src="/img/logo.png"
-          alt="logo"
-          fill
-          sizes="120px"
-          className="object-contain"
-        />
+    <div className="flex h-full flex-col justify-between">
+      
+      {/* TOP SECTION */}
+      <div>
+        {/* LOGO */}
+        <div className="relative mb-6 h-[60px] w-[120px]">
+          <Image
+            src="/img/logo.png"
+            alt="logo"
+            fill
+            sizes="120px"
+            className="object-contain"
+          />
+        </div>
+
+        {/* BACK TO HOME */}
+        <Link
+          href="/"
+          className="mb-4 flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200"
+        >
+          <Home size={18} />
+          Back to Home
+        </Link>
+
+        {/* NAV LINKS */}
+        <nav className="space-y-1">
+          {links.map(({ href, label, icon: Icon }) => {
+            const isActive = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition ${
+                  isActive
+                    ? 'bg-black text-white'
+                    : 'text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <Icon size={18} />
+                {label}
+              </Link>
+            )
+          })}
+        </nav>
       </div>
 
-      <nav className="space-y-1">
-        {links.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition ${
-                isActive
-                  ? 'bg-black text-white'
-                  : 'text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <Icon size={18} />
-              {label}
-            </Link>
-          )
-        })}
-      </nav>
-    </>
+      {/* BOTTOM SECTION */}
+      <div className="mt-6 border-t pt-4">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
+      </div>
+    </div>
   )
 
   return (
     <>
+      {/* MOBILE HEADER */}
       <header className="fixed left-0 top-0 z-50 flex h-16 w-full items-center justify-between bg-white px-4 shadow-md lg:hidden">
         <div className="relative h-11 w-[96px]">
           <Image
@@ -82,32 +115,31 @@ const Sidebar = () => {
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label={isOpen ? 'Close sidebar' : 'Open sidebar'}
-          aria-expanded={isOpen}
           className="inline-flex size-10 items-center justify-center rounded-md text-gray-800 transition hover:bg-gray-100"
         >
           {!isOpen && <Menu size={24} />}
         </button>
       </header>
 
+      {/* OVERLAY */}
       {isOpen && (
         <button
           type="button"
-          aria-label="Close sidebar overlay"
           onClick={() => setIsOpen(false)}
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
         />
       )}
 
+      {/* SIDEBAR */}
       <aside
         className={`fixed left-0 top-0 z-50 h-screen w-64 bg-white p-4 shadow-md transition-transform duration-300 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:block`}
       >
+        {/* CLOSE BUTTON */}
         <div className="mb-4 flex justify-end lg:hidden">
           <button
-            type="button"
             onClick={() => setIsOpen(false)}
-            aria-label="Close sidebar"
             className="inline-flex size-10 items-center justify-center rounded-md text-gray-800 transition hover:bg-gray-100"
           >
             <X size={24} />

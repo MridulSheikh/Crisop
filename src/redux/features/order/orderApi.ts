@@ -4,6 +4,7 @@ import { TProduct } from "@/types/user";
 // types
 
 export type TOrderItem<P> = {
+  id?: string;
   product: P;
   quantity: number;
   price: number;
@@ -125,7 +126,7 @@ export const orderApi = baseApi.injectEndpoints({
     }),
   }),
 
-  overrideExisting: false,
+  overrideExisting: true,
 });
 
 export const {
