@@ -7,10 +7,11 @@ import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useGetStockQuery } from "@/redux/features/warehouse/stockApi";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { ErrorUi, LoadingUi } from "../team/page";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
 import { cn } from "@/lib/utils";
+import ErrorUi from "@/components/shared/error/ErrorUi";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 const StockPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

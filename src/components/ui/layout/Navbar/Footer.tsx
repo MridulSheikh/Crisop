@@ -30,7 +30,7 @@ const Footer = () => {
       <div className="absolute w-[400px] h-[400px] bg-green-500/20 blur-[120px] top-0 left-0" />
       <div className="absolute w-[300px] h-[300px] bg-emerald-500/10 blur-[120px] bottom-0 right-0" />
 
-      <div className="max-w-screen-xl mx-auto px-5 py-16 grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
+      <div className="max-w-screen-2xl mx-auto px-5 py-16 grid grid-cols-1 md:grid-cols-3 gap-10 relative z-10">
 
         {/* ABOUT */}
         <div>

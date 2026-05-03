@@ -7,8 +7,6 @@ import {
   useGetAllOrdersQuery,
   TOrder,
 } from "@/redux/features/order/orderApi";
-
-import { LoadingUi } from "../team/page";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
@@ -20,6 +18,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 const STATUS_OPTIONS = ["all", "pending", "packing", "shipped", "delivered"];
 

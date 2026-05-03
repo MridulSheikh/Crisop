@@ -1,5 +1,7 @@
 "use client";
+import ErrorUi from "@/components/shared/error/ErrorUi";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
@@ -11,41 +13,7 @@ import {
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { TailSpin } from "react-loader-spinner";
 import { toast } from "react-toastify";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const ErrorUi = ({ error }: { error: any }) => {
-  return (
-    <div className="flex justify-center py-10">
-      {"status" in error &&
-      error?.data &&
-      typeof error.data === "object" &&
-      "errorMessage" in error.data ? (
-        <p>{(error.data as { errorMessage: string }).errorMessage}</p>
-      ) : (
-        <p>Something went wrong.</p>
-      )}
-    </div>
-  );
-};
-
-export const LoadingUi = () => {
-  return (
-    <div className=" w-full h-40 flex justify-center items-center">
-      <TailSpin
-        visible={true}
-        height="80"
-        width="80"
-        color="#4fa94d"
-        ariaLabel="tail-spin-loading"
-        radius="1"
-        wrapperStyle={{}}
-        wrapperClass=""
-      />
-    </div>
-  );
-};
 
 const TeamPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

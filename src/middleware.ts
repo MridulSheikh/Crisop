@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {jwtDecode} from "jwt-decode";
 
 const authPublicRoute = [
   "/login",
@@ -8,7 +9,15 @@ const authPublicRoute = [
   "/reset-password",
 ];
 
-const privateRoute = ["/order", "/profile", "/checkout"];
+const privateRoute = ["/order", "/profile", "/checkout", "/admin"];
+
+// allowed roles
+const allowedRoles = ["admin", "manager", "super"];
+
+type DecodedToken = {
+  role?: string;
+  exp?: number;
+};
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value || "";
@@ -22,18 +31,39 @@ export function middleware(request: NextRequest) {
     path.startsWith(route)
   );
 
-  // logged in user trying to access auth pages
+  let userRole: string | null = null;
+
+  // decode token
+  if (token) {
+    try {
+      const decoded: DecodedToken = jwtDecode(token);
+      userRole = decoded?.role || null;
+    } catch (error) {
+      console.log("Invalid token");
+    }
+  }
+
+  //  logged in user trying to access auth pages
   if (isAuthPublicRoute && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // protected route without login
+  //  protected route without login
   if (isPrivateRoute && !token) {
     const fullPath = request.nextUrl.pathname + request.nextUrl.search;
-    return NextResponse.redirect(new URL(`/login?redirect=${fullPath}`, request.url));
+    return NextResponse.redirect(
+      new URL(`/login?redirect=${fullPath}`, request.url)
+    );
   }
 
-  return NextResponse.next(); 
+  //  ROLE-BASED PROTECTION
+  if (path.startsWith("/admin")) {
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
@@ -45,5 +75,6 @@ export const config = {
     "/order/:path*",
     "/profile/:path*",
     "/checkout/:path*",
+    "/admin/:path*",
   ],
 };

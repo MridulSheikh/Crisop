@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useSearchParams } from "next/navigation";
-import { LoadingUi, ErrorUi } from "../team/page"; // assuming you have loading/error components
 import SearchInput from "@/components/shared/searchInput/SearchInput";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
 import { useGetAdminProductQuery } from "@/redux/features/product/productApi";
+import ErrorUi from "@/components/shared/error/ErrorUi";
 
 export default function ProductPage() {
   const [searchQuery, setSearchQuery] = useState("");

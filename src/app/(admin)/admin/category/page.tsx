@@ -8,9 +8,10 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
-import { ErrorUi, LoadingUi } from "../team/page";
 import { TCategory } from "@/types/user";
 import { useGetCategoryQuery } from "@/redux/features/category/categoryApi";
+import ErrorUi from "@/components/shared/error/ErrorUi";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 const CategoryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

@@ -16,7 +16,7 @@ import StockSelect from "../../add-product/StockSelect";
 import ProductTagInput from "../../add-product/ProductTagInput";
 import Image from "next/image";
 import { Undo } from "lucide-react";
-import { LoadingUi } from "../../team/page";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 const MAX_TOTAL_IMAGES = 5;
 

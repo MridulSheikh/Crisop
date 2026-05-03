@@ -16,7 +16,7 @@ const Banner = () => {
 
       <div className="max-w-screen-2xl mx-auto px-5 w-full relative z-10">
         {/* FLEX CONTAINER */}
-        <div className="flex flex-row items-center py-16 2xl:py-0 2xl:min-h-screen gap-10">
+        <div className="flex flex-row items-center py-16 xl:py-0 2xl:min-h-screen gap-10">
           {/* LEFT CONTENT */}
           <div className="flex-1 space-y-6 text-center md:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border text-sm text-green-700 font-medium">
