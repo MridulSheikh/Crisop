@@ -14,7 +14,8 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MdClose } from "react-icons/md";
 import { useGetWarehouseQuery } from "@/redux/features/warehouse/warehouseApi";
-import { ErrorUi, LoadingUi } from "@/app/(admin)/admin/team/page";
+import ErrorUi from "@/components/shared/error/ErrorUi";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 type Props = {
   value: string;

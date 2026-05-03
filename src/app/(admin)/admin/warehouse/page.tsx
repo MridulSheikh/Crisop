@@ -4,12 +4,13 @@ import AddWarehouse from "@/components/ui/admin/warehouse/AddWarehouse";
 import DeleteWarehouseModal from "@/components/ui/admin/warehouse/DeleteWarehouseModal";
 import EditWarehouse from "@/components/ui/admin/warehouse/EditWarehouseModal";
 import { useGetWarehouseQuery } from "@/redux/features/warehouse/warehouseApi";
-import { ErrorUi, LoadingUi } from "../team/page";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
+import ErrorUi from "@/components/shared/error/ErrorUi";
+import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 
 export default function WarehousePage() {
   const [searchQuery, setSearchQuery] = useState("");

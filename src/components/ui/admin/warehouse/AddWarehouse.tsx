@@ -56,7 +56,6 @@ export default function AddWarehouse() {
         autoClose: 3000,
         position: "top-center",
       });
-      // eslint-disable-next-line @typescript-eslint/no-exp
     } catch (error: any) {
       toast.update(toastId, {
         render:

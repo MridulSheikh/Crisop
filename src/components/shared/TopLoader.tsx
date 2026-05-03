@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import NProgress from "nprogress";
-// @ts-expect-error: CSS module import without type declarations
 import "nprogress/nprogress.css";
 
 export default function TopLoaderProvider({
