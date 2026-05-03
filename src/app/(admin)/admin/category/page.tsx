@@ -53,7 +53,7 @@ const CategoryPage = () => {
       </div>
 
       {/* Table */}
-      <div className=" overflow-x-scroll">
+      <div className="overflow-x-auto">
         {isError ? (
           <div className="bg-white">
             <ErrorUi error={error} />

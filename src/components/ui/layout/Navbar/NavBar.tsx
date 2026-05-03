@@ -12,14 +12,12 @@ import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import ProductSearchBar from "../../products/ProductSearchBar";
-import {
-  ClipboardList,
-  Heart,
-  ShoppingBag,
-  ShoppingCart,
-} from "lucide-react";
+import { ClipboardList, Heart, ShoppingBag, ShoppingCart } from "lucide-react";
 
-const navigationData = [{ name: "Shop", link: "/shop" }];
+const navigationData = [
+  { name: "Shop", link: "/shop", isAdminRoute: false },
+  { name: "Admin", link: "/admin", isAdminRoute: true },
+];
 
 const bottomNav = [
   { name: "Shop", link: "/shop", icon: ShoppingBag },
@@ -27,6 +25,8 @@ const bottomNav = [
   { name: "Orders", link: "/order", icon: ClipboardList },
   { name: "Wishlist", link: "/wishlist", icon: Heart },
 ];
+
+const AdminAllowedRoles = ["admin", "manager", "super"];
 
 const NavBar = () => {
   const [serchBarFocus, setSerchBarFocus] = useState(false);
@@ -36,10 +36,7 @@ const NavBar = () => {
   const cartItems = useAppSelector((state) => state.cart.items);
   const wishlistItems = useAppSelector((state) => state.wishlist.products);
 
-  const cartCount = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const user = useAppSelector(useCurrentUser);
   const pathname = usePathname();
@@ -103,16 +100,12 @@ const NavBar = () => {
         initial={false}
         animate={{ y: showNavbar ? 0 : -100 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={cn(
-          "fixed top-0 left-0 w-full z-50 bg-[#f6f6f6]",
-          {
-            "bg-transparent": !scrolled && isHome,
-            "bg-white/90 backdrop-blur-md shadow-sm": scrolled,
-          }
-        )}
+        className={cn("fixed top-0 left-0 w-full z-50 bg-[#f6f6f6]", {
+          "bg-transparent": !scrolled && isHome,
+          "bg-white/90 backdrop-blur-md shadow-sm": scrolled,
+        })}
       >
         <div className="max-w-screen-2xl mx-auto px-5 flex items-center py-2 lg:py-4 gap-x-2 lg:gap-x-5">
-
           {/* LOGO */}
           <div
             className={cn("flex items-center gap-x-5", {
@@ -153,18 +146,21 @@ const NavBar = () => {
               "flex items-center gap-x-2 md:gap-x-3 lg:gap-x-5 ml-auto",
               {
                 "hidden md:flex": serchBarFocus && isMobile,
-              }
+              },
             )}
           >
             {/* NAV LINKS */}
-            <ul className="hidden md:flex items-center gap-x-8">
+            <ul className="hidden md:flex items-center gap-x-5">
               {navigationData.map((item) => (
                 <li key={item.link}>
                   <Link
                     href={item.link}
                     className={cn(
                       "font-semibold transition hover:text-green-700",
-                      pathname === item.link && "text-green-700"
+                      {
+                        "text-green-700": pathname === item.link,
+                        "hidden": (item.isAdminRoute === true) && !AdminAllowedRoles.includes(user?.role as string),
+                      },
                     )}
                   >
                     {item.name}
@@ -205,9 +201,7 @@ const NavBar = () => {
               />
             ) : (
               <Link href="/login">
-                <Button className=" rounded-full">
-                  Login
-                </Button>
+                <Button className=" rounded-full">Login</Button>
               </Link>
             )}
           </div>
@@ -220,7 +214,7 @@ const NavBar = () => {
           "fixed bottom-0 left-0 w-full bg-white border-t shadow-md md:hidden flex justify-around items-center py-2 z-50",
           {
             hidden: serchBarFocus && isMobile,
-          }
+          },
         )}
       >
         {bottomNav.map((item) => {
@@ -232,9 +226,7 @@ const NavBar = () => {
               href={item.link}
               className={cn(
                 "flex flex-col items-center text-xs",
-                pathname === item.link
-                  ? "text-green-600"
-                  : "text-gray-500"
+                pathname === item.link ? "text-green-600" : "text-gray-500",
               )}
             >
               <div className="relative">
@@ -246,12 +238,11 @@ const NavBar = () => {
                   </span>
                 )}
 
-                {item.name === "Wishlist" &&
-                  wishlistItems?.length > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
-                      {wishlistItems.length}
-                    </span>
-                  )}
+                {item.name === "Wishlist" && wishlistItems?.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                    {wishlistItems.length}
+                  </span>
+                )}
               </div>
 
               <span>{item.name}</span>

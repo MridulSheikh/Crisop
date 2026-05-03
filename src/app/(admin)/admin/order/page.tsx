@@ -118,7 +118,7 @@ const OrdersPage = () => {
       </div>
 
       {/* TABLE */}
-      <div className="bg-white shadow rounded-lg overflow-x-scroll">
+      <div className="bg-white shadow rounded-lg overflow-x-auto">
         <table className="w-full text-left">
 
           {/* HEAD */}

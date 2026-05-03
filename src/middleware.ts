@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const authPublicRoute = [
   "/login",
@@ -24,12 +24,10 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isAuthPublicRoute = authPublicRoute.some((route) =>
-    path.startsWith(route)
+    path.startsWith(route),
   );
 
-  const isPrivateRoute = privateRoute.some((route) =>
-    path.startsWith(route)
-  );
+  const isPrivateRoute = privateRoute.some((route) => path.startsWith(route));
 
   let userRole: string | null = null;
 
@@ -52,12 +50,15 @@ export function middleware(request: NextRequest) {
   if (isPrivateRoute && !token) {
     const fullPath = request.nextUrl.pathname + request.nextUrl.search;
     return NextResponse.redirect(
-      new URL(`/login?redirect=${fullPath}`, request.url)
+      new URL(`/login?redirect=${fullPath}`, request.url),
     );
   }
 
   //  ROLE-BASED PROTECTION
   if (path.startsWith("/admin")) {
+    if (path === "/admin") {
+      return NextResponse.redirect(new URL("/admin/product", request.url));
+    }
     if (!userRole || !allowedRoles.includes(userRole)) {
       return NextResponse.redirect(new URL("/", request.url));
     }
