@@ -92,7 +92,7 @@ const TeamPage = () => {
       <div className="flex p-6 flex-col  gap-8">
         {/* Team Members */}
         <section className="flex-1">
-          <div className=" overflow-x-scroll">
+          <div className=" overflow-x-auto">
             <table className="min-w-full shadow-md bg-white rounded-md overflow-hidden text-left text-sm">
               <thead className="bg-black text-white">
                 <tr>

@@ -187,10 +187,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (user?.email) {
       if (typeof redirectTo === "string") {
-        console.log(redirectTo)
         router.push(redirectTo);
       } else {
-        router.push("/profile");
+        router.push("/shop");
       }
     }
   }, [user, redirectTo]);

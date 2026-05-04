@@ -21,6 +21,7 @@ type DecodedToken = {
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value || "";
+  console.log("TOKEN:", token || "NO TOKEN");
   const path = request.nextUrl.pathname;
 
   const isAuthPublicRoute = authPublicRoute.some((route) =>

@@ -87,7 +87,7 @@ const Signup = () => {
       });
 
       // rederect route
-      router.push('/dashboard/profile')
+      router.push('/shop')
     } catch {
       toast.update(toastId, {
         render: "❌ Invalid or expired code",
