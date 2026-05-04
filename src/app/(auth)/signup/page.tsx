@@ -112,6 +112,7 @@ const Signup = () => {
       setEmailForVerification(data.email);
       setStep("verify");
     } catch (err: any) {
+      console.log(err)
       toast.update(toastId, {
         render:
           err?.data?.errorMessage ??

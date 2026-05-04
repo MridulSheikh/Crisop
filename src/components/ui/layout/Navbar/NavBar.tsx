@@ -152,14 +152,20 @@ const NavBar = () => {
             {/* NAV LINKS */}
             <ul className="hidden md:flex items-center gap-x-5">
               {navigationData.map((item) => (
-                <li key={item.link}>
+                <li
+                  key={item.link}
+                  className={cn("", {
+                    hidden:
+                      item.isAdminRoute === true &&
+                      !AdminAllowedRoles.includes(user?.role as string),
+                  })}
+                >
                   <Link
                     href={item.link}
                     className={cn(
                       "font-semibold transition hover:text-green-700",
                       {
                         "text-green-700": pathname === item.link,
-                        "hidden": (item.isAdminRoute === true) && !AdminAllowedRoles.includes(user?.role as string),
                       },
                     )}
                   >

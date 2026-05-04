@@ -4,6 +4,7 @@ import "@/style/css/globals.css";
 import { Providers } from "@/components/provider/Provider";
 import { ToastContainer } from "react-toastify";
 import TopLoaderProvider from "@/components/shared/TopLoader";
+import PrivateRoute from "@/components/protected-route/PrivateRoute";
 
 const bdoGrotesk = localFont({
   src: "../fonts/BDOGroteskVF.woff2",
@@ -29,7 +30,7 @@ export default function RootLayout({
         <ToastContainer position="top-center" />
 
         <Providers>
-          <TopLoaderProvider>{children}</TopLoaderProvider>
+            <TopLoaderProvider>{children}</TopLoaderProvider>
         </Providers>
       </body>
     </html>
