@@ -49,8 +49,8 @@ const AboutUs = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-[#106D42] text-center md:text-left">
-            About <span className="text-gray-900">Us</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center md:text-left">
+            About Us
           </h1>
 
           <p className="mt-5 text-gray-600 leading-relaxed text-center md:text-left text-sm md:text-lg">
@@ -66,7 +66,7 @@ const AboutUs = () => {
                 key={i}
                 className="flex gap-4 p-4 rounded-xl bg-white border hover:shadow-md transition"
               >
-                <div className="text-[#86a628]">
+                <div className="text-green-600">
                   <item.icon />
                 </div>
                 <div>

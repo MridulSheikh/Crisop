@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const categories = [
@@ -31,7 +32,7 @@ const OurCategories = () => {
 
       {/* HEADER */}
       <div className="text-center mb-14">
-        <h1 className="text-3xl md:text-5xl font-bold text-[#106D42]">
+        <h1 className="text-3xl md:text-5xl font-bold">
           Our Categories
         </h1>
         <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
@@ -44,6 +45,7 @@ const OurCategories = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* LEFT BIG */}
+        <Link href={"/shop"}>
         <div className="relative h-[250px] lg:h-[520px] rounded-2xl overflow-hidden group cursor-pointer">
 
           <Image
@@ -59,6 +61,7 @@ const OurCategories = () => {
             {categories[0].name}
           </h1>
         </div>
+        </Link>
 
         {/* MIDDLE */}
         <div className="grid gap-6">
