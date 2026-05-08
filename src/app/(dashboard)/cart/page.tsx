@@ -29,7 +29,7 @@ const CartPage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto ">
+    <div className="max-w-6xl mx-auto pb-20 ">
       <h1 className="text-xl md:text-2xl font-semibold">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <EmptyCart />

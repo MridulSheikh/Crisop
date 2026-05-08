@@ -140,18 +140,17 @@ const Banner = () => {
               <Link href="/shop">
                 <Button className="bg-gradient-to-r from-[#106D42] to-emerald-500 hover:from-[#0c5132] hover:to-emerald-600 text-white px-6 py-6 text-base rounded-xl shadow-md hover:shadow-xl transition-all flex items-center gap-2">
                   <ShoppingBag className="w-5 h-5" />
-                  Shop Now
+                  Explore Ai Shop
                 </Button>
               </Link>
 
-              {/* Secondary Button */}
               <a href="/#contact">
                 <Button
                   variant="outline"
-                  className="px-6 py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all shadow-sm hover:shadow-md flex items-center gap-2"
+                  className="px-6 py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2"
                 >
                   <Mail className="w-5 h-5" />
-                  Get in Touch
+                  Talk to AI Assistant
                 </Button>
               </a>
             </div>
@@ -159,7 +158,7 @@ const Banner = () => {
             {/* =========================
                 FEATURE CARDS
             ========================= */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-10">
+            <div className="hidden sm:grid sm:grid-cols-3 gap-5 pt-10">
               {BotomCardData.map((item, i) => (
                 <motion.div
                   key={i}

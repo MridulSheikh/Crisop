@@ -1,6 +1,6 @@
 import AboutUs from "@/components/ui/home/AboutUs";
+import AIDeliverySection from "@/components/ui/home/AIDeliverySection";
 import Banner from "@/components/ui/home/Banner";
-import Contact from "@/components/ui/home/ContactUs";
 import OurCategories from "@/components/ui/home/OurCategories";
 
 export default function Home() {
@@ -8,8 +8,8 @@ export default function Home() {
     <>
       <Banner />
       <OurCategories />
+      <AIDeliverySection />
       <AboutUs />
-      <Contact />
     </>
   );
 }

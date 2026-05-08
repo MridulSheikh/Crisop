@@ -4,7 +4,11 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { motion } from "framer-motion";
 
+/* =========================
+   DATA
+========================= */
 const categories = [
   {
     name: "Vegetables",
@@ -26,99 +30,148 @@ const categories = [
   },
 ];
 
+/* =========================
+   REUSABLE ANIMATION
+========================= */
+const fadeUpVariant = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.12,
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  }),
+};
+
+/* =========================
+   REUSABLE CARD
+========================= */
+const CategoryCard = ({
+  item,
+  className,
+  index,
+}: {
+  item: {
+    name: string;
+    img: string;
+  };
+  className?: string;
+  index: number;
+}) => {
+  return (
+    <motion.div
+      custom={index}
+      variants={fadeUpVariant}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      className={cn(
+        "relative rounded-3xl overflow-hidden group cursor-pointer",
+        className
+      )}
+    >
+      {/* Image */}
+      <Image
+        src={item.img}
+        alt={item.name}
+        fill
+        className="object-cover group-hover:scale-105 transition-transform duration-700"
+      />
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+      {/* Content */}
+      <div className="absolute bottom-0 left-0 p-6">
+        <h1 className="text-white text-2xl md:text-3xl font-semibold tracking-tight">
+          {item.name}
+        </h1>
+
+        <p className="text-white/80 text-sm mt-1">
+          Fresh premium quality products
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
+/* =========================
+   COMPONENT
+========================= */
 const OurCategories = () => {
   return (
-    <section id="categories" className="max-w-screen-2xl mx-auto px-5 mt-10 md:mt-28">
-
+    <section
+      id="categories"
+      className="max-w-screen-2xl mx-auto px-5 mt-10 md:mt-28"
+    >
       {/* HEADER */}
-      <div className="text-center mb-14">
-        <h1 className="text-3xl md:text-5xl font-bold">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-16"
+      >
+        <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-gray-900">
           Our Categories
         </h1>
-        <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
+
+        <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
           Fresh groceries, meat, fish and fruits delivered with premium quality.
           Choose your favorite category and start shopping.
         </p>
-      </div>
+      </motion.div>
 
       {/* GRID */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* LEFT BIG */}
-        <Link href={"/shop"}>
-        <div className="relative h-[250px] lg:h-[520px] rounded-2xl overflow-hidden group cursor-pointer">
-
-          <Image
-            src={categories[0].img}
-            alt={categories[0].name}
-            fill
-            className="object-cover group-hover:scale-110 transition duration-500"
+        <Link href="/shop">
+          <CategoryCard
+            item={categories[0]}
+            index={1}
+            className="h-[260px] lg:h-[560px]"
           />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-          <h1 className="absolute bottom-5 left-5 text-white text-2xl font-semibold">
-            {categories[0].name}
-          </h1>
-        </div>
         </Link>
 
         {/* MIDDLE */}
         <div className="grid gap-6">
 
           {[categories[1], categories[2]].map((item, i) => (
-            <div
+            <CategoryCard
               key={i}
-              className={cn("relative h-[180px] md:h-full lg:h-[250px] rounded-2xl overflow-hidden group cursor-pointer", {"md:hidden lg:block" : i == 1})}
-            >
-              <Image
-                src={item.img}
-                alt={item.name}
-                fill
-                className="object-cover group-hover:scale-110 transition duration-500"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-              <h1 className="absolute bottom-4 left-4 text-white text-xl font-medium">
-                {item.name}
-              </h1>
-            </div>
+              item={item}
+              index={i + 2}
+              className={cn(
+                "h-[220px] lg:h-[268px]",
+                {
+                  "md:hidden lg:block": i === 1,
+                }
+              )}
+            />
           ))}
+
         </div>
 
         {/* RIGHT BIG */}
-        <div className="relative h-[250px] lg:h-[520px] rounded-2xl overflow-hidden group cursor-pointer">
+        <CategoryCard
+          item={categories[3]}
+          index={5}
+          className="h-[260px] lg:h-[560px]"
+        />
 
-          <Image
-            src={categories[3].img}
-            alt={categories[3].name}
-            fill
-            className="object-cover group-hover:scale-110 transition duration-500"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-          <h1 className="absolute bottom-5 left-5 text-white text-2xl font-semibold">
-            {categories[3].name}
-          </h1>
-        </div>
-
-         <div className="relative hidden md:block lg:hidden rounded-2xl overflow-hidden group cursor-pointer">
-
-          <Image
-            src={categories[2].img}
-            alt={categories[2].name}
-            fill
-            className="object-cover group-hover:scale-110 transition duration-500"
-          />
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-
-          <h1 className="absolute bottom-5 left-5 text-white text-2xl font-semibold">
-            {categories[3].name}
-          </h1>
-        </div>
+        {/* Tablet Fix */}
+        <CategoryCard
+          item={categories[2]}
+          index={6}
+          className="hidden md:block lg:hidden h-[260px]"
+        />
 
       </div>
     </section>

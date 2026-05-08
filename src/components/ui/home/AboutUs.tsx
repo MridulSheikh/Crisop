@@ -5,125 +5,245 @@ import { CircleHelp, Package, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
+/* =========================
+   DATA
+========================= */
 const features = [
   {
     icon: ShieldCheck,
-    title: "Quality Products",
-    desc: "We source only fresh and verified groceries from trusted suppliers.",
+    title: "Premium Quality",
+    desc: "Fresh and verified groceries sourced from trusted suppliers and local farms.",
   },
   {
     icon: CircleHelp,
-    title: "24/7 Support",
-    desc: "Our support team is always ready to help you anytime.",
+    title: "24/7 Smart Support",
+    desc: "Dedicated support team and AI assistance available anytime you need help.",
   },
   {
     icon: Package,
     title: "Fast Delivery",
-    desc: "Quick and safe delivery right to your doorstep.",
+    desc: "Reliable same-day delivery system designed for speed and convenience.",
   },
 ];
 
-const companyImage = [
-  "/img/footer/shefinds-logo 1.png",
-  "/img/footer/yahoo-news-img 1.png",
-  "/img/footer/Healthline-img 1.png",
-  "/img/footer/yahoo-news-img 2.png",
-  "/img/footer/MSN-logo 1.png",
-];
+/* =========================
+   ANIMATION VARIANTS
+========================= */
+
+const containerVariant = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 50,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const cardVariant = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.96,
+  },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.12,
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+const imageVariant = {
+  hidden: {
+    opacity: 0,
+    scale: 1.08,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+/* =========================
+   COMPONENT
+========================= */
 
 const AboutUs = () => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
+
+  const inView = useInView(ref, {
+    once: true,
+    amount: 0.2,
+  });
 
   return (
     <section
       id="about-us"
-      className="max-w-screen-2xl mx-auto px-5 mt-10 md:mt-24"
+      className="relative overflow-hidden py-20 md:py-32 px-5"
     >
-      <div className="grid md:grid-cols-2 gap-16 items-center">
 
-        {/* LEFT CONTENT */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center md:text-left">
-            About Us
-          </h1>
+      {/* Background Glow */}
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-emerald-300/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-green-300/10 rounded-full blur-[120px]" />
 
-          <p className="mt-5 text-gray-600 leading-relaxed text-center md:text-left text-sm md:text-lg">
-            At Crisop, we deliver fresh, organic, and high-quality groceries
-            directly to your home. Our goal is to make your daily shopping
-            faster, easier, and healthier.
-          </p>
+      <div className="max-w-screen-2xl mx-auto relative z-10">
 
-          {/* FEATURES */}
-          <div className="mt-10 space-y-5">
-            {features.map((item, i) => (
-              <div
-                key={i}
-                className="flex gap-4 p-4 rounded-xl bg-white border hover:shadow-md transition"
-              >
-                <div className="text-green-600">
-                  <item.icon />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+        <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
 
-        {/* RIGHT IMAGE */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.6 }}
-          className="relative h-[400px] lg:h-[791px] rounded-2xl overflow-hidden"
-        >
-          <Image
-            src="/img/about-us/delevery-boy.jpg"
-            alt="delivery"
-            fill
-            className="object-cover"
-          />
+          {/* ================= LEFT ================= */}
+          <motion.div
+            ref={ref}
+            variants={containerVariant}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            className="space-y-10"
+          >
 
-          {/* overlay glow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-        </motion.div>
-      </div>
-
-      {/* BRAND SECTION */}
-      <div className="mt-24 border border-dashed border-[#86a628] rounded-2xl p-8 relative">
-        <h2 className="absolute -top-4 left-6 bg-white px-4 text-lg font-semibold text-[#106D42]">
-          Trusted Brands
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
-          {companyImage.map((img, i) => (
-            <div
-              key={i}
-              className="p-4 border rounded-xl bg-white hover:shadow-md transition"
+            {/* Badge */}
+            <motion.div
+              variants={fadeUp}
+              className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 text-sm font-medium text-emerald-700"
             >
-              <div className="relative h-12">
-                <Image
-                  src={img}
-                  alt="brand"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              About Crisop
+            </motion.div>
+
+            {/* Heading */}
+            <motion.div variants={fadeUp} className="space-y-6">
+
+              <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-gray-900 leading-tight">
+                Redefining grocery delivery with modern technology
+              </h1>
+
+              <p className="text-gray-500 text-lg leading-relaxed max-w-xl">
+                Crisop combines intelligent logistics, premium quality products,
+                and modern delivery systems to create a faster, smarter, and
+                more reliable grocery shopping experience.
+              </p>
+
+            </motion.div>
+
+            {/* Features */}
+            <div className="space-y-5">
+
+              {features.map((item, i) => (
+                <motion.div
+                  key={i}
+                  custom={i}
+                  variants={cardVariant}
+                  whileHover={{
+                    y: -5,
+                    transition: { duration: 0.25 },
+                  }}
+                  className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-xl p-5 shadow-sm hover:shadow-xl transition-all duration-500"
+                >
+
+                  {/* hover glow */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-100/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
+
+                  <div className="relative flex gap-4">
+
+                    {/* Icon */}
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                      <item.icon size={22} />
+                    </div>
+
+                    {/* Text */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {item.title}
+                      </h3>
+
+                      <p className="text-gray-500 text-sm leading-relaxed mt-1">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                  </div>
+
+                </motion.div>
+              ))}
+
             </div>
-          ))}
+
+          </motion.div>
+
+          {/* ================= RIGHT IMAGE ================= */}
+          <motion.div
+            variants={imageVariant}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            className="relative"
+          >
+
+            {/* glow */}
+            <div className="absolute inset-0 bg-emerald-200/20 blur-3xl rounded-full scale-75" />
+
+            {/* image shell */}
+            <div className="relative overflow-hidden rounded-[32px] border border-white/40 shadow-2xl bg-white/50 backdrop-blur-xl">
+
+              <div className="relative h-[450px] md:h-[700px]">
+
+                <Image
+                  src="/img/about-us/delevery-boy.jpg"
+                  alt="delivery"
+                  fill
+                  className="object-cover"
+                />
+
+                {/* overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+              </div>
+
+              {/* floating glass card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="absolute bottom-6 left-6 right-6 backdrop-blur-xl bg-white/70 border border-white/40 rounded-2xl p-5 shadow-xl"
+              >
+
+                <p className="text-sm text-gray-500 mb-1">
+                  Trusted by thousands
+                </p>
+
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  Fast & reliable grocery delivery
+                </h3>
+
+              </motion.div>
+
+            </div>
+
+          </motion.div>
+
         </div>
+
       </div>
     </section>
   );
