@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "../button";
 import Link from "next/link";
-import { ShoppingBag, Truck, ShieldCheck, Clock, Mail } from "lucide-react";
+import { ShoppingBag, Truck, ShieldCheck, Clock, Mail, Bot } from "lucide-react";
 import { motion } from "framer-motion";
 
 /* =========================
@@ -143,16 +143,13 @@ const Banner = () => {
                   Explore Ai Shop
                 </Button>
               </Link>
-
-              <a href="/#contact">
                 <Button
                   variant="outline"
                   className="px-6 py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2"
                 >
-                  <Mail className="w-5 h-5" />
+                  <Bot className="w-5 h-5" />
                   Talk to AI Assistant
                 </Button>
-              </a>
             </div>
 
             {/* =========================

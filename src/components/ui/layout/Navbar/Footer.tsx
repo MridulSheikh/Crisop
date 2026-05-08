@@ -30,11 +30,7 @@ const fakeSocialLink = [
 
 const navigationData = [
   { name: "Home", link: "/" },
-  { name: "Categories", link: "/categories" },
-  { name: "Products", link: "/products" },
-  { name: "Flash Sale", link: "/flash-sale" },
-  { name: "About us", link: "/about-us" },
-  { name: "Contact us", link: "/contact-us" },
+  { name: "Products", link: "/shop" },
 ];
 
 const paymentMethods = [
@@ -202,7 +198,7 @@ const Footer = () => {
             Quick Links
           </h1>
 
-          <ul className="grid grid-cols-2 gap-y-4 text-sm text-white/70">
+          <ul className="flex flex-col gap-y-4 text-sm text-white/70">
             {navigationData.map((dt, index) => (
               <motion.li
                 key={index}
