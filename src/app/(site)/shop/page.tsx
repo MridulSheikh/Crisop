@@ -1,11 +1,10 @@
 import ProductCard from "@/components/shared/card/ProductCard";
-import { Button } from "@/components/ui/button";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import LimitSelectClient from "@/components/ui/products/LimitClientComponent";
 import MobileFilter from "@/components/ui/products/MobileShopFilter";
+import PriceFilter from "@/components/ui/products/PriceFilter";
 import CategorySidebar from "@/components/ui/products/SelectCategorySidebar";
 import { TProduct } from "@/types/user";
-import { Menu } from "lucide-react";
 import { cookies } from "next/headers";
 import Image from "next/image";
 
@@ -17,16 +16,20 @@ const Products = async ({
     limit?: string;
     category?: string;
     searchTerm?:string;
+    min?: string;
+    max?:string;
   };
 }) => {
   const page = Number(searchParams.page) || 1;
   const limit = Number(searchParams.limit) || 12;
+  const minPrice = searchParams.min
+  const maxPrice = searchParams.max
   const category = searchParams.category;
   const searchTerm = searchParams.searchTerm;
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/product?page=${page}&limit=${limit}${
-    category ? `&category=${category}` : ""}${searchTerm ? `&searchTerm=${searchTerm}` : ''}`;
+    category ? `&category=${category}` : ""}${searchTerm ? `&searchTerm=${searchTerm}` : ''}${minPrice ? `&minPrice=${minPrice}`: ''}${maxPrice ? `&maxPrice=${maxPrice}`: ''}`;
   const res = await fetch(url, {
     cache: "no-store",
     headers: {
@@ -90,6 +93,7 @@ const Products = async ({
         <div className=" flex flex-col xl:flex-row gap-x-5 mt-[34px] w-full">
           <div className="hidden xl:block">
             <CategorySidebar />
+            <PriceFilter />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
             {products?.data?.map((product: TProduct) => (

@@ -118,7 +118,7 @@ const OurCategories = () => {
         transition={{ duration: 0.6 }}
         className="text-center mb-16"
       >
-        <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-gray-900">
+        <h1 className="text-4xl md:text-6xl xl:text-5xl 2xl:text-6xl font-semibold tracking-tight text-gray-900">
           Our Categories
         </h1>
 

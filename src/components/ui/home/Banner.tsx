@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import React from "react";
-import { Button } from "../button";
-import Link from "next/link";
-import { ShoppingBag, Truck, ShieldCheck, Clock, Mail, Bot } from "lucide-react";
+import { Truck, ShieldCheck, Clock } from "lucide-react";
 import { motion } from "framer-motion";
+import HeroButtons from "./HeroButtons";
 
 /* =========================
    DATA
@@ -79,7 +78,7 @@ const Banner = () => {
             </div>
 
             {/* Heading */}
-            <h1 className="text-4xl lg:text-6xl font-bold leading-[1.1] text-gray-900">
+            <h1 className="text-4xl 2xl:text-6xl font-bold leading-[1.1] text-gray-900">
               {/* ONE LINE */}
               <motion.div
                 custom={1}
@@ -135,27 +134,12 @@ const Banner = () => {
             </motion.p>
 
             {/* CTA BUTTONS */}
-            <div className="flex gap-4 justify-center md:justify-start pt-2">
-              {/* Primary Button */}
-              <Link href="/shop">
-                <Button className="bg-gradient-to-r from-[#106D42] to-emerald-500 hover:from-[#0c5132] hover:to-emerald-600 text-white px-6 py-6 text-base rounded-xl shadow-md hover:shadow-xl transition-all flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5" />
-                  Explore Ai Shop
-                </Button>
-              </Link>
-                <Button
-                  variant="outline"
-                  className="px-6 py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2"
-                >
-                  <Bot className="w-5 h-5" />
-                  Talk to AI Assistant
-                </Button>
-            </div>
+            <HeroButtons />
 
             {/* =========================
                 FEATURE CARDS
             ========================= */}
-            <div className="hidden sm:grid sm:grid-cols-3 gap-5 pt-10">
+            <div className="hidden 2xl:grid 2xl:grid-cols-3 gap-5 pt-10">
               {BotomCardData.map((item, i) => (
                 <motion.div
                   key={i}

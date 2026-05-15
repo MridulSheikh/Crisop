@@ -13,7 +13,6 @@ import {
   Settings,
   Menu,
   X,
-  Home,
   LogOut,
 } from 'lucide-react'
 import useAuth from '@/hooks/useAuth'
@@ -43,6 +42,7 @@ const Sidebar = () => {
       {/* TOP SECTION */}
       <div>
         {/* LOGO */}
+        <Link href={"/"}>
         <div className="relative mb-6 h-[60px] w-[120px]">
           <Image
             src="/img/logo.png"
@@ -52,14 +52,6 @@ const Sidebar = () => {
             className="object-contain"
           />
         </div>
-
-        {/* BACK TO HOME */}
-        <Link
-          href="/"
-          className="mb-4 flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-200"
-        >
-          <Home size={18} />
-          Back to Home
         </Link>
 
         {/* NAV LINKS */}

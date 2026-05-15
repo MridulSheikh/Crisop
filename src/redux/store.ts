@@ -3,6 +3,7 @@ import { baseApi } from "./api/baseApi";
 import authReducer from "./features/auth/authSlice";
 import cartReducer from "./features/cart/cartSlice";
 import wishlistReducer from "./features/wishlist/wishListSlice"
+import chatbotReducer from "./features/bot/chatbotSlice";
 
 import {
   persistStore,
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   [baseApi.reducerPath]: baseApi.reducer,
   auth: authReducer,
   cart: cartReducer,
-  wishlist: wishlistReducer
+  wishlist: wishlistReducer,
+  chatbot: chatbotReducer
 });
 
 // persisted reducer
