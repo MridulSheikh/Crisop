@@ -19,9 +19,11 @@ import useAuth from "@/hooks/useAuth";
 export function UserAvatar({
   className,
   userName,
+  image,
 }: {
   className: string;
   userName: string;
+  image?: string;
 }) {
   const router = useRouter();
   const { handleLogout, isLogoutLoading } = useAuth()
@@ -29,7 +31,7 @@ export function UserAvatar({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className={cn("cursor-pointer ", className)}>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={image || "/img/user_placeholder.png"} alt={userName} />
           <AvatarFallback>{userName}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -39,7 +41,7 @@ export function UserAvatar({
       >
         <div className=" pt-5 flex justify-center">
           <Avatar className={cn("cursor-pointer size-14 ")}>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={image || ""} alt={userName} />
             <AvatarFallback>{userName}</AvatarFallback>
           </Avatar>
         </div>

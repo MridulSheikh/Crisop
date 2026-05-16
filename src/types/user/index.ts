@@ -77,6 +77,26 @@ export type TCategoryQueryBuilder = {
   };
 };
 
+export type TBrand = {
+  _id: string;
+  name: string;
+  img?: TProductImage | string;
+  productsCount?: number;
+  isDeleted?: boolean;
+};
+
+export type TBrandQueryBuilder = {
+  data: {
+    meta: {
+      total: number;
+      page: number;
+      limit: number;
+      totalPages: number;
+    };
+    data: TBrand[];
+  };
+};
+
 export type TProductImage = {
   url: string;
   public_id: string;

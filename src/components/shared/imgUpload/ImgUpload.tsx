@@ -116,6 +116,7 @@ const ImgUpload = ({ value = [], onChange, max_file = 5 }: Props) => {
                 />
 
                 <Button
+                  type="button"
                   size="icon"
                   variant="destructive"
                   className="absolute top-1 right-1"

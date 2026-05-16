@@ -11,7 +11,9 @@ type TUser = {
   email: string;
   exp: number | null;
   name: string;
-  img: string;
+  image?: string;
+  img?: string;
+  authProvider?: "local" | "google" | "facebook";
   role: string;
 };
 

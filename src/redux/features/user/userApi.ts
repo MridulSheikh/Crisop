@@ -35,8 +35,29 @@ const userApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["users"]
         }),
+        updateMyProfile: builder.mutation({
+            query: (data) => ({
+                url: "/user/me",
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags: ["users"],
+        }),
+        changeMyPassword: builder.mutation({
+            query: (data) => ({
+                url: "/user/change-password",
+                method: "PATCH",
+                body: data,
+            }),
+        }),
     })
 })
 
 
-export const { useGetTeamMemberQuery, useAddTeamMemeberMutation, useChangeUserRoleMutation } = userApi
+export const {
+    useGetTeamMemberQuery,
+    useAddTeamMemeberMutation,
+    useChangeUserRoleMutation,
+    useUpdateMyProfileMutation,
+    useChangeMyPasswordMutation,
+} = userApi

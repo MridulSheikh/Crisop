@@ -351,6 +351,7 @@ const NavBar = () => {
                       <UserAvatar
                         className="inline-block size-9"
                         userName={user.name}
+                        image={user.image}
                       />
                     </motion.div>
                   ) : (
