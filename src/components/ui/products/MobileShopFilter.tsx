@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import CategorySidebar from "@/components/ui/products/SelectCategorySidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import PriceFilter from "./PriceFilter";
+import BrandFilter from "./BrandFilter";
 
 export default function MobileFilter() {
   const [open, setOpen] = useState(false);
@@ -39,6 +40,7 @@ export default function MobileFilter() {
             >
               <CategorySidebar className="border-0" />
               <PriceFilter className=" shadow-none mt-0" />
+              <BrandFilter />
             </motion.div>
           </div>
         )}

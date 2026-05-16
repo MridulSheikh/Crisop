@@ -84,7 +84,7 @@ const imageVariant = {
 
 const AIDeliverySection = () => {
   return (
-    <section className="relative py-28 overflow-hidden bg-[#f6f7f6] px-5 mt-10 md:mt-24">
+    <section className="relative py-10 lg:py-28 overflow-hidden bg-[#f6f7f6] md:px-5 mt-10 md:mt-24">
 
       {/* Background Glow */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-emerald-400/10 rounded-full blur-[120px]" />
@@ -103,14 +103,14 @@ const AIDeliverySection = () => {
 
           <motion.p
             variants={fadeUp}
-            className="text-sm font-medium tracking-[0.2em] text-emerald-700 uppercase"
+            className="text-xs md:text-sm font-medium tracking-[0.2em] text-emerald-700 uppercase"
           >
             Next Generation Delivery Platform
           </motion.p>
 
           <motion.h2
             variants={fadeUp}
-            className="text-4xl md:text-6xl font-semibold text-gray-900 leading-tight tracking-tight"
+            className="text-2xl md:text-6xl font-semibold text-gray-900 leading-tight tracking-tight"
           >
             AI-powered logistics for modern delivery systems
           </motion.h2>

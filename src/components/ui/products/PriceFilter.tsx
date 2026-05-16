@@ -65,7 +65,7 @@ export default function PriceFilter({
 
 
   return (
-    <div className={cn("w-full max-w-60 bg-white shadow-sm p-5 space-y-5 mt-2", className)}>
+    <div className={cn("w-full max-w-60 bg-white shadow-sm p-5 space-y-5", className)}>
 
       {/* Header */}
       <div className="flex items-center justify-between">

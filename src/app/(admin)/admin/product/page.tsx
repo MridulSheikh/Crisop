@@ -16,7 +16,7 @@ export default function ProductPage() {
   const searchParams = useSearchParams();
 
   const page = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit")) || 10;
+  const limit = Number(searchParams.get("limit")) || 15;
 
   const { data, isLoading, isError, error } = useGetAdminProductQuery({
     page,

@@ -10,7 +10,7 @@ import { toggleChatbot } from "@/redux/features/bot/chatbotSlice";
 export default function HeroButtons() {
     const dispatch = useDispatch();
   return (
-    <div className="flex gap-4 justify-center md:justify-start pt-2">
+    <div className="flex flex-col lg:flex-row items-center gap-4 justify-center md:justify-start pt-2">
       
       {/* Primary Button */}
       <Link href="/shop">
@@ -18,7 +18,7 @@ export default function HeroButtons() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.97 }}
         >
-          <Button className="bg-gradient-to-r from-[#106D42] to-emerald-500 hover:from-[#0c5132] hover:to-emerald-600 text-white px-6 py-6 text-base rounded-xl shadow-md hover:shadow-xl transition-all flex items-center gap-2 overflow-hidden relative">
+          <Button className="bg-gradient-to-r from-[#106D42] to-emerald-500 hover:from-[#0c5132] hover:to-emerald-600 text-white py-3 w-full lg:w-auto lg:px-6 lg:py-6 text-base rounded-xl shadow-md hover:shadow-xl transition-all flex items-center gap-2 overflow-hidden relative">
             
             {/* icon animation */}
             <motion.span
@@ -42,7 +42,7 @@ export default function HeroButtons() {
         <Button
          onClick={() => dispatch(toggleChatbot())}
           variant="outline"
-          className="px-6 py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2 overflow-hidden relative"
+          className="py-3 w-full lg:w-auto lg:px-6 lg:py-6 text-base rounded-xl border-2 hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2 overflow-hidden relative"
         >
           
           {/* Bot icon animation */}

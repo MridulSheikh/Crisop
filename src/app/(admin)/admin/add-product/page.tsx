@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { useCreateProductMutation } from "@/redux/features/product/productApi";
 import AddStock from "@/components/ui/admin/stock/AddStock";
 import AddCategory from "@/components/ui/admin/category/AddCategory";
+import BrandSelect from "./BrandSelect";
+import AddBrand from "@/components/ui/admin/brand/AddBrand";
 
 type FormValues = {
   name: string;
@@ -20,6 +22,7 @@ type FormValues = {
   discountPrice: number;
   category: string;
   stock: string;
+  brand: string;
   tags: string[];
   images: File[];
   isFeatured: boolean;
@@ -45,6 +48,7 @@ const AddProductPage = () => {
       discountPrice: 0,
       category: "",
       stock: "",
+      brand: "",
       tags: [],
       images: [],
       isFeatured: false,
@@ -69,6 +73,7 @@ const AddProductPage = () => {
     formData.append("price", String(data.price));
     formData.append("discountPrice", String(data.discountPrice));
     formData.append("category", data.category);
+    formData.append("brand", data.brand);
     formData.append("stock", data.stock);
 
     // tags array
@@ -211,6 +216,15 @@ const AddProductPage = () => {
             )}
           </div>
           <AddStock />
+
+          {/* brand */}
+          <Controller
+            name="brand"
+            control={control}
+            rules={{ required: "Select Brand" }}
+            render={({ field }) => <BrandSelect {...field} />}
+          />
+          <AddBrand />
 
           {/* Tags */}
           <div>

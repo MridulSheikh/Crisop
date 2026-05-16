@@ -17,6 +17,7 @@ import ProductTagInput from "../../add-product/ProductTagInput";
 import Image from "next/image";
 import { Undo } from "lucide-react";
 import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
+import BrandSelect from "../../add-product/BrandSelect";
 
 const MAX_TOTAL_IMAGES = 5;
 
@@ -27,6 +28,7 @@ type FormValues = {
   discountPrice: number;
   category: string;
   stock: string;
+  brand: string;
   tags: string[];
   newImages: File[];
   isFeatured: boolean;
@@ -76,6 +78,7 @@ const EditProductPage = () => {
         discountPrice: product.discountPrice,
         category: product.category?._id || product.category,
         stock: product.stock?._id || product.stock,
+        brand: product.brand?._id || product.Brand,
         tags: product.tags,
         isFeatured: product.isFeatured,
         isPublished: product.isPublished,
@@ -99,6 +102,7 @@ const EditProductPage = () => {
     formData.append("price", String(data.price));
     formData.append("discountPrice", String(data.discountPrice));
     formData.append("category", data.category);
+    formData.append("brand", data.brand);
     formData.append("stock", data.stock);
 
     data.tags.forEach((tag) => {
@@ -232,6 +236,12 @@ const EditProductPage = () => {
             name="stock"
             control={control}
             render={({ field }) => <StockSelect {...field} />}
+          />
+
+          <Controller
+          name="brand"
+          control={control}
+          render={({ field }) => <BrandSelect {...field} />}
           />
           <div>
             <label className="block mb-1 font-medium">Tags</label>

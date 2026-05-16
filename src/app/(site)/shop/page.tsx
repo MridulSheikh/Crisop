@@ -1,5 +1,6 @@
 import ProductCard from "@/components/shared/card/ProductCard";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import BrandFilter from "@/components/ui/products/BrandFilter";
 import LimitSelectClient from "@/components/ui/products/LimitClientComponent";
 import MobileFilter from "@/components/ui/products/MobileShopFilter";
 import PriceFilter from "@/components/ui/products/PriceFilter";
@@ -15,21 +16,24 @@ const Products = async ({
     page?: string;
     limit?: string;
     category?: string;
-    searchTerm?:string;
+    searchTerm?: string;
     min?: string;
-    max?:string;
+    max?: string;
+    brand?:string;
   };
 }) => {
   const page = Number(searchParams.page) || 1;
   const limit = Number(searchParams.limit) || 12;
-  const minPrice = searchParams.min
-  const maxPrice = searchParams.max
+  const minPrice = searchParams.min;
+  const maxPrice = searchParams.max;
   const category = searchParams.category;
+  const brand = searchParams.brand;
   const searchTerm = searchParams.searchTerm;
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/product?page=${page}&limit=${limit}${
-    category ? `&category=${category}` : ""}${searchTerm ? `&searchTerm=${searchTerm}` : ''}${minPrice ? `&minPrice=${minPrice}`: ''}${maxPrice ? `&maxPrice=${maxPrice}`: ''}`;
+    category ? `&category=${category}` : ""
+  }${searchTerm ? `&searchTerm=${searchTerm}` : ""}${minPrice ? `&minPrice=${minPrice}` : ""}${maxPrice ? `&maxPrice=${maxPrice}` : ""}${brand?`&brand=${brand}` : ''}`;
   const res = await fetch(url, {
     cache: "no-store",
     headers: {
@@ -69,16 +73,6 @@ const Products = async ({
             Discover premium quality groceries, fresh fish, meat and daily
             essentials delivered straight to your door.
           </p>
-
-          {/* <div className="flex items-center gap-4 pt-2">
-            <button className="bg-green-600 hover:bg-green-700 transition px-5 py-2 rounded-md text-sm font-medium">
-              Shop Now
-            </button>
-
-            <button className="border border-white/40 hover:border-white transition px-5 py-2 rounded-md text-sm">
-              View Offers
-            </button>
-          </div> */}
         </div>
       </div>
       <div className="max-w-screen-2xl px-5 mx-auto pt-10">
@@ -94,11 +88,14 @@ const Products = async ({
           <div className="hidden xl:block">
             <CategorySidebar />
             <PriceFilter />
+            <BrandFilter />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-            {products?.data?.map((product: TProduct) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
+          <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+              {products?.data?.map((product: TProduct) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
           </div>
         </div>
         {/* 🔥 Product Grid */}

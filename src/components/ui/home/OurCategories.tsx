@@ -122,7 +122,7 @@ const OurCategories = () => {
           Our Categories
         </h1>
 
-        <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
+        <p className="mt-4 text-gray-500 lg:max-w-2xl mx-auto text-sm lg:text-lg leading-relaxed">
           Fresh groceries, meat, fish and fruits delivered with premium quality.
           Choose your favorite category and start shopping.
         </p>

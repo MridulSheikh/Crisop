@@ -5,6 +5,12 @@ export type TUser = {
   image: string;
   role: "admin" | "manager" | "user" | "super";
 };
+
+export type TImage = {
+  url: string;
+  public_id: string;
+};
+
 export type TUserBuilderQueries = {
   data: {
     meta: {
@@ -80,7 +86,7 @@ export type TCategoryQueryBuilder = {
 export type TBrand = {
   _id: string;
   name: string;
-  img?: TProductImage | string;
+  img?: TImage;
   productsCount?: number;
   isDeleted?: boolean;
 };
@@ -100,7 +106,7 @@ export type TBrandQueryBuilder = {
 export type TProductImage = {
   url: string;
   public_id: string;
-}
+};
 
 export type TProduct = {
   _id: string;
@@ -113,16 +119,17 @@ export type TProduct = {
   tags?: string[];
   images: TProductImage[];
   isFeatured?: boolean;
+  brand?: TBrand | string;
   isDeleted: boolean;
   isPublished: boolean;
 };
 
 export type TProductBuilderQueries = {
-    meta: {
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
-    };
-    data: TProduct[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+  data: TProduct[];
 };

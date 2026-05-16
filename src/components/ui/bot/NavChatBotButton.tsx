@@ -10,9 +10,7 @@ import { Bot } from "lucide-react";
 export default function ChatbotButton() {
   const dispatch = useDispatch();
 
-  const isOpen = useSelector(
-    (state: RootState) => state.chatbot.isOpen
-  );
+  const isOpen = useSelector((state: RootState) => state.chatbot.isOpen);
 
   return (
     <AnimatePresence>
@@ -33,14 +31,16 @@ export default function ChatbotButton() {
           }}
           onClick={() => dispatch(toggleChatbot())}
           className={cn(
-            "fixed bottom-5 right-5 z-50",
+            "fixed right-5 z-50",
+            "bottom-[6.5rem]",
+            "md:bottom-5",
             "flex items-center gap-2",
-            "px-5 py-3 rounded-full",
+            "px-3 md:px-5 py-3 rounded-full",
             "bg-gradient-to-r from-emerald-500 via-green-500 to-lime-500",
             "text-white font-medium",
             "shadow-[0_8px_30px_rgba(16,185,129,0.35)]",
             "border border-white/20 backdrop-blur-xl",
-            "overflow-hidden"
+            "overflow-hidden",
           )}
         >
           {/* Glow Effect */}
@@ -76,7 +76,7 @@ export default function ChatbotButton() {
           <motion.span
             initial={{ opacity: 0.8 }}
             whileHover={{ opacity: 1 }}
-            className="relative z-10 text-sm tracking-wide"
+            className="relative z-10 text-sm tracking-wide hidden md:block"
           >
             Ask Crisop AI
           </motion.span>

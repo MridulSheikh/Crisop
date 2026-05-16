@@ -1,6 +1,6 @@
 "use client";
 
-import { TProduct } from "@/types/user";
+import { TBrand, TProduct } from "@/types/user";
 import { getDiscountPercentage } from "@/utils/getDiscountPercentage";
 import { Eye, Heart, ShoppingCart } from "lucide-react";
 import Image from "next/image";
@@ -12,12 +12,14 @@ import { handleAddToCartUtil } from "@/utils/cart/handleAddToCart";
 import { toggleWishlist } from "@/redux/features/wishlist/wishListSlice";
 import { toast } from "react-toastify";
 
-
 const ProductCard = ({ product }: { product: TProduct }) => {
   const dispatch = useAppDispatch();
 
   // 🛒 Cart
   const cartItems = useAppSelector((state) => state.cart.items);
+
+  // brand
+  const brand = product.brand as TBrand;
 
   // ❤️ Wishlist
   const wishlistItems = useAppSelector((state) => state.wishlist.products);
@@ -63,6 +65,19 @@ const ProductCard = ({ product }: { product: TProduct }) => {
           </div>
         )}
 
+        {brand && (
+          <div className=" inline absolute top-0 right-1  text-sm z-10">
+            <div className="relative w-10 h-10 rounded-md overflow-hidden">
+              <Image
+                src={brand.img?.url || "/placeholder.png"}
+                alt={brand.name}
+                fill
+                className=" object-contain"
+              />
+            </div>
+          </div>
+        )}
+
         <Link href={`/shop/${product?._id}`}>
           <div className=" h-28 md:h-60 lg:h-56 w-full relative overflow-hidden">
             <Image
@@ -92,7 +107,6 @@ const ProductCard = ({ product }: { product: TProduct }) => {
 
         {/* ACTION BUTTONS */}
         <div className="flex justify-center space-x-3 mt-5 xl:opacity-0 xl:translate-y-3 xl:group-hover:opacity-100 xl:group-hover:translate-y-0 transition-all duration-300 ease-in-out">
-          
           {/* ❤️ Wishlist */}
           <button
             onClick={handleToggleWishlist}

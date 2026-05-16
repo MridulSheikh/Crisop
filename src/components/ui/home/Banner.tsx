@@ -71,21 +71,21 @@ const Banner = () => {
           {/* =========================
               LEFT CONTENT
           ========================= */}
-          <div className="flex-1 text-center md:text-left space-y-8">
+          <div className="flex-1 text-center md:text-left space-y-6 md:space-y-8 w-full">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border text-sm text-green-700 font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border text-xs sm:text-sm text-green-700 font-medium">
               🥬 Fresh Grocery Delivery
             </div>
 
             {/* Heading */}
-            <h1 className="text-4xl 2xl:text-6xl font-bold leading-[1.1] text-gray-900">
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-[1.1] text-gray-900">
               {/* ONE LINE */}
               <motion.div
                 custom={1}
                 variants={textVariant}
                 initial="hidden"
                 animate="visible"
-                className="flex flex-wrap items-end gap-3"
+                className="flex flex-wrap md:flex-nowrap items-end gap-x-3 gap-y-2 justify-center md:justify-start"
               >
                 <span className="block">Fresh & Organic</span>
 
@@ -93,7 +93,7 @@ const Banner = () => {
                   Grocery
                   {/* ✨ marker style underline */}
                   <svg
-                    className="absolute left-0 -bottom-3 w-full h-5"
+                    className="absolute left-0 -bottom-2 w-full h-4 md:h-5"
                     viewBox="0 0 200 20"
                     fill="none"
                     preserveAspectRatio="none"
@@ -114,18 +114,19 @@ const Banner = () => {
                 variants={textVariant}
                 initial="hidden"
                 animate="visible"
-                className="block"
+                className="block mt-2"
               >
                 at Your Door
               </motion.span>
             </h1>
 
+            {/* Description */}
             <motion.p
               custom={3}
               variants={textVariant}
               initial="hidden"
               animate="visible"
-              className="text-gray-600 text-base lg:text-lg mx-auto md:mx-0 leading-relaxed"
+              className="text-gray-600 text-sm sm:text-base lg:text-lg mx-auto md:mx-0 leading-relaxed max-w-xl"
             >
               Get fresh vegetables, fruits, dairy, and daily essentials
               delivered straight to your doorstep within hours. We ensure
@@ -134,12 +135,14 @@ const Banner = () => {
             </motion.p>
 
             {/* CTA BUTTONS */}
-            <HeroButtons />
+            <div className="flex justify-center md:justify-start">
+              <HeroButtons />
+            </div>
 
             {/* =========================
-                FEATURE CARDS
-            ========================= */}
-            <div className="hidden 2xl:grid 2xl:grid-cols-3 gap-5 pt-10">
+      FEATURE CARDS
+  ========================= */}
+            <div className="hidden xl:grid xl:grid-cols-3 gap-5 pt-8">
               {BotomCardData.map((item, i) => (
                 <motion.div
                   key={i}
@@ -150,7 +153,9 @@ const Banner = () => {
                   className="bg-white rounded-xl p-4 shadow-sm border hover:shadow-md transition"
                 >
                   <item.icon className="text-green-600 mb-2" />
+
                   <h3 className="font-semibold text-gray-900">{item.title}</h3>
+
                   <p className="text-sm text-gray-500">{item.desc}</p>
                 </motion.div>
               ))}
