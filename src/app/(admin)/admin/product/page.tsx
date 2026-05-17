@@ -10,10 +10,14 @@ import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
 import { useGetAdminProductQuery } from "@/redux/features/product/productApi";
 import ErrorUi from "@/components/shared/error/ErrorUi";
+import { hasPermission } from "@/helper/auth";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 export default function ProductPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchParams = useSearchParams();
+  const user = useAppSelector(useCurrentUser);
 
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 15;
@@ -27,18 +31,21 @@ export default function ProductPage() {
   const products = data?.data;
   const meta = data?.meta;
 
+  if (
+    !hasPermission(user?.role as "admin" | "manager" | "super", "view:products")
+  ) {
+    return null;
+  }
+
   return (
-      <div className="p-4 sm:p-6 min-h-screen">
-      
+    <div className="p-4 sm:p-6 min-h-screen">
       {/* HEADER */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
-        
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Product Management
         </h1>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
-
           {/* Limit Select */}
           <div className="w-full">
             <LimitSelect />
@@ -54,23 +61,24 @@ export default function ProductPage() {
           </div>
 
           {/* Add Button */}
-          <Link href="/admin/add-product" className="w-full">
-            <Button className="w-full ">
-              Add Product
-            </Button>
-          </Link>
 
+          {hasPermission(
+            user?.role as "admin" | "manager" | "super",
+            "create:products",
+          ) && (
+            <Link href="/admin/add-product" className="w-full">
+              <Button className="w-full ">Add Product</Button>
+            </Link>
+          )}
         </div>
       </div>
 
       {/* TABLE SECTION */}
       <div className="w-full overflow-x-auto rounded-md border bg-white shadow-sm">
-        
         {isError ? (
           <ErrorUi error={error} />
         ) : (
           <table className="min-w-[800px] w-full text-sm text-left">
-            
             <thead className="bg-black text-white">
               <tr>
                 <th className="p-3">Image</th>
@@ -85,18 +93,12 @@ export default function ProductPage() {
 
             <tbody>
               {products?.map((product: any) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                />
+                <ProductCard key={product._id} product={product} />
               ))}
 
               {!isLoading && products?.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={7}
-                    className="p-6 text-center text-gray-500"
-                  >
+                  <td colSpan={7} className="p-6 text-center text-gray-500">
                     No products found.
                   </td>
                 </tr>

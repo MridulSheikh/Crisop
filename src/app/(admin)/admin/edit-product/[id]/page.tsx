@@ -18,6 +18,9 @@ import Image from "next/image";
 import { Undo } from "lucide-react";
 import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
 import BrandSelect from "../../add-product/BrandSelect";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { hasPermission } from "@/helper/auth";
 
 const MAX_TOTAL_IMAGES = 5;
 
@@ -65,6 +68,7 @@ const EditProductPage = () => {
 
   const price = watch("price");
   const totalImages = keepImages?.length + (watch("newImages")?.length || 0);
+  const user = useAppSelector(useCurrentUser);
 
   // 🟢 Prefill data
   useEffect(() => {
@@ -170,6 +174,15 @@ const EditProductPage = () => {
     });
   };
 
+  if (
+    !hasPermission(
+      user?.role as "admin" | "manager" | "super",
+      "update:products",
+    )
+  ) {
+    return null;
+  }
+
   if (isFetching)
     return (
       <div className=" w-full h-screen flex justify-center items-center">
@@ -239,9 +252,9 @@ const EditProductPage = () => {
           />
 
           <Controller
-          name="brand"
-          control={control}
-          render={({ field }) => <BrandSelect {...field} />}
+            name="brand"
+            control={control}
+            render={({ field }) => <BrandSelect {...field} />}
           />
           <div>
             <label className="block mb-1 font-medium">Tags</label>

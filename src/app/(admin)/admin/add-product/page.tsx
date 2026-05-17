@@ -14,6 +14,9 @@ import AddStock from "@/components/ui/admin/stock/AddStock";
 import AddCategory from "@/components/ui/admin/category/AddCategory";
 import BrandSelect from "./BrandSelect";
 import AddBrand from "@/components/ui/admin/brand/AddBrand";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { hasPermission } from "@/helper/auth";
 
 type FormValues = {
   name: string;
@@ -32,6 +35,7 @@ type FormValues = {
 const AddProductPage = () => {
   const isDiscountTouched = useRef(false);
   const [createProduct, { isLoading }] = useCreateProductMutation();
+   const user = useAppSelector(useCurrentUser);
   const {
     register,
     handleSubmit,
@@ -106,6 +110,15 @@ const AddProductPage = () => {
 
     reset();
   };
+
+    if (
+      !hasPermission(
+        user?.role as "admin" | "manager" | "super",
+        "create:products",
+      )
+    ) {
+      return null;
+    }
 
   return (
     <div className="p-6 max-w-4xl xl:max-w-full mx-auto">

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useGetSingleStockQuery, useGetStockQuery } from "@/redux/features/warehouse/stockApi";
 import { TStock } from "@/types/user";
 import SelectCommand from "@/components/shared/command/SelectCommand";
+import UpdateStock from "@/components/ui/admin/stock/UpdateStockModal";
 
 type Props = {
   value: string;
@@ -44,13 +45,17 @@ const StockSelect = ({ value, onChange }: Props) => {
         </div>
       )}
       renderSelectValue={(s) => (
-        <div className="flex flex-col">
-          <span className="font-medium">
+        <div className=" flex justify-between items-center w-full">
+          <div className="flex flex-col">
+              <span className="font-medium">
             {s.productName} - {s.warehouse?.name}
           </span>
           <span className="text-sm text-muted-foreground">
             Qty: {s.quantity} {s.unit}
           </span>
+            </div>       
+        
+             <UpdateStock stock={s} />
         </div>
       )}
     />
