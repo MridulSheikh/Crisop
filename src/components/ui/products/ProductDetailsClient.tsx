@@ -17,7 +17,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { VscHeartFilled } from "react-icons/vsc";
-import { TProduct } from "@/types/user";
+import { TBrand, TProduct } from "@/types/user";
 import DOMPurify from "dompurify";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -30,8 +30,16 @@ export default function ProductDetailsClient({
 }: {
   product: TProduct;
 }) {
-  const { name, description, category, images, stock, price, discountPrice } =
-    product;
+  const {
+    name,
+    description,
+    category,
+    images,
+    stock,
+    price,
+    discountPrice,
+    brand,
+  } = product;
 
   const dispatch = useAppDispatch();
 
@@ -108,7 +116,13 @@ export default function ProductDetailsClient({
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground lg:mt-20">
+    <div className="min-h-screen text-foreground lg:pt-20 relative">
+      {/* background gradient layer */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-green-50 via-white to-emerald-50" />
+
+      {/* soft glow blobs */}
+      <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-green-200/30 blur-3xl rounded-full -z-10" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-emerald-200/30 blur-3xl rounded-full -z-10" />
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* IMAGE */}
@@ -137,9 +151,7 @@ export default function ProductDetailsClient({
                   key={index}
                   onClick={() => api?.scrollTo(index)}
                   className={`h-14 w-14 rounded-md border overflow-hidden ${
-                    current === index
-                      ? "border-green-600"
-                      : "border-border"
+                    current === index ? "border-green-600" : "border-border"
                   }`}
                 >
                   <Image
@@ -177,6 +189,24 @@ export default function ProductDetailsClient({
               </button>
             </div>
 
+            {/* BRAND */}
+            {brand && (
+              <div className="flex items-center gap-2">
+                <div className="h-10 w-10 overflow-hidden border relative">
+                  <Image
+                    src={(brand as TBrand).img?.url || " "}
+                    alt={(brand as TBrand).name}
+                    fill
+                    className="object-contain object-center"
+                  />
+                </div>
+
+                <span className="text-sm text-muted-foreground">
+                  {(brand as TBrand).name}
+                </span>
+              </div>
+            )}
+
             {/* price */}
             <div>
               {discountPrice && discountPrice < price ? (
@@ -189,9 +219,7 @@ export default function ProductDetailsClient({
                   </span>
                 </div>
               ) : (
-                <span className="text-2xl font-bold">
-                  ${price.toFixed(2)}
-                </span>
+                <span className="text-2xl font-bold">${price.toFixed(2)}</span>
               )}
 
               <span className="text-sm text-muted-foreground ml-2">
@@ -206,9 +234,7 @@ export default function ProductDetailsClient({
                   In Stock ({stock.quantity})
                 </span>
               ) : (
-                <span className="text-red-500">
-                  Out of Stock
-                </span>
+                <span className="text-red-500">Out of Stock</span>
               )}
             </div>
 
@@ -222,11 +248,7 @@ export default function ProductDetailsClient({
                 >
                   -
                 </button>
-                <input
-                  value={quantity}
-                  readOnly
-                  className="w-10 text-center"
-                />
+                <input value={quantity} readOnly className="w-10 text-center" />
                 <button
                   onClick={increment}
                   disabled={quantity >= stock.quantity}
@@ -243,10 +265,7 @@ export default function ProductDetailsClient({
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
-                    <RefreshCw
-                      size={18}
-                      className="animate-spin"
-                    />
+                    <RefreshCw size={18} className="animate-spin" />
                     Adding...
                   </span>
                 ) : (
@@ -275,15 +294,11 @@ export default function ProductDetailsClient({
 
         {/* description */}
         <div className="mt-16">
-          <h2 className="text-xl font-semibold mb-4">
-            Product Details
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Product Details</h2>
 
           <div
             className="prose prose-sm max-w-none text-muted-foreground"
-            dangerouslySetInnerHTML={createMarkup(
-              description as string
-            )}
+            dangerouslySetInnerHTML={createMarkup(description as string)}
           />
         </div>
       </div>

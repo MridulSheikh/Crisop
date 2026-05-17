@@ -42,7 +42,7 @@ export default function UpdateStock({ stock }: UpdateStockProps) {
   const defaultValue = {
     productName: stock.productName,
     quantity: stock.quantity,
-    warehouse: stock.warehouse._id,
+    warehouse:stock.warehouse._id,
     unit: stock.unit
   }
 

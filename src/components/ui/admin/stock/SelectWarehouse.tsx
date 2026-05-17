@@ -25,7 +25,7 @@ type Props = {
 export function SelectWarehouse({ value, onChange }: Props) {
   const [searchTerm, setSearchTerm] = useState("");
   const { data, isLoading, error, isError } = useGetWarehouseQuery(
-    { search: searchTerm },
+    { search: searchTerm, limit:100 },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
@@ -33,6 +33,13 @@ export function SelectWarehouse({ value, onChange }: Props) {
   );
 
   const warehouses = data?.data;
+  
+  console.log(warehouses)
+  console.log(value)
+
+  const selectedData = warehouses?.data?.find((wh) => wh._id === value)
+
+  console.log(selectedData)
 
   return (
     <div>

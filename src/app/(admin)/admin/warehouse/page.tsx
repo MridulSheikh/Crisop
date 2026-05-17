@@ -24,7 +24,7 @@ export default function WarehousePage() {
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    }
+    },
   );
 
   const warehouses = data?.data?.data;
@@ -32,19 +32,18 @@ export default function WarehousePage() {
 
   return (
     <div className="p-4 sm:p-6 min-h-screen">
-
       {/* HEADER */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Warehouses
         </h1>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          <div className="flex-shrink-0">
+            <LimitSelect />
+          </div>
 
-          <LimitSelect />
-
-          <div className="w-full sm:w-[260px]">
+          <div className="w-full sm:w-[260px] flex-shrink-0">
             <SearchInput
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -52,18 +51,18 @@ export default function WarehousePage() {
             />
           </div>
 
-          <AddWarehouse />
+          <div className="flex-shrink-0">
+            <AddWarehouse />
+          </div>
         </div>
       </div>
 
       {/* TABLE */}
       <div className="w-full overflow-x-auto rounded-lg border bg-white shadow-sm">
-
         {isError ? (
           <ErrorUi error={error} />
         ) : (
           <table className="min-w-[700px] w-full text-sm text-left">
-
             <thead className="bg-black text-white">
               <tr>
                 <th className="p-3">Name</th>
@@ -79,17 +78,11 @@ export default function WarehousePage() {
                   key={wh._id}
                   className="border-b hover:bg-gray-50 transition"
                 >
-                  <td className="p-3 font-medium text-gray-800">
-                    {wh.name}
-                  </td>
+                  <td className="p-3 font-medium text-gray-800">{wh.name}</td>
 
-                  <td className="p-3 text-gray-600">
-                    {wh.location}
-                  </td>
+                  <td className="p-3 text-gray-600">{wh.location}</td>
 
-                  <td className="p-3 text-gray-600">
-                    {wh.capacity}
-                  </td>
+                  <td className="p-3 text-gray-600">{wh.capacity}</td>
 
                   {/* ACTIONS FIXED */}
                   <td className="p-3">
@@ -109,7 +102,6 @@ export default function WarehousePage() {
                 </tr>
               )}
             </tbody>
-
           </table>
         )}
       </div>
@@ -131,7 +123,6 @@ export default function WarehousePage() {
           />
         </div>
       )}
-
     </div>
   );
 }

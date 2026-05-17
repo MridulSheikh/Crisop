@@ -25,7 +25,7 @@ const StockPage = () => {
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    }
+    },
   );
 
   const stock = data?.data?.data;
@@ -33,21 +33,18 @@ const StockPage = () => {
 
   return (
     <div className="p-4 sm:p-6 min-h-screen">
-
       {/* HEADER */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Stock Management
         </h1>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
-
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           <div className="w-full sm:w-auto">
             <LimitSelect />
           </div>
 
-          <div className="w-full sm:w-[260px]">
+          <div className="w-full sm:w-[260px] flex-shrink-0">
             <SearchInput
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -55,18 +52,18 @@ const StockPage = () => {
             />
           </div>
 
-          <AddStock />
+          <div className="flex-shrink-0">
+            <AddStock />
+          </div>
         </div>
       </div>
 
       {/* TABLE */}
       <div className="w-full overflow-x-auto rounded-lg border bg-white shadow-sm">
-
         {isError ? (
           <ErrorUi error={error} />
         ) : (
           <table className="min-w-[800px] w-full text-sm text-left">
-
             <thead className="bg-black text-white">
               <tr>
                 <th className="p-3">Product</th>
@@ -87,9 +84,7 @@ const StockPage = () => {
                     {item.productName}
                   </td>
 
-                  <td className="p-3 text-gray-600">
-                    {item.sku}
-                  </td>
+                  <td className="p-3 text-gray-600">{item.sku}</td>
 
                   <td className="p-3 text-gray-600">
                     <span
@@ -102,9 +97,7 @@ const StockPage = () => {
                     {item.unit}
                   </td>
 
-                  <td className="p-3 text-gray-600">
-                    {item.warehouse?.name}
-                  </td>
+                  <td className="p-3 text-gray-600">{item.warehouse?.name}</td>
 
                   {/* FIXED ACTIONS COLUMN */}
                   <td className="p-3">
@@ -124,10 +117,8 @@ const StockPage = () => {
                 </tr>
               )}
             </tbody>
-
           </table>
         )}
-
       </div>
 
       {/* LOADING */}
@@ -147,7 +138,6 @@ const StockPage = () => {
           />
         </div>
       )}
-
     </div>
   );
 };

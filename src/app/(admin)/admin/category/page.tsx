@@ -25,7 +25,7 @@ const CategoryPage = () => {
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    }
+    },
   );
 
   const categories = data?.data?.data;
@@ -34,21 +34,30 @@ const CategoryPage = () => {
   return (
     <div className="p-6 min-h-screen">
       {/* Header */}
-      <div className="lg:flex lg:items-center justify-between mb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-semibold text-gray-800">
           Category Management
         </h1>
 
-        <div className="flex flex-col lg:flex-row gap-2 mt-5 lg:mt-0 lg:gap-4 lg:items-center">
-          <LimitSelect />
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          {/* LIMIT */}
+          <div className="flex-shrink-0">
+            <LimitSelect />
+          </div>
 
-          <SearchInput
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="🔍 Search Category by Name"
-          />
+          {/* SEARCH */}
+          <div className="w-full sm:w-[260px] flex-shrink-0">
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="🔍 Search Category by Name"
+            />
+          </div>
 
-          <AddCategory />
+          {/* ADD CATEGORY */}
+          <div className="flex-shrink-0">
+            <AddCategory />
+          </div>
         </div>
       </div>
 
@@ -70,7 +79,7 @@ const CategoryPage = () => {
             </thead>
 
             <tbody>
-              {categories?.map((category : TCategory) => (
+              {categories?.map((category: TCategory) => (
                 <tr
                   key={category._id}
                   className="hover:bg-gray-50 transition duration-150 border-b"
@@ -79,16 +88,14 @@ const CategoryPage = () => {
                     {category.name}
                   </td>
 
-                  <td className="p-3 text-gray-600">
-                    {category.description}
-                  </td>
+                  <td className="p-3 text-gray-600">{category.description}</td>
 
                   <td className="p-3 text-gray-600">
                     {category.productsCount}
                   </td>
 
                   <td className="flex justify-end">
-                    <EditCategoryModal category = {category} />
+                    <EditCategoryModal category={category} />
                     <DeleteCategoryAlert categoryId={category._id} />
                   </td>
                 </tr>

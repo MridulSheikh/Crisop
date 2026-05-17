@@ -24,7 +24,7 @@ const LimitSelect = () => {
   };
   return (
     <Select value={String(limit)} onValueChange={handleLimitChange}>
-      <SelectTrigger className="w-full max-w-48">
+      <SelectTrigger className="max-w-48">
         <SelectValue placeholder="Select Item Per Page" />
       </SelectTrigger>
       <SelectContent>

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useGetBrandsQuery } from "@/redux/features/brand/brandApi";
 import { TBrand } from "@/types/user";
 
-const BrandFilter = ({className} : {className?:string}) => {
+const BrandFilter = ({ className }: { className?: string }) => {
   const { data, isLoading } = useGetBrandsQuery({ limit: 100 });
   const brand = data?.data?.data || [];
 
@@ -27,7 +27,6 @@ const BrandFilter = ({className} : {className?:string}) => {
 
     const params = new URLSearchParams(searchParams.toString());
 
-
     if (updated.length) {
       params.set("brand", updated.join(","));
     } else {
@@ -39,7 +38,7 @@ const BrandFilter = ({className} : {className?:string}) => {
   };
 
   return (
-    <div className={cn("w-60 border-r p-4 bg-background rounded-m", className)}>
+    <div className={cn("w-60 p-4 bg-background rounded-m", className)}>
       <h2 className="font-semibold mb-4">Brand</h2>
 
       {isLoading ? (
@@ -49,13 +48,7 @@ const BrandFilter = ({className} : {className?:string}) => {
           {brand.map((br: TBrand) => (
             <label
               key={br._id}
-              className="
-    flex items-center gap-2 cursor-pointer
-    px-2 py-1 rounded-md
-    transition-all duration-200 ease-in-out
-    hover:bg-muted/60
-    hover:pl-3
-  "
+              className="flex items-center gap-2 cursor-pointer px-2 py-1 rounded-md transition-all duration-200 ease-in-out  hover:bg-muted/60 hover:pl-3"
             >
               <Checkbox
                 checked={selectedBrand.includes(br._id)}

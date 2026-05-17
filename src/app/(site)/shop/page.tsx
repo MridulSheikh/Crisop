@@ -8,6 +8,7 @@ import CategorySidebar from "@/components/ui/products/SelectCategorySidebar";
 import { TProduct } from "@/types/user";
 import { cookies } from "next/headers";
 import Image from "next/image";
+import Link from "next/link";
 
 const Products = async ({
   searchParams,
@@ -19,7 +20,7 @@ const Products = async ({
     searchTerm?: string;
     min?: string;
     max?: string;
-    brand?:string;
+    brand?: string;
   };
 }) => {
   const page = Number(searchParams.page) || 1;
@@ -33,7 +34,7 @@ const Products = async ({
   const token = cookieStore.get("token")?.value;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/product?page=${page}&limit=${limit}${
     category ? `&category=${category}` : ""
-  }${searchTerm ? `&searchTerm=${searchTerm}` : ""}${minPrice ? `&minPrice=${minPrice}` : ""}${maxPrice ? `&maxPrice=${maxPrice}` : ""}${brand?`&brand=${brand}` : ''}`;
+  }${searchTerm ? `&searchTerm=${searchTerm}` : ""}${minPrice ? `&minPrice=${minPrice}` : ""}${maxPrice ? `&maxPrice=${maxPrice}` : ""}${brand ? `&brand=${brand}` : ""}`;
   const res = await fetch(url, {
     cache: "no-store",
     headers: {
@@ -85,27 +86,60 @@ const Products = async ({
           </div>
         </div>
         <div className=" flex flex-col xl:flex-row gap-x-5 mt-[34px] w-full">
-          <div className="hidden xl:block">
+          <div className="hidden shadow-sm xl:block">
             <CategorySidebar />
             <PriceFilter />
             <BrandFilter />
           </div>
-          <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-              {products?.data?.map((product: TProduct) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* 🔥 Product Grid */}
-        <div className="mt-10">
-          <div className="mt-5">
-            <PaginationWithLinks
-              page={meta?.page}
-              pageSize={meta?.limit}
-              totalCount={meta?.total}
-            />
+          <div className="w-full">
+            {products?.data?.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+                  {products.data.map((product: TProduct) => (
+                    <ProductCard key={product._id} product={product} />
+                  ))}
+                </div>
+
+                <div className="mt-10">
+                  <PaginationWithLinks
+                    page={meta?.page}
+                    pageSize={meta?.limit}
+                    totalCount={meta?.total}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-center w-full h-full">
+                {/* illustration */}
+                <div className="w-40 h-40 mb-6 opacity-80">
+                  <Image
+                    src="/img/product-not-found.png"
+                    alt="No products"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+
+                {/* title */}
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  No Products Found
+                </h2>
+
+                {/* subtitle */}
+                <p className="text-sm text-gray-500 mt-2 max-w-md">
+                  We couldn’t find any products matching your filters or search.
+                  Try adjusting category, price range, or brand.
+                </p>
+
+                {/* CTA button (optional but PRO UX) */}
+                <Link
+                  href="/shop"
+                  className="mt-6 px-5 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition"
+                >
+                  Reset Filters
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

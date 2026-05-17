@@ -6,10 +6,13 @@ import SearchInput from "@/components/shared/searchInput/SearchInput";
 import AddTeamMemberModal from "@/components/ui/admin/team/AddTeamMember";
 import TeamCard from "@/components/ui/admin/team/TeamCard";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
+import { hasPermission } from "@/helper/auth";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import {
   useAddTeamMemeberMutation,
   useGetTeamMemberQuery,
 } from "@/redux/features/user/userApi";
+import { useAppSelector } from "@/redux/hooks";
 import { TUser } from "@/types/user";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -19,11 +22,12 @@ const TeamPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   // Roles state
   const searchParams = useSearchParams();
+  const user = useAppSelector(useCurrentUser);
   const page = searchParams.get("page");
   const pageNumber = Number(page) || 1;
-   const limit = Number(searchParams.get("limit")) || 15;
+  const limit = Number(searchParams.get("limit")) || 15;
   const { data, isLoading, error, isError } = useGetTeamMemberQuery(
-    { page: pageNumber, search: searchQuery, limit : limit },
+    { page: pageNumber, search: searchQuery, limit: limit },
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
@@ -63,30 +67,40 @@ const TeamPage = () => {
     }
   };
 
+  if (
+    !hasPermission(user?.role as "admin" | "manager" | "super", "view:products")
+  ) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen">
-      <div className="px-6 py-3 lg:flex justify-between items-center">
+      <div className="px-6 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <h1 className="text-2xl font-semibold text-gray-800">Manage Team</h1>
-        <div className=" flex flex-col lg:flex-row gap-2 mt-5 lg:mt-0 lg:gap-4 lg:items-center">
-          <div className="flex gap-x-3">
-            <div>
-              <LimitSelect />
-            </div>
 
-            <div className="flex">
-              <SearchInput
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                placeholder="🔍 Search Team Member by Name or Email"
-              />
-            </div>
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          {/* LIMIT */}
+          <div className="flex-shrink-0">
+            <LimitSelect />
           </div>
 
-          <AddTeamMemberModal
-            roles={["admin", "manager"]}
-            onAdd={handleAddMember}
-            isLoading={isChangeRoleLoading}
-          />
+          {/* SEARCH */}
+          <div className="w-full sm:w-[260px] flex-shrink-0">
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="🔍 Search Team Member by Name or Email"
+            />
+          </div>
+
+          {/* ADD BUTTON */}
+          <div className="flex-shrink-0">
+            <AddTeamMemberModal
+              roles={["admin", "manager"]}
+              onAdd={handleAddMember}
+              isLoading={isChangeRoleLoading}
+            />
+          </div>
         </div>
       </div>
       <div className="flex p-6 flex-col  gap-8">

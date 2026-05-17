@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { SelectValue } from "@radix-ui/react-select";
 import { Avatar, AvatarImage } from "../../avatar";
 import { cn } from "@/lib/utils";
+import { hasPermission } from "@/helper/auth";
 
 interface IProps {
   member: TUser;
@@ -34,7 +35,7 @@ const TeamCard = (props: IProps) => {
       {/* Role column with dropdown */}
       <td className="p-3 text-gray-600 capitalize">
         <Select
-          disabled={isSameAdmin || isSuper}
+          disabled={isSameAdmin || !hasPermission(user?.role as "admin" | "manager" | "super", "delete:team-member")}
           defaultValue={member.role}
           onValueChange={async (newRole) => {
             const toastId = toast.loading("Updating...");
@@ -77,12 +78,11 @@ const TeamCard = (props: IProps) => {
 
       <td className="p-3 text-right space-x-3 flex items-center justify-end">
         {/* Delete Button */}
-        {member.role !== "super" &&
-          user?.role !== member.role &&
-          user?.role !== "manager" && (
-            <DeleteTeamMember email={member.email} />
-          )}
-
+        {
+          hasPermission(user?.role as "admin" | "manager" | "super", "delete:team-member") ? (
+            <DeleteTeamMember email={member.email} />  
+          ): <span className="text-yellow-500">Permission required!</span>
+        }
       </td>
     </tr>
   );

@@ -3,10 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  useGetAllOrdersQuery,
-  TOrder,
-} from "@/redux/features/order/orderApi";
+import { useGetAllOrdersQuery, TOrder } from "@/redux/features/order/orderApi";
 import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 import LimitSelect from "@/components/shared/limitSelect/LimitSelect";
 import SearchInput from "@/components/shared/searchInput/SearchInput";
@@ -19,6 +16,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { LoadingUi } from "@/components/shared/loadingui/LoadingUi";
+import { hasPermission } from "@/helper/auth";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 const STATUS_OPTIONS = ["all", "pending", "packing", "shipped", "delivered"];
 
@@ -46,6 +46,7 @@ const OrdersPage = () => {
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;
   const status = searchParams.get("status") || "all";
+  const user = useAppSelector(useCurrentUser);
 
   // API CALL
   const { data, isLoading, isError } = useGetAllOrdersQuery({
@@ -81,46 +82,58 @@ const OrdersPage = () => {
     );
   }
 
+  if (
+    !hasPermission(
+      user?.role as "admin" | "manager" | "super",
+      "update:products",
+    )
+  ) {
+    return null;
+  }
+
   return (
     <div className="p-6 min-h-screen">
-
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-semibold">All Orders</h1>
 
-        <div className="flex flex-col lg:flex-row gap-2">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          {/* STATUS FILTER */}
+          <div className="flex-shrink-0">
+            <Select value={status} onValueChange={handleStatusChange}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Filter Status" />
+              </SelectTrigger>
 
-          {/* STATUS FILTER (SHADCN SELECT) */}
-          <Select value={status} onValueChange={handleStatusChange}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Filter Status" />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="packing">Packing</SelectItem>
-              <SelectItem value="shipped">Shipped</SelectItem>
-              <SelectItem value="delivered">Delivered</SelectItem>
-            </SelectContent>
-          </Select>
+              <SelectContent>
+                <SelectItem value="all">Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="packing">Packing</SelectItem>
+                <SelectItem value="shipped">Shipped</SelectItem>
+                <SelectItem value="delivered">Delivered</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* LIMIT */}
-          <LimitSelect />
+          <div className="flex-shrink-0">
+            <LimitSelect />
+          </div>
 
           {/* SEARCH */}
-          <SearchInput
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="🔍 Search order"
-          />
+          <div className="w-full sm:w-[260px] flex-shrink-0">
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="🔍 Search order"
+            />
+          </div>
         </div>
       </div>
 
       {/* TABLE */}
       <div className="bg-white shadow rounded-lg overflow-x-auto">
         <table className="w-full text-left">
-
           {/* HEAD */}
           <thead className="bg-black text-white text-sm">
             <tr>
@@ -138,23 +151,18 @@ const OrdersPage = () => {
           <tbody>
             {orders.map((order: TOrder<any>) => (
               <tr key={order._id} className="border-t hover:bg-gray-50">
-
                 <td className="p-4 font-medium">
                   {order.orderId || order._id.slice(0, 8)}
                 </td>
 
-                <td className="p-4">
-                  {order.customer || "Unknown"}
-                </td>
+                <td className="p-4">{order.customer || "Unknown"}</td>
 
-                <td className="p-4 font-semibold">
-                  ${order.total}
-                </td>
+                <td className="p-4 font-semibold">${order.total}</td>
 
                 <td className="p-4">
                   <span
                     className={`px-3 py-1 text-xs rounded-full ${getStatusColor(
-                      order.status
+                      order.status,
                     )}`}
                   >
                     {order.status}
@@ -181,7 +189,6 @@ const OrdersPage = () => {
                     View
                   </Link>
                 </td>
-
               </tr>
             ))}
 

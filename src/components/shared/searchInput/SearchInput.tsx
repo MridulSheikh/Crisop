@@ -15,7 +15,7 @@ const SearchInput = ({ searchQuery, setSearchQuery, placeholder }: IProps) => {
   return (
     <Input
       type="search"
-      className="md:min-w-80"
+      className=""
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleSearch}

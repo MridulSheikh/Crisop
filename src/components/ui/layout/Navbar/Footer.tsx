@@ -16,6 +16,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Linkedin } from "lucide-react";
 
 /* =========================
    DATA
@@ -145,7 +146,7 @@ const Footer = () => {
           className="space-y-6"
         >
           <h1 className="text-xl font-semibold">
-            Contact
+           Developer Contact
           </h1>
 
           <div className="space-y-5 text-sm text-white/70">
@@ -169,19 +170,19 @@ const Footer = () => {
                 <MdEmail className="text-emerald-400" />
               </div>
 
-              <span>needhelp@company.com</span>
+              <span>mridul.sheikh.90@gmail.com</span>
             </motion.div>
 
             <motion.div
               whileHover={{ x: 4 }}
-              className="flex items-start gap-3"
+              className="flex items-center gap-3"
             >
               <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                <FaLocationDot className="text-emerald-400" />
+                <Linkedin className="text-emerald-400" />
               </div>
 
               <span>
-                666 Road, Brooklyn Street, New York 600
+                /in/mridul-sheikh
               </span>
             </motion.div>
 

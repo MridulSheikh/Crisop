@@ -45,14 +45,14 @@ export default function ProductPage() {
           Product Management
         </h1>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           {/* Limit Select */}
-          <div className="w-full">
+          <div className="flex-shrink-0">
             <LimitSelect />
           </div>
 
           {/* Search */}
-          <div className="w-full ">
+          <div className="w-full sm:w-[260px] flex-shrink-0">
             <SearchInput
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -61,13 +61,15 @@ export default function ProductPage() {
           </div>
 
           {/* Add Button */}
-
           {hasPermission(
             user?.role as "admin" | "manager" | "super",
             "create:products",
           ) && (
-            <Link href="/admin/add-product" className="w-full">
-              <Button className="w-full ">Add Product</Button>
+            <Link
+              href="/admin/add-product"
+              className="w-full sm:w-auto flex-shrink-0"
+            >
+              <Button className="w-full sm:w-auto">Add Product</Button>
             </Link>
           )}
         </div>

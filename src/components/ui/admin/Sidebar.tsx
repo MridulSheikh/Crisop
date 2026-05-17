@@ -17,20 +17,24 @@ import {
   LogOut,
 } from 'lucide-react'
 import useAuth from '@/hooks/useAuth'
+import { hasPermission } from '@/helper/auth'
+import { useAppSelector } from '@/redux/hooks'
+import { useCurrentUser } from '@/redux/features/auth/authSlice'
 
 const Sidebar = () => {
   const pathname = usePathname()
    const { handleLogout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const user = useAppSelector(useCurrentUser);
 
   const links = [
-    { href: '/admin/product', label: 'Products', icon: Package },
-    { href: '/admin/order', label: 'Orders', icon: ShoppingCart },
-    { href: '/admin/category', label: 'Categories', icon: Tag },
-    { href: '/admin/brand', label: 'Brands', icon: Tags },
-    { href: '/admin/stock', label: 'Stock', icon: Boxes },
-    { href: '/admin/warehouse', label: 'Warehouse', icon: Warehouse },
-    { href: '/admin/team', label: 'Manage Team', icon: Settings },
+    { href: '/admin/product', label: 'Products', icon: Package, rules:'view:products' },
+    { href: '/admin/order', label: 'Orders', icon: ShoppingCart, rules:'view:orders' },
+    { href: '/admin/category', label: 'Categories', icon: Tag, rules: 'view:categorys' },
+    { href: '/admin/brand', label: 'Brands', icon: Tags, rules:'view:brands'},
+    { href: '/admin/stock', label: 'Stock', icon: Boxes, rules:'view:stocks' },
+    { href: '/admin/warehouse', label: 'Warehouse', icon: Warehouse, rules:"view:warehouses" },
+    { href: '/admin/team', label: 'Manage Team', icon: Settings, rules:"view:teams" },
   ]
 
   useEffect(() => {
@@ -58,7 +62,10 @@ const Sidebar = () => {
 
         {/* NAV LINKS */}
         <nav className="space-y-1">
-          {links.map(({ href, label, icon: Icon }) => {
+          {links.map(({ href, label, icon: Icon, rules }) => {
+            if(!hasPermission(user?.role as "admin" | "manager" | "super", rules as any)){
+               return null;
+            }
             const isActive = pathname === href
             return (
               <Link

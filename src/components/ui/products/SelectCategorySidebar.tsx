@@ -43,7 +43,7 @@ const CategorySidebar = ({className} : {className?:string}) => {
   };
 
   return (
-    <div className={cn("w-60 border-r p-4 bg-background rounded-m", className)}>
+    <div className={cn("w-60 p-4 bg-background rounded-m", className)}>
       <h2 className="font-semibold mb-4">Categories</h2>
 
       {isLoading ? (

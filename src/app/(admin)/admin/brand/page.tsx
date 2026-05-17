@@ -29,7 +29,7 @@ const BrandPage = () => {
     {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
-    }
+    },
   );
 
   const brands = data?.data?.data;
@@ -37,21 +37,30 @@ const BrandPage = () => {
 
   return (
     <div className="p-4 sm:p-6 min-h-screen">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
           Brand Management
         </h1>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full lg:w-auto">
-          <LimitSelect />
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          {/* LIMIT */}
+          <div className="flex-shrink-0">
+            <LimitSelect />
+          </div>
 
-          <SearchInput
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            placeholder="Search Brand by Name"
-          />
+          {/* SEARCH */}
+          <div className="w-full sm:w-[260px] flex-shrink-0">
+            <SearchInput
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              placeholder="Search Brand by Name"
+            />
+          </div>
 
-          <AddBrand />
+          {/* ADD BRAND */}
+          <div className="flex-shrink-0">
+            <AddBrand />
+          </div>
         </div>
       </div>
 

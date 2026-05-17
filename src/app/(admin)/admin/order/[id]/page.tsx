@@ -21,6 +21,9 @@ import {
   XCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { hasPermission } from "@/helper/auth";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
 const STATUS_STEPS = ["pending", "packing", "shipped", "delivered"];
 
@@ -34,6 +37,7 @@ const statusIcon: any = {
 export default function OrderDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
+  const user = useAppSelector(useCurrentUser);
 
   const orderId = typeof id === "string" ? id : "";
 
@@ -63,6 +67,15 @@ export default function OrderDetailsPage() {
         <p>Order not found</p>
       </div>
     );
+  }
+
+  if (
+    !hasPermission(
+      user?.role as "admin" | "manager" | "super",
+      "update:products",
+    )
+  ) {
+    return null;
   }
 
   const handleStatusChange = async (status: string) => {
@@ -125,10 +138,8 @@ export default function OrderDetailsPage() {
 
   return (
     <div className="min-h-screen p-4 sm:p-6">
-
       {/* HEADER */}
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.back()}
@@ -162,14 +173,11 @@ export default function OrderDetailsPage() {
 
       {/* MAIN GRID */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-
         {/* LEFT */}
         <div className="lg:col-span-8 space-y-6">
-
           {/* STEP INDICATOR */}
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow">
             <div className="flex justify-between gap-2 overflow-x-auto">
-
               {STATUS_STEPS.map((step, i) => {
                 const Icon = statusIcon[step];
                 const active = i <= currentIndex;
@@ -190,9 +198,7 @@ export default function OrderDetailsPage() {
                       <Icon size={14} />
                     </div>
 
-                    <span className="text-xs mt-2 capitalize">
-                      {step}
-                    </span>
+                    <span className="text-xs mt-2 capitalize">{step}</span>
                   </button>
                 );
               })}
@@ -201,17 +207,13 @@ export default function OrderDetailsPage() {
 
           {/* PRODUCTS */}
           <div className="bg-white rounded-xl shadow overflow-hidden">
-
             <div className="p-4 border-b flex items-center gap-2">
               <Package size={16} />
               <h2 className="font-semibold">Products</h2>
             </div>
 
             {order.items?.map((item: any, i: number) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 p-4 border-b"
-              >
+              <div key={i} className="flex items-center gap-4 p-4 border-b">
                 <Image
                   src={item?.product?.images?.[0]?.url || "/placeholder.png"}
                   alt="product"
@@ -243,7 +245,6 @@ export default function OrderDetailsPage() {
 
         {/* RIGHT */}
         <div className="lg:col-span-4 space-y-6">
-
           {/* CUSTOMER */}
           <div className="bg-white p-4 rounded-xl shadow space-y-3">
             <h3 className="font-semibold">Customer</h3>
@@ -271,9 +272,7 @@ export default function OrderDetailsPage() {
           <div className="bg-white p-4 rounded-xl shadow space-y-2">
             <h3 className="font-semibold">Payment</h3>
 
-            <p className="text-sm">
-              Method: {order.isCod ? "COD" : "Online"}
-            </p>
+            <p className="text-sm">Method: {order.isCod ? "COD" : "Online"}</p>
 
             <p className="text-sm">
               Status: {order.isPaymentComplete ? "Paid" : "Pending"}
@@ -289,7 +288,6 @@ export default function OrderDetailsPage() {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function MobileFilter() {
             >
               <CategorySidebar className="border-0" />
               <PriceFilter className=" shadow-none mt-0" />
-              <BrandFilter />
+              <BrandFilter className="shadow-none" />
             </motion.div>
           </div>
         )}
