@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { closeChatbot } from "@/redux/features/bot/chatbotSlice";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Leaf, Send, Sparkles, Bot, ShoppingCart } from "lucide-react";
+import { X, Leaf, Send, Sparkles, Bot, ShoppingCart, FileText } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSendMessageMutation } from "@/redux/features/bot/chatbot.api";
@@ -31,6 +30,12 @@ type Message = {
   role: "user" | "assistant";
   content: string;
   products?: Product[];
+  sources?: {
+    id: string;
+    type: string;
+    title: string;
+    content: string;
+  }[];
 };
 
 export default function Chatbot() {
@@ -39,6 +44,7 @@ export default function Chatbot() {
   const isOpen = useSelector((state: RootState) => state.chatbot.isOpen);
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [inboxId, setInboxId] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState([
     "Fresh fish",
     "Chicken breast",
@@ -75,13 +81,21 @@ export default function Chatbot() {
     try {
       const res = await sendMessage({
         message: data.prompt,
+        inboxId: inboxId || undefined,
       }).unwrap();
+
+      const nextInboxId = res?.data?.meta?.inboxId;
+      if (nextInboxId) {
+        setInboxId(nextInboxId);
+      }
 
       const botMsg: Message = {
         role: "assistant",
         content:
           res?.data?.data?.message || "Sorry, I couldn't process your request.",
         products: res?.data?.data?.products || [],
+        sources:
+          res?.data?.data?.rag?.sources || res?.data?.meta?.rag?.sources || [],
       };
 
       setMessages((prev) => [...prev, botMsg]);
@@ -89,7 +103,7 @@ export default function Chatbot() {
       if (res?.data?.meta?.analysis?.suggestions?.length) {
         setSuggestions(res.data.meta.analysis.suggestions);
       }
-    } catch (error) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
@@ -225,6 +239,23 @@ export default function Chatbot() {
 
                         {msg.products?.length ? (
                           <ProductCarousel products={msg.products} />
+                        ) : null}
+
+                        {msg.sources?.length ? (
+                          <div className="flex flex-wrap gap-2">
+                            {msg.sources.slice(0, 3).map((source) => (
+                              <div
+                                key={`${source.type}-${source.id}`}
+                                className="flex max-w-full items-center gap-1 rounded-full border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] text-green-800"
+                                title={source.content}
+                              >
+                                <FileText size={12} />
+                                <span className="truncate">
+                                  {source.title}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         ) : null}
                       </div>
                     </div>
