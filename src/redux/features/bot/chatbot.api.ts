@@ -1,12 +1,17 @@
 import { baseApi } from "@/redux/api/baseApi";
 
+export type SendMessageRequest = {
+  message: string;
+  inboxId?: string;
+};
+
 export const chatBotApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
     sendMessage: builder.mutation({
-      query: (body: { message: string; inboxId?: string }) => {
+      query: (body: SendMessageRequest) => {
         return {
-          url: "/chatBot",
+          url: "/chat",
           method: "POST",
           body,
         };

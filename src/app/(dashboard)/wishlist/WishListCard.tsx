@@ -34,6 +34,8 @@ const WishListCard = ({ id }: { id: string }) => {
     );
   }
 
+  console.log(id)
+
   const product = data.data as TProduct;
   const inStock = product.stock.quantity > 0;
 

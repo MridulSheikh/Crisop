@@ -72,7 +72,7 @@ const CategoryCard = ({
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       className={cn(
-        "relative rounded-3xl overflow-hidden group cursor-pointer",
+        "relative rounded-3xl overflow-hidden group",
         className
       )}
     >
@@ -119,7 +119,7 @@ const OurCategories = () => {
         className="text-center mb-16"
       >
         <h1 className="text-4xl md:text-6xl xl:text-5xl 2xl:text-6xl font-semibold tracking-tight text-gray-900">
-          Our Categories
+          Our Top Categories
         </h1>
 
         <p className="mt-4 text-gray-500 lg:max-w-2xl mx-auto text-sm lg:text-lg leading-relaxed">
@@ -132,13 +132,11 @@ const OurCategories = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* LEFT BIG */}
-        <Link href="/shop">
           <CategoryCard
             item={categories[0]}
             index={1}
             className="h-[260px] lg:h-[560px]"
           />
-        </Link>
 
         {/* MIDDLE */}
         <div className="grid gap-6">

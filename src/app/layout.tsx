@@ -4,8 +4,8 @@ import "@/style/css/globals.css";
 import { Providers } from "@/components/provider/Provider";
 import { ToastContainer } from "react-toastify";
 import TopLoaderProvider from "@/components/shared/TopLoader";
-import Chatbot from "@/components/ui/bot/Chatbot";
-import ChatbotButton from "@/components/ui/bot/NavChatBotButton";
+import Chatbot from "@/components/ui/chatbot/Chatbot";
+import ChatbotButton from "@/components/ui/chatbot/ChatbotButton";
 
 const bdoGrotesk = localFont({
   src: "../fonts/BDOGroteskVF.woff2",
@@ -33,9 +33,10 @@ export default function RootLayout({
         <Providers>
           <TopLoaderProvider>
             <>
-            <Chatbot />
-            <ChatbotButton />
-            {children}</>
+              <Chatbot />
+              <ChatbotButton />
+              {children}
+            </>
           </TopLoaderProvider>
         </Providers>
       </body>
